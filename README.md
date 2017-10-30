@@ -1,13 +1,13 @@
 <p align="center">&#1576;&#1587;&#1605; &#1575;&#1604;&#1604;&#1607; &#1575;&#1604;&#1585;&#1581;&#1605;&#1606; &#1575;&#1604;&#1585;&#1581;&#1610;&#1605;</p>
 <p align="center">In the name of Allah, the Most Compassionate, the Most Merciful</p>
 
-# Unity Decision Guidance Management System (Unity DGMS)
+# Unity DGMS
 
 [![NPM version](http://img.shields.io/npm/v/dgms.svg?style=flat)](http://badge.fury.io/js/dgms)
 
-${project.description}
+Unity is a research prototype of a decision guidance management system (DGMS) for rapid decision guidance application development.
 
-# About Unity DGMS
+## About Unity DGMS
 Enterprises across all industries depend on decision guidance to facilitate decision-making across all lines of business. Despite significant technological advances, current development paradigms for decision guidance systems are ad-hoc and lead to systems that exhibit an overly tight coupling of analytical models, algorithms and underlying tools. This inhibits both the reusability and the interoperability of such systems. To address these limitations, a paradigm shift for decision guidance systems development is needed.
 
 Unity is a research prototype of a DGMS, which encapsulates a paradigm shift to reusable analytical model repository-centered development of decision guidance systems.
