@@ -1,0 +1,445 @@
+jsoniq version "1.0";
+(:
+    بسم الله الرحمن الرحيم
+   
+    In the name of Allah, the Most Compassionate, the Most Merciful
+   
+    This software is authored by Mohamad Omar Nachawati, 1436-1439 AH
+:)
+module namespace op = "http://dgms.io/unity/modules/symbolics/jsoniq/operators";
+
+import module namespace math = "http://www.w3.org/2005/xpath-functions/math";
+
+declare namespace u = "http://dgms.io/unity";
+declare option u:symbolic-computation "disabled";
+
+declare function op:symbolic-add($arg1, $arg2)
+{
+	if ($arg1 instance of object or $arg2 instance of object) then
+		{ "+": [ $arg1, $arg2 ], "@type": null }
+	else
+		$arg1 + $arg2
+};
+
+declare function op:symbolic-subtract($arg1, $arg2)
+{
+	if ($arg1 instance of object or $arg2 instance of object) then
+		{ "-": [ $arg1, $arg2 ], "@type": null }
+	else
+		$arg1 - $arg2
+};
+
+declare function op:symbolic-multiply($arg1, $arg2)
+{
+	if ($arg1 instance of object or $arg2 instance of object) then
+		{ "*": [ $arg1, $arg2 ], "@type": null }
+	else
+		$arg1 * $arg2
+};
+
+declare function op:symbolic-divide($arg1, $arg2)
+{
+	if ($arg1 instance of object or $arg2 instance of object) then
+		{ "/": [ $arg1, $arg2 ], "@type": null }
+	else
+		$arg1 div $arg2
+};
+
+declare function op:symbolic-integer-divide($arg1, $arg2)
+{
+	if ($arg1 instance of object or $arg2 instance of object) then
+		{ "//": [ $arg1, $arg2 ], "@type": null }
+    else
+        $arg1 idiv $arg2
+};
+
+declare function op:symbolic-mod($arg1, $arg2)
+{
+	if ($arg1 instance of object or $arg2 instance of object) then
+		{ "%": [ $arg1, $arg2 ], "@type": null }
+    else
+    	$arg1 mod $arg2
+};
+
+declare function op:symbolic-unary-plus($arg)
+{
+	$arg
+};
+
+declare function op:symbolic-unary-minus($arg)
+{
+    if ($arg instance of object) then
+    	{ "u-": [ $arg ], "@type": null }
+    else
+        -$arg
+};
+
+declare function op:symbolic-value-equal($arg1, $arg2)
+{
+	if ($arg1 instance of object or $arg2 instance of object) then
+		{ "==": [ $arg1, $arg2 ], "@type": null }
+	else
+        $arg1 eq $arg2
+};
+
+declare function op:symbolic-general-equal($arg1, $arg2)
+{
+	if ($arg1 instance of object or $arg2 instance of object) then
+		{ "==": [ $arg1, $arg2 ], "@type": null }
+	else
+        $arg1 = $arg2
+};
+
+declare function op:symbolic-value-not-equal($arg1, $arg2)
+{
+	if ($arg1 instance of object or $arg2 instance of object) then
+		{ "!=": [ $arg1, $arg2 ], "@type": null }
+	else
+        $arg1 ne $arg2
+};
+
+declare function op:symbolic-general-not-equal($arg1, $arg2)
+{
+	if ($arg1 instance of object or $arg2 instance of object) then
+		{ "!=": [ $arg1, $arg2 ], "@type": null }
+	else
+        $arg1 != $arg2
+};
+
+declare function op:symbolic-value-less-than($arg1, $arg2)
+{
+	if ($arg1 instance of object or $arg2 instance of object) then
+		{ "<": [ $arg1, $arg2 ], "@type": null }
+	else
+        $arg1 lt $arg2
+};
+
+declare function op:symbolic-general-less-than($arg1, $arg2)
+{
+	if ($arg1 instance of object or $arg2 instance of object) then
+		{ "<": [ $arg1, $arg2 ], "@type": null }
+	else
+        $arg1 < $arg2
+};
+
+declare function op:symbolic-value-less-than-or-equal($arg1, $arg2)
+{
+	if ($arg1 instance of object or $arg2 instance of object) then
+		{ "<=": [ $arg1, $arg2 ], "@type": null }
+	else
+        $arg1 le $arg2
+};
+
+declare function op:symbolic-general-less-than-or-equal($arg1, $arg2)
+{
+	if ($arg1 instance of object or $arg2 instance of object) then
+		{ "<=": [ $arg1, $arg2 ], "@type": null }
+	else
+        $arg1 <= $arg2
+};
+
+declare function op:symbolic-value-greater-than($arg1, $arg2)
+{
+	if ($arg1 instance of object or $arg2 instance of object) then
+		{ ">": [ $arg1, $arg2 ], "@type": null }
+	else
+        $arg1 gt $arg2
+};
+
+declare function op:symbolic-general-greater-than($arg1, $arg2)
+{
+	if ($arg1 instance of object or $arg2 instance of object) then
+		{ ">": [ $arg1, $arg2 ], "@type": null }
+	else
+        $arg1 > $arg2
+};
+
+declare function op:symbolic-value-greater-than-or-equal($arg1, $arg2)
+{
+	if ($arg1 instance of object or $arg2 instance of object) then
+		{ ">=": [ $arg1, $arg2 ], "@type": null }
+	else
+        $arg1 ge $arg2
+};
+
+declare function op:symbolic-general-greater-than-or-equal($arg1, $arg2)
+{
+	if ($arg1 instance of object or $arg2 instance of object) then
+		{ ">=": [ $arg1, $arg2 ], "@type": null }
+	else
+        $arg1 >= $arg2
+};
+
+declare function op:symbolic-and($arg1, $arg2)
+{
+	if ($arg1 instance of object) then
+		if ($arg2 instance of object) then
+			{ "&&": [ $arg1, $arg2 ], "@type": null }
+		else if ($arg2) then
+			$arg1
+		else
+			false
+	else if ($arg2 instance of object) then
+		if ($arg1) then
+			$arg2
+		else
+			false
+    else
+        $arg1 and $arg2
+};
+
+declare function op:symbolic-or($arg1, $arg2)
+{
+	if ($arg1 instance of object) then
+		if ($arg2 instance of object) then
+			{ "||": [ $arg1, $arg2 ], "@type": null }
+		else if ($arg2) then
+			true
+		else
+			$arg1
+	else if ($arg2 instance of object) then
+		if ($arg1) then
+			true
+		else
+			$arg2
+    else
+        $arg1 or $arg2
+};
+
+declare function op:symbolic-some($values)
+{
+	let $flattened-values := jn:flatten($values)
+	return
+		if (some $value in $flattened-values satisfies $value instance of boolean and $value eq true) then
+			true
+		else
+			let $operands := for $value in $flattened-values where not($value instance of boolean) return $value
+			return
+				if (count($operands) = 0) then
+					false
+				else if (count($operands) = 1) then
+					$operands[1]
+				else
+					{ "||": [ $operands ], "@type": null }
+};
+
+declare function op:symbolic-every($values)
+{
+   	let $flattened-values := jn:flatten($values)
+	return
+		if (some $value in $flattened-values satisfies $value instance of boolean and $value eq false) then
+			false
+		else
+			let $operands := for $value in $flattened-values where not($value instance of boolean) return $value
+			return
+				if (count($operands) = 0) then
+					true
+				else if (count($operands) = 1) then
+					$operands[1]
+				else
+					{ "&&": [ $operands ], "@type": null }
+};
+
+declare function op:symbolic-instance-of($obj, $type)
+{
+	let $value :=
+		if ($obj instance of object and fn:exists($obj."@type") and $obj."@type" = null) then
+			0
+		else
+			$obj
+	return switch ($type)
+	case "object"
+		return $value instance of object
+	case "array"
+		return $value instance of array
+	case "integer"
+		return $value instance of integer
+	case "decimal"
+		return $value instance of decimal
+	case "double"
+		return $value instance of double
+	case "string"
+		return $value instance of string
+	case "boolean"
+		return $value instance of boolean
+	default
+		return $type
+};
+
+declare function op:symbolic-if($if, $then, $else)
+{
+    if ($if instance of object) then
+		{ "?:": [ $if, $then, $else ], "@type": null }
+    else if ($if) then
+  		$then
+	else
+  		$else
+};
+
+declare function op:symbolic-pow($arg1, $arg2)
+{
+    if ($arg1 instance of object or $arg2 instance of object) then
+    	{ "**": [ $arg1, $arg2 ], "@type": null }
+    else
+         math:pow($arg1, $arg2)
+};
+
+declare function op:symbolic-sum($values)
+{
+    try {
+      	fn:sum($values)
+    } catch * {
+        { "a.sum": [ for $value in jn:flatten($values)[not($$ instance of null)] return $value ], "@type": null }
+    }
+};
+
+declare function op:symbolic-not($arg)
+{
+    if ($arg instance of object) then
+    	{ "!": [ $arg ], "@type": null }
+    else
+        fn:not($arg)
+};
+
+declare function op:symbolic-abs($arg)
+{
+    if ($arg instance of object) then
+    	{ "m.abs": [ $arg ], "@type": null }
+    else
+        fn:abs($arg)
+};
+
+declare function op:symbolic-ceiling($arg)
+{
+    if ($arg instance of object) then
+    	{ "m.ceil": [ $arg ], "@type": null }
+    else
+        fn:ceiling($arg)
+};
+
+declare function op:symbolic-floor($arg)
+{
+    if ($arg instance of object) then
+    	{ "m.floor": [ $arg ], "@type": null }
+    else
+        fn:floor($arg)
+};
+
+declare function op:symbolic-max($values)
+{
+    try {
+        fn:max(jn:flatten($values))
+    } catch * {
+        { "max": [ jn:flatten($values) ], "@type": null }
+    }
+};
+
+declare function op:symbolic-min($values)
+{
+    try {
+        fn:min(jn:flatten($values))
+    } catch * {
+        { "min": [ jn:flatten($values) ], "@type": null }
+    }
+};
+
+declare function op:symbolic-round($arg)
+{
+    if ($arg instance of object) then
+    	{ "m.round": [ $arg ], "@type": null }
+	else
+        fn:round($arg)
+};
+
+declare function op:symbolic-acos($arg)
+{
+	if ($arg instance of object) then
+		{ "m.acos": [ $arg ], "@type": null }
+	else
+        math:acos($arg)
+};
+
+declare function op:symbolic-asin($arg)
+{
+	if ($arg instance of object) then
+		{ "m.asin": [ $arg ], "@type": null }
+	else
+        math:asin($arg)
+};
+
+declare function op:symbolic-atan($arg)
+{
+	if ($arg instance of object) then
+		{ "m.atan": [ $arg ], "@type": null }
+	else
+        math:atan($arg)
+};
+
+declare function op:symbolic-atan2($arg1, $arg2)
+{
+    if ($arg1 instance of object or $arg2 instance of object) then
+    	{ "m.atan2": [ $arg1, $arg2 ], "@type": null }
+    else
+        math:atan2($arg1, $arg2)
+};
+
+declare function op:symbolic-cos($arg)
+{
+    if ($arg instance of object) then
+    	{ "m.cos": [ $arg ], "@type": null }
+    else
+        math:cos($arg)
+};
+
+declare function op:symbolic-exp($arg)
+{
+    if ($arg instance of object) then
+    	{ "m.exp": [ $arg ], "@type": null }
+    else
+        math:exp($arg)
+};
+
+declare function op:symbolic-exp10($arg)
+{
+    rt:pow(10, $arg)
+};
+
+declare function op:symbolic-log($arg)
+{
+    if ($arg instance of object) then
+    	{ "m.ln": [ $arg ], "@type": null }
+    else
+         math:log($arg)
+};
+
+declare function op:symbolic-log10($arg)
+{
+    if ($arg instance of object) then
+    	{ "m.log10": [ $arg ], "@type": null }
+    else
+         math:log10($arg)
+};
+
+declare function op:symbolic-sin($arg)
+{
+    if ($arg instance of object) then
+    	{ "m.sin": [ $arg ], "@type": null }
+    else
+         math:sin($arg)
+};
+
+declare function op:symbolic-sqrt($arg)
+{
+    if ($arg instance of object) then
+    	{ "m.sqrt": [ $arg ], "@type": null }
+    else
+         math:sqrt($arg)
+};
+
+declare function op:symbolic-tan($arg)
+{
+    if ($arg instance of object) then
+    	{ "m.tan": [ $arg ], "@type": null }
+    else
+         math:tan($arg)
+};

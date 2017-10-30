@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    بسم الله الرحمن الرحيم
+   
+    In the name of Allah, the Most Compassionate, the Most Merciful
+   
+    This software is authored by Mohamad Omar Nachawati, 1436-1439 AH
+ -->
+
+<persistence xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+	version="2.0" xmlns="http://java.sun.com/xml/ns/persistence">
+	<persistence-unit name="unity" transaction-type="RESOURCE_LOCAL">
+		<class>io.dgms.unity.registry.UnityDGPackageReference</class>
+		<class>io.dgms.unity.system.UnityDGTask</class>
+		<class>io.dgms.unity.system.UnityDGTaskExecution</class>
+		<properties>
+			<property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.EmbeddedDriver" />
+			<property name="javax.persistence.jdbc.url" value="jdbc:derby:unity;create=true" />
+			<property name="javax.persistence.jdbc.user" value="unity" />
+			<property name="javax.persistence.jdbc.password" value="dgms" />
+			<property name="eclipselink.logging.level" value="SEVERE" />
+			<property name="eclipselink.ddl-generation" value="create-or-extend-tables" />
+			<property name="eclipselink.ddl-generation.output-mode"
+				value="database" />
+		</properties>
+	</persistence-unit>
+</persistence>

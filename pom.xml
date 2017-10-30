@@ -1,0 +1,671 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    بسم الله الرحمن الرحيم
+   
+    In the name of Allah, the Most Compassionate, the Most Merciful
+   
+    This software is authored by Mohamad Omar Nachawati, 1436-1439 AH
+ -->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>io.dgms.unity</groupId>
+	<artifactId>unity</artifactId>
+	<version>0.1.0-SNAPSHOT</version>
+
+	<packaging>pom</packaging>
+
+	<name>Unity</name>
+	<description>Unity is a research prototype of a decision guidance management system (DGMS) for rapid decision guidance application development.</description>
+
+	<url>https://github.com/nachawati/unity</url>
+
+	<developers>
+
+		<developer>
+			<id>nachawati</id>
+			<name>Mohamad Omar Nachawati</name>
+			<email>mnachawa@gmu.edu</email>
+			<url>http://mason.gmu.edu/~mnachawa</url>
+		</developer>
+
+	</developers>
+
+	<properties>
+		<ampl.version>1.2.2</ampl.version>
+		<basex.version>9.0-SNAPSHOT</basex.version>
+		<compileSource>1.8</compileSource>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<rex.version>5.45.1494</rex.version>
+		<symjava.version>1.0</symjava.version>
+		<zorba.version>3.0.0</zorba.version>
+	</properties>
+
+	<modules>
+		<module>api</module>
+		<module>cli</module>
+		<module>client</module>
+		<module>core</module>
+		<module>distros</module>
+		<module>modules</module>
+		<module>vendor/basex</module>
+		<module>vendor/rex</module>
+		<module>vendor/symjava</module>
+	</modules>
+
+	<scm>
+		<connection>scm:git:git://github.com/nachawati/unity.git</connection>
+		<developerConnection>scm:git:git@github.com:nachawati/unity.git</developerConnection>
+		<url>https://github.com/nachawati/unity</url>
+		<tag>HEAD</tag>
+	</scm>
+
+	<issueManagement>
+		<system>GitHub Tracker</system>
+		<url>https://github.com/nachawati/unity/issues</url>
+	</issueManagement>
+
+	<repositories>
+
+	</repositories>
+
+	<build>
+
+		<pluginManagement>
+			<plugins>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.6.1</version>
+					<inherited>true</inherited>
+					<configuration>
+						<source>${compileSource}</source>
+						<target>${compileSource}</target>
+					</configuration>
+				</plugin>
+
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>buildnumber-maven-plugin</artifactId>
+					<version>1.4</version>
+					<executions>
+						<execution>
+							<phase>validate</phase>
+							<goals>
+								<goal>create</goal>
+							</goals>
+						</execution>
+					</executions>
+					<configuration>
+						<doCheck>false</doCheck>
+						<doUpdate>false</doUpdate>
+						<shortRevisionLength>7</shortRevisionLength>
+					</configuration>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-jar-plugin</artifactId>
+					<version>3.0.2</version>
+					<inherited>true</inherited>
+					<configuration>
+						<archive>
+							<manifest>
+								<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+							</manifest>
+							<manifestEntries>
+								<Implementation-Build>${buildNumber}</Implementation-Build>
+							</manifestEntries>
+						</archive>
+					</configuration>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>2.20</version>
+					<inherited>true</inherited>
+					<configuration>
+						<forkCount>1</forkCount>
+						<reuseForks>false</reuseForks>
+						<skipTests>true</skipTests>
+					</configuration>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-release-plugin</artifactId>
+					<version>2.5.3</version>
+					<configuration>
+						<autoVersionSubmodules>true</autoVersionSubmodules>
+						<releaseProfiles>release</releaseProfiles>
+						<scmCommentPrefix>Release: </scmCommentPrefix>
+						<tagNameFormat>@{project.version}</tagNameFormat>
+					</configuration>
+				</plugin>
+
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.apache.maven.plugins</groupId>
+										<artifactId>maven-antrun-plugin</artifactId>
+										<versionRange>[1.8,)</versionRange>
+										<goals>
+											<goal>run</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore />
+									</action>
+								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.apache.maven.plugins</groupId>
+										<artifactId>maven-install-plugin</artifactId>
+										<versionRange>[2.5.2,)</versionRange>
+										<goals>
+											<goal>install-file</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore />
+									</action>
+								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.codehaus.mojo</groupId>
+										<artifactId>exec-maven-plugin</artifactId>
+										<versionRange>[1.6.0,)</versionRange>
+										<goals>
+											<goal>java</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore />
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+
+			</plugins>
+		</pluginManagement>
+
+		<plugins>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.8</version>
+				<inherited>false</inherited>
+				<executions>
+					<execution>
+						<phase>validate</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<target>
+								<copy file="${project.basedir}/NOTICE" tofile="${project.build.directory}/NOTICE" />
+								<copy file="${project.basedir}/NOTICE-3RD-PARTY" tofile="${project.build.directory}/NOTICE-3RD-PARTY" />
+								<copy file="${project.basedir}/package.json" tofile="${project.build.directory}/package.json" />
+								<copy file="${project.basedir}/README.md" tofile="${project.build.directory}/README.md" />
+							</target>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-install-plugin</artifactId>
+				<version>2.5.2</version>
+				<inherited>false</inherited>
+				<executions>
+					<execution>
+						<id>install-ampl</id>
+						<phase>validate</phase>
+						<goals>
+							<goal>install-file</goal>
+						</goals>
+						<configuration>
+							<file>${project.basedir}/vendor/prebuilt/lib/ampl-1.2.2.jar</file>
+							<groupId>com.ampl</groupId>
+							<artifactId>ampl</artifactId>
+							<version>${ampl.version}</version>
+							<packaging>jar</packaging>
+						</configuration>
+					</execution>
+					<execution>
+						<id>install-zorba</id>
+						<phase>validate</phase>
+						<goals>
+							<goal>install-file</goal>
+						</goals>
+						<configuration>
+							<file>${project.basedir}/vendor/prebuilt/lib/zorba_api.jar</file>
+							<groupId>io.zorba</groupId>
+							<artifactId>zorba_api</artifactId>
+							<version>${zorba.version}</version>
+							<packaging>jar</packaging>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+		</plugins>
+	</build>
+
+	<profiles>
+
+		<profile>
+
+			<id>windows-msvc-x86_64</id>
+
+			<activation>
+
+				<os>
+					<arch>amd64</arch>
+					<family>windows</family>
+				</os>
+
+			</activation>
+
+			<properties>
+				<package.name>unity-windows-msvc-x86_64</package.name>
+				<target>windows-msvc-x86_64</target>
+			</properties>
+
+			<build>
+
+				<plugins>
+
+					<plugin>
+						<artifactId>maven-resources-plugin</artifactId>
+						<version>3.0.2</version>
+						<inherited>false</inherited>
+						<executions>
+
+							<execution>
+								<phase>validate</phase>
+								<goals>
+									<goal>copy-resources</goal>
+								</goals>
+								<configuration>
+									<outputDirectory>${project.build.directory}/windows-msvc-x86_64</outputDirectory>
+									<overwrite>true</overwrite>
+									<resources>
+
+										<resource>
+											<directory>${project.basedir}/vendor/prebuilt/windows-msvc-x86_64/ampl</directory>
+											<targetPath>${project.build.directory}/windows-msvc-x86_64/bin</targetPath>
+											<filtering>false</filtering>
+										</resource>
+
+										<resource>
+											<directory>${project.basedir}/vendor/prebuilt/windows-msvc-x86_64/zorba/bin</directory>
+											<targetPath>${project.build.directory}/windows-msvc-x86_64/bin</targetPath>
+											<filtering>false</filtering>
+										</resource>
+
+										<resource>
+											<directory>${project.basedir}/vendor/prebuilt/windows-msvc-x86_64/zorba/include</directory>
+											<targetPath>${project.build.directory}/windows-msvc-x86_64/include</targetPath>
+											<filtering>false</filtering>
+										</resource>
+
+										<resource>
+											<directory>${project.basedir}/vendor/prebuilt/windows-msvc-x86_64/zorba/lib</directory>
+											<targetPath>${project.build.directory}/windows-msvc-x86_64/lib</targetPath>
+											<filtering>false</filtering>
+										</resource>
+
+										<resource>
+											<directory>${project.basedir}/vendor/prebuilt/windows-msvc-x86_64/zorba/share</directory>
+											<targetPath>${project.build.directory}/windows-msvc-x86_64/share</targetPath>
+											<filtering>false</filtering>
+										</resource>
+
+										<resource>
+											<directory>${project.basedir}/vendor/prebuilt/windows-msvc-x86_64/zorba/share/java</directory>
+											<targetPath>${project.build.directory}/windows-msvc-x86_64/bin</targetPath>
+											<filtering>false</filtering>
+											<includes>
+												<include>zorba_api_java.dll</include>
+											</includes>
+										</resource>
+
+										<resource>
+											<directory>${project.build.directory}</directory>
+											<includes>
+												<include>NOTICE</include>
+												<include>NOTICE-3RD-PARTY</include>
+												<include>README.md</include>
+												<include>package.json</include>
+											</includes>
+											<filtering>true</filtering>
+										</resource>
+
+									</resources>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+
+				</plugins>
+
+			</build>
+
+		</profile>
+
+		<profile>
+
+			<id>linux-gcc-x86_64</id>
+
+			<activation>
+
+				<os>
+					<arch>amd64</arch>
+					<family>linux</family>
+				</os>
+
+			</activation>
+
+			<properties>
+				<package.name>unity-linux-gcc-x86_64</package.name>
+				<target>linux-gcc-x86_64</target>
+			</properties>
+
+			<build>
+				<plugins>
+					<plugin>
+						<artifactId>maven-resources-plugin</artifactId>
+						<version>3.0.2</version>
+						<inherited>false</inherited>
+						<executions>
+							<execution>
+								<phase>validate</phase>
+								<goals>
+									<goal>copy-resources</goal>
+								</goals>
+								<configuration>
+									<outputDirectory>${project.build.directory}/linux-gcc-x86_64</outputDirectory>
+									<overwrite>true</overwrite>
+									<resources>
+
+										<resource>
+											<directory>${project.basedir}/vendor/prebuilt/linux-gcc-x86_64/ampl</directory>
+											<targetPath>${project.build.directory}/linux-gcc-x86_64/bin</targetPath>
+											<filtering>false</filtering>
+										</resource>
+
+										<resource>
+											<directory>${project.basedir}/vendor/prebuilt/linux-gcc-x86_64/zorba/bin</directory>
+											<targetPath>${project.build.directory}/linux-gcc-x86_64/bin</targetPath>
+											<filtering>false</filtering>
+										</resource>
+
+										<resource>
+											<directory>${project.basedir}/vendor/prebuilt/linux-gcc-x86_64/zorba/include</directory>
+											<targetPath>${project.build.directory}/linux-gcc-x86_64/include</targetPath>
+											<filtering>false</filtering>
+										</resource>
+
+										<resource>
+											<directory>${project.basedir}/vendor/prebuilt/linux-gcc-x86_64/zorba/lib</directory>
+											<targetPath>${project.build.directory}/linux-gcc-x86_64/lib</targetPath>
+											<filtering>false</filtering>
+										</resource>
+
+										<resource>
+											<directory>${project.basedir}/vendor/prebuilt/linux-gcc-x86_64/zorba/share</directory>
+											<targetPath>${project.build.directory}/linux-gcc-x86_64/share</targetPath>
+											<filtering>false</filtering>
+										</resource>
+
+										<resource>
+											<directory>${project.basedir}/vendor/prebuilt/linux-gcc-x86_64/zorba/share/java</directory>
+											<targetPath>${project.build.directory}/linux-gcc-x86_64/lib</targetPath>
+											<filtering>false</filtering>
+											<includes>
+												<include>libzorba_api_java.so</include>
+											</includes>
+										</resource>
+
+										<resource>
+											<directory>${project.build.directory}</directory>
+											<includes>
+												<include>NOTICE</include>
+												<include>NOTICE-3RD-PARTY</include>
+												<include>README.md</include>
+												<include>package.json</include>
+											</includes>
+											<filtering>true</filtering>
+										</resource>
+
+									</resources>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+	</profiles>
+
+	<dependencyManagement>
+
+		<dependencies>
+
+			<dependency>
+				<groupId>com.beust</groupId>
+				<artifactId>jcommander</artifactId>
+				<!-- <version>1.29</version> -->
+				<version>1.72</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.google.code.gson</groupId>
+				<artifactId>gson</artifactId>
+				<version>2.8.1</version>
+			</dependency>
+
+			<dependency>
+				<groupId>commons-io</groupId>
+				<artifactId>commons-io</artifactId>
+				<version>2.5</version>
+			</dependency>
+
+			<dependency>
+				<groupId>javax.servlet</groupId>
+				<artifactId>javax.servlet-api</artifactId>
+				<version>4.0.0</version>
+			</dependency>
+
+			<dependency>
+				<groupId>javax.servlet</groupId>
+				<artifactId>jstl</artifactId>
+				<version>1.2</version>
+			</dependency>
+
+			<dependency>
+				<groupId>javax.servlet.jsp</groupId>
+				<artifactId>javax.servlet.jsp-api</artifactId>
+				<version>2.3.1</version>
+			</dependency>
+
+			<dependency>
+				<groupId>javax.ws.rs</groupId>
+				<artifactId>javax.ws.rs-api</artifactId>
+				<version>2.1</version>
+			</dependency>
+
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>4.12</version>
+				<scope>test</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>net.sourceforge.owlapi</groupId>
+				<artifactId>owlapi-distribution</artifactId>
+				<version>5.1.0</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-lang3</artifactId>
+				<version>3.6</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-text</artifactId>
+				<version>1.1</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.derby</groupId>
+				<artifactId>derby</artifactId>
+				<version>10.13.1.1</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.jena</groupId>
+				<artifactId>jena-core</artifactId>
+				<version>3.4.0</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.basex</groupId>
+				<artifactId>basex</artifactId>
+				<version>${basex.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.eclipse.jetty</groupId>
+				<artifactId>jetty-runner</artifactId>
+				<version>9.4.7.v20170914</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.eclipse.jgit</groupId>
+				<artifactId>org.eclipse.jgit</artifactId>
+				<version>4.6.0.201612231935-r</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.eclipse.persistence</groupId>
+				<artifactId>javax.persistence</artifactId>
+				<version>2.2.0</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.eclipse.persistence</groupId>
+				<artifactId>org.eclipse.persistence.jpa</artifactId>
+				<version>2.7.0</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-core</artifactId>
+				<version>2.9.1</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.fasterxml.jackson.jaxrs</groupId>
+				<artifactId>jackson-jaxrs-json-provider</artifactId>
+				<version>2.9.1</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.fusesource.jansi</groupId>
+				<artifactId>jansi</artifactId>
+				<version>1.16</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.gitlab4j</groupId>
+				<artifactId>gitlab4j-api</artifactId>
+				<version>4.6.2</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.glassfish.jersey.containers</groupId>
+				<artifactId>jersey-container-servlet</artifactId>
+				<version>2.25.1</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.glassfish.jersey.core</groupId>
+				<artifactId>jersey-client</artifactId>
+				<version>2.25.1</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.glassfish.jersey.core</groupId>
+				<artifactId>jersey-common</artifactId>
+				<version>2.25.1</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.glassfish.jersey.core</groupId>
+				<artifactId>jersey-server</artifactId>
+				<version>2.25.1</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.glassfish.jersey.ext</groupId>
+				<artifactId>jersey-mvc-jsp</artifactId>
+				<version>2.25.1</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-api</artifactId>
+				<version>1.7.25</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-simple</artifactId>
+				<version>1.7.25</version>
+			</dependency>
+
+			<dependency>
+				<groupId>symjava</groupId>
+				<artifactId>symjava</artifactId>
+				<version>${symjava.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>io.zorba</groupId>
+				<artifactId>zorba_api</artifactId>
+				<version>${zorba.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.ampl</groupId>
+				<artifactId>ampl</artifactId>
+				<version>${ampl.version}</version>
+			</dependency>
+
+		</dependencies>
+
+	</dependencyManagement>
+
+</project>

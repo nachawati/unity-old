@@ -1,0 +1,176 @@
+jsoniq version "1.0";
+
+(:
+    بسم الله الرحمن الرحيم
+   
+    In the name of Allah, the Most Compassionate, the Most Merciful
+   
+    This software is authored by Mohamad Omar Nachawati, 1436-1439 AH
+:)
+ 
+module namespace ampl = "http://dgms.io/unity/modules/languages/ampl";
+
+import module namespace math = "http://www.w3.org/2005/xpath-functions/math";
+
+declare namespace u = "http://dgms.io/unity";
+declare option u:symbolic-computation "disabled";
+
+declare function ampl:solve($model, $solver) external;
+
+declare function ampl:reduce($model)
+{
+    fn:serialize((
+        (for $key in jn:keys($model.variables)
+        let $variable := $model.variables.$key
+        return ((switch ($variable.kind)
+            case "integer" return
+                ( "var ", $variable.name, " integer",
+                    ( if (not(fn:empty($variable.lowerBound)) and not(fn:empty($variable.upperBound))) then
+                        ( " >= ", $variable.lowerBound, ", <= ", $variable.upperBound )
+                      else if (not(fn:empty($variable.lowerBound))) then
+                        ( " >= ", $variable.lowerBound )
+                      else if (not(fn:empty($variable.upperBound))) then
+                        ( " <= ", $variable.upperBound )
+                      else "" ),
+                    ( if (not(fn:empty($variable.initialValue))) then
+                        ( " default ", $variable.initialValue )
+                    else "" ),
+                    ";" )
+            case "decimal" return
+                ( "var ", $variable.name,
+                    ( if (not(fn:empty($variable.lowerBound)) and not(fn:empty($variable.upperBound))) then
+                        ( " >= ", $variable.lowerBound - 0.00001, ", <= ", $variable.upperBound + 0.00001 )
+                      else if (not(fn:empty($variable.lowerBound))) then
+                        ( " >= ", $variable.lowerBound - 0.00001 )
+                      else if (not(fn:empty($variable.upperBound))) then
+                        ( " <= ", $variable.upperBound + 0.00001 )
+                      else "" ),
+                    ( if (not(fn:empty($variable.initialValue))) then
+                        ( " default ", $variable.initialValue )
+                    else "" ),
+                    ";" )
+            case "binary" return
+                ("var ", $variable.name, " binary",
+                if (not(fn:empty($variable.initialValue))) then
+                    (" := ", $variable.initialValue, ";" )
+                else ";" )
+            default return fn:error(fn:QName("http://dgms.io/modules/targets/ampl", "ampl:error"), "invalid decision variable type")))),
+    	(if ($model.mode eq "min") then " minimize " else if ($model.mode eq "max") then " maximize " else fn:error(fn:QName("http://dgms.io/modules/targets/ampl", "ampl:error"), "invalid optimization mode")),
+        " obj: ",
+    	ampl:rewrite($model, $model.objective),
+      (";", for $constraint at $pos in ampl:flatten($model.constraints) return (" subject to uc"||$pos, ": ", ampl:rewrite($model, $constraint), ";"))
+
+      ))
+};
+
+declare %private function ampl:flatten($constraints)
+{
+    try {
+        if (fn:exists($constraints.every)) then
+            for $constraint in $constraints.every[] return ampl:flatten($constraint)
+        else if (fn:exists($constraints."&&")) then
+            for $constraint in $constraints."&&"[] return ampl:flatten($constraint)
+        else if ($constraints instance of boolean) then
+            if ($constraints eq true) then { "==": [1,1], "@type": null } else { "==": [1,0], "@type": null }
+        else
+            $constraints
+    } catch * {
+        $constraints
+    }
+};
+
+declare %private function ampl:rewrite($model, $item)
+{
+    if ($item instance of object) then
+        if (fn:exists($item."integer?")) then
+            $model.variables.($item."integer?").name
+        else if (fn:exists($item."decimal?")) then
+            $model.variables.($item."decimal?").name
+        else if (fn:exists($item."binary?")) then
+            $model.variables.($item."binary?").name
+        else
+            let $func := jn:keys($item)[1]
+            let $args := $item.$func[]
+            return switch ($func)
+                (:core:)
+                case "+" return ("(", ampl:rewrite($model, $args[1]), "+", ampl:rewrite($model, $args[2]), ")")
+                case "-" return ("(", ampl:rewrite($model, $args[1]), "-", ampl:rewrite($model, $args[2]), ")")
+                case "*" return ("(", ampl:rewrite($model, $args[1]), "*", ampl:rewrite($model, $args[2]), ")")
+                case "/" return ("(", ampl:rewrite($model, $args[1]), "/", ampl:rewrite($model, $args[2]), ")")
+                case "//" return ("(", ampl:rewrite($model, $args[1]), " div ", ampl:rewrite($model, $args[2]), ")")
+                case "u-" return ("(-", ampl:rewrite($model, $args[1]), ")")
+                case "u+" return ("(+", ampl:rewrite($model, $args[1]), ")")
+                case "%" return ("(", ampl:rewrite($model, $args[1]), " mod ", ampl:rewrite($model, $args[2]), ")")
+                case "%%" return ("(", ampl:rewrite($model, $args[1]), " mod ", ampl:rewrite($model, $args[2]), ")")
+                case "**" return ("(", ampl:rewrite($model, $args[1]), "**", ampl:rewrite($model, $args[2]), ")")
+                (:case "cmp" return ("(", ampl:rewrite($model, $args[1]), " cmp ", ampl:rewrite($model, $args[2]), ")"):)
+                case "==" return ("", ampl:rewrite($model, $args[1]), "==", ampl:rewrite($model, $args[2]), "")
+                case ">=" return ("", ampl:rewrite($model, $args[1]), ">=", ampl:rewrite($model, $args[2]), "")
+                case ">" return ("", ampl:rewrite($model, $args[1]), ">", ampl:rewrite($model, $args[2]), "")
+                case "!=" return ("", ampl:rewrite($model, $args[1]), "!=", ampl:rewrite($model, $args[2]), "")
+                case "<" return ("", ampl:rewrite($model, $args[1]), "<", ampl:rewrite($model, $args[2]), "")
+                case "<=" return ("", ampl:rewrite($model, $args[1]), "<=", ampl:rewrite($model, $args[2]), "")
+                case "max" return ("max(", ampl:rewrite($model, $args[1]), ",", ampl:rewrite($model, $args[2]), ")")
+                case "min" return ("min(", ampl:rewrite($model, $args[1]), ",", ampl:rewrite($model, $args[2]), ")")
+                case "&&" return ("", ampl:rewrite($model, $args[1]), "&&", ampl:rewrite($model, $args[2]), "")
+                case "||" return ("", ampl:rewrite($model, $args[1]), "||", ampl:rewrite($model, $args[2]), "")
+                (:case "^^" return ("(", ampl:rewrite($model, $args[1]), "^^", ampl:rewrite($model, $args[2]), ")"):)
+                case "!" return ("!", ampl:rewrite($model, $args[1]), "")
+                (:case "&&&" return ("(", ampl:rewrite($model, $args[1]), "&&&", ampl:rewrite($model, $args[2]), ")"):)
+                (:case "|||" return ("(", ampl:rewrite($model, $args[1]), "|||", ampl:rewrite($model, $args[2]), ")"):)
+                (:case "!!!" return ("(!!!", ampl:rewrite($model, $args[1]), ")"):)
+                (:case "&" return ("(", ampl:rewrite($model, $args[1]), "&", ampl:rewrite($model, $args[2]), ")"):)
+                (:case "|" return ("(", ampl:rewrite($model, $args[1]), "|", ampl:rewrite($model, $args[2]), ")"):)
+                (:case "^" return ("(", ampl:rewrite($model, $args[1]), "^", ampl:rewrite($model, $args[2]), ")"):)
+                (:case "~" return ("(~", ampl:rewrite($model, $args[1]), ")"):)
+
+                (:math:)
+                case "m.pi" return (math:pi())
+                case "m.e" return (math:exp(1))
+                case "m.abs" return ("abs(", ampl:rewrite($model, $args[1]), ")")
+                case "m.acos" return ("acos(", ampl:rewrite($model, $args[1]), ")")
+                case "m.acosh" return ("acosh(", ampl:rewrite($model, $args[1]), ")")
+                case "m.asin" return ("asin(", ampl:rewrite($model, $args[1]), ")")
+                case "m.asinh" return ("asinh(", ampl:rewrite($model, $args[1]), ")")
+                case "m.atan" return ("atan(", ampl:rewrite($model, $args[1]), ")")
+                case "m.atan2" return ("atan2(", ampl:rewrite($model, $args[1]), ",", ampl:rewrite($model, $args[2]), ")")
+                case "m.atanh" return ("atanh(", ampl:rewrite($model, $args[1]), ")")
+                case "m.ceil" return ("ceil(", ampl:rewrite($model, $args[1]), ")")
+                (:case "m.copysign" return ("copysign(", ampl:rewrite($model, $args[1]), ",", ampl:rewrite($model, $args[1]), ")"):)
+                case "m.cos" return ("cos(", ampl:rewrite($model, $args[1]), ")")
+                (:case "m.cosh" return ("cosh(", ampl:rewrite($model, $args[1]), ")"):)
+                case "m.exp" return ("exp(", ampl:rewrite($model, $args[1]), ")")
+                (:case "m.expm1" return ("expm1(", ampl:rewrite($model, $args[1]), ")"):)
+                case "m.floor" return ("floor(", ampl:rewrite($model, $args[1]), ")")
+                (:case "m.hypot" return ("hypot(", ampl:rewrite($model, $args[1]), ",", ampl:rewrite($model, $args[1]), ")"):)
+                case "m.ln" return ("log(", ampl:rewrite($model, $args[1]), ")")
+                case "m.log10" return ("log10(", ampl:rewrite($model, $args[1]), ")")
+                (:case "m.log" return ("log(", ampl:rewrite($model, $args[1]), ",", ampl:rewrite($model, $args[1]), ")"):)
+                (:case "m.ln1p" return ("ln1p(", ampl:rewrite($model, $args[1]), ")"):)
+                case "m.round" return ("round(", ampl:rewrite($model, $args[1]), ")")
+                (:case "m.rint" return ("rint(", ampl:rewrite($model, $args[1]), ")"):)
+                (:case "m.signum" return ("signum(", ampl:rewrite($model, $args[1]), ")"):)
+                case "m.sin" return ("sin(", ampl:rewrite($model, $args[1]), ")")
+                case "m.sinh" return ("sinh(", ampl:rewrite($model, $args[1]), ")")
+                case "m.sqrt" return ("sqrt(", ampl:rewrite($model, $args[1]), ")")
+                case "m.tan" return ("tan(", ampl:rewrite($model, $args[1]), ")")
+                case "m.tanh" return ("tanh(", ampl:rewrite($model, $args[1]), ")")
+
+                (:extended:)
+                case "=>" return ("(!", ampl:rewrite($model, $args[1]), "||", ampl:rewrite($model, $args[2]), ")")
+                case "?:" return ("(if(", ampl:rewrite($model, $args[1]), ")then(", ampl:rewrite($model, $args[2]), ")else(", ampl:rewrite($model, $args[3]),"))")
+                case "m.pow" return ("exp(", ampl:rewrite($model, $args[1]), "*log(", ampl:rewrite($model, $args[2]), "))")
+                case "a.sum" return
+                	if (count($args) eq 1) then
+                		ampl:rewrite($model, $args)
+            		else
+                		("(", (for $arg at $pos in $args return (ampl:rewrite($model, $arg), if ($pos lt count($args)) then "+" else "")),")")
+                case "a.pwl" return ("(<<",
+                    let $count := count(($args[1])[])
+                    for $piece at $pos in ($args[1])[] return (ampl:rewrite($model, $piece.breakpoint), if ($pos lt $count) then "," else ";"),
+                    for $piece in ($args[1])[] return (ampl:rewrite($model, $piece.slope), ","),
+                    ampl:rewrite($model, $args[2]), ">>", ampl:rewrite($model, $args[5]), ")")
+                default return fn:error(fn:QName("http://dgms.io/modules/targets/ampl", "ampl:error"), "invalid operator: "||$func)
+    else
+        $item
+};

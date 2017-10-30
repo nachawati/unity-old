@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    بسم الله الرحمن الرحيم
+   
+    In the name of Allah, the Most Compassionate, the Most Merciful
+   
+    This software is authored by Mohamad Omar Nachawati, 1436-1439 AH
+ -->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>io.dgms.unity</groupId>
+		<artifactId>unity-modules</artifactId>
+		<version>0.1.0-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>module-engine-zorba</artifactId>
+
+	<name>Unity / Modules / Engines / Zorba</name>
+
+	<profiles>
+
+		<profile>
+
+			<id>windows-msvc-x86_64</id>
+
+			<activation>
+
+				<os>
+					<arch>amd64</arch>
+					<family>windows</family>
+				</os>
+
+			</activation>
+
+			<build>
+
+				<plugins>
+
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<version>1.8</version>
+						<dependencies>
+							<dependency>
+								<groupId>com.sun</groupId>
+								<artifactId>tools</artifactId>
+								<version>1.8.0</version>
+								<scope>system</scope>
+								<systemPath>${java.home}/../lib/tools.jar</systemPath>
+							</dependency>
+						</dependencies>
+						<executions>
+							<execution>
+								<phase>compile</phase>
+								<goals>
+									<goal>run</goal>
+								</goals>
+								<configuration>
+									<exportAntProperties>true</exportAntProperties>
+									<target>
+										<property name="runtime_classpath" refid="maven.compile.classpath" />
+										<exec executable="javah">
+											<arg value="-cp" />
+											<arg value="${runtime_classpath}" />
+											<arg value="-d" />
+											<arg value="${project.basedir}/src/main/include" />
+											<arg
+												value="io.dgms.unity.modules.engines.zorba.ZorbaDGScriptContext" />
+										</exec>
+										<mkdir dir="${project.build.directory}/windows-msvc-x86_64" />
+										<exec executable="cmake"
+											dir="${project.build.directory}/windows-msvc-x86_64">
+											<arg value="-A" />
+											<arg value="x64" />
+											<arg value="-D" />
+											<arg value="windows-msvc-x86_64='true'" />
+											<arg value="${project.basedir}/src/main/c++" />
+										</exec>
+										<exec executable="cmake"
+											dir="${project.build.directory}/windows-msvc-x86_64">
+											<arg value="--build" />
+											<arg value="." />
+											<arg value="--target" />
+											<arg value="ALL_BUILD" />
+											<arg value="--config" />
+											<arg value="Release" />
+										</exec>
+										<copy
+											file="${project.build.directory}/windows-msvc-x86_64/Release/unity-module-engine-zorba.dll"
+											tofile="${project.basedir}/../../target/windows-msvc-x86_64/bin/unity-module-engine-zorba.dll" />
+										<copy
+											file="${project.build.directory}/windows-msvc-x86_64/Release/unity-module-engine-zorba.lib"
+											tofile="${project.basedir}/../../target/windows-msvc-x86_64/lib/unity-module-engine-zorba.lib" />
+									</target>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+
+				</plugins>
+
+
+			</build>
+
+		</profile>
+
+		<profile>
+
+			<id>linux-gcc-x86_64</id>
+
+			<activation>
+
+				<os>
+					<arch>amd64</arch>
+					<family>linux</family>
+				</os>
+
+			</activation>
+
+			<build>
+
+				<plugins>
+
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<version>1.8</version>
+						<dependencies>
+							<dependency>
+								<groupId>com.sun</groupId>
+								<artifactId>tools</artifactId>
+								<version>1.8.0</version>
+								<scope>system</scope>
+								<systemPath>${java.home}/../lib/tools.jar</systemPath>
+							</dependency>
+						</dependencies>
+						<executions>
+							<execution>
+								<phase>compile</phase>
+								<goals>
+									<goal>run</goal>
+								</goals>
+								<configuration>
+									<exportAntProperties>true</exportAntProperties>
+									<target>
+										<property name="runtime_classpath" refid="maven.compile.classpath" />
+										<exec executable="javah">
+											<arg value="-cp" />
+											<arg value="${runtime_classpath}" />
+											<arg value="-d" />
+											<arg value="${project.basedir}/src/main/include" />
+											<arg
+												value="io.dgms.unity.modules.engines.zorba.ZorbaDGScriptContext" />
+										</exec>
+
+										<mkdir dir="${project.build.directory}/linux-gcc-x86_64" />
+										<exec executable="cmake"
+											dir="${project.build.directory}/linux-gcc-x86_64">
+											<arg value="-G" />
+											<arg value="Unix Makefiles" />
+											<arg value="-D" />
+											<arg value="linux-gcc-x86_64='true'" />
+											<arg value="-D" />
+											<arg value="CMAKE_CXX_FLAGS=-D_GLIBCXX_USE_CXX11_ABI=0"/>
+											<arg value="${project.basedir}/src/main/c++" />
+										</exec>
+										<exec executable="make"
+											dir="${project.build.directory}/linux-gcc-x86_64">
+											<arg value="-j8" />
+										</exec>
+										<copy
+											file="${project.build.directory}/linux-gcc-x86_64/libunity-module-engine-zorba.so"
+											tofile="${project.basedir}/../../target/linux-gcc-x86_64/lib/libunity-module-engine-zorba.so" />
+									</target>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+
+				</plugins>
+
+
+			</build>
+
+		</profile>
+
+	</profiles>
+
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>3.0.2</version>
+				<inherited>false</inherited>
+				<executions>
+
+					<execution>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.basedir}/../../target/${target}/modules/engine-zorba</outputDirectory>
+							<overwrite>true</overwrite>
+							<resources>
+
+								<resource>
+									<directory>${project.basedir}</directory>
+									<includes>
+										<include>../../NOTICE</include>
+										<include>package.json</include>
+									</includes>
+									<filtering>true</filtering>
+								</resource>
+
+								<resource>
+									<directory>${project.basedir}/src/main/jsoniq</directory>
+									<filtering>false</filtering>
+								</resource>
+
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+		</plugins>
+	</build>
+
+	<dependencies>
+
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>io.dgms.unity</groupId>
+			<artifactId>unity-api</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>io.dgms.unity</groupId>
+			<artifactId>module-language-ampl</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>io.dgms.unity</groupId>
+			<artifactId>module-language-jsoniq</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>io.zorba</groupId>
+			<artifactId>zorba_api</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+		</dependency>
+
+	</dependencies>
+
+</project>

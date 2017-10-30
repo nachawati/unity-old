@@ -1,0 +1,32 @@
+{
+	"name": "dgms-${target}",
+	"version": "${project.version}",
+	"description": "${project.description}",
+	"keywords": [
+		"algebra", "analysis", "analytics", "data", "decision", "dgms",
+		"guidance", "json", "jsoniq", "learning", "linear", "machine",
+		"model", "modeling", "numeric", "ontology", "optimization",
+		"regression", "semantic", "simulation", "stochastic", "symbolic",
+		"xquery", "xml", "zorba"
+	],
+	"homepage": "https://github.com/nachawati/unity#readme",
+	"bugs": {
+		"url": "https://github.com/nachawati/unity/issues"
+	},
+	"license": "SEE LICENSE IN NOTICE",
+	"author": "Mohamad Omar Nachawati",
+	"bin": {
+		"dgms-${target}": "bin/dgms.js"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/nachawati/unity.git"
+	},
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"dependencies": {
+		"shelljs": "^0.7.5"
+	},
+	"preferGlobal": true
+}

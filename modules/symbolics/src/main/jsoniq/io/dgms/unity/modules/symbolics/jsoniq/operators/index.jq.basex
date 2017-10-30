@@ -1,0 +1,269 @@
+jsoniq version "1.0";
+(:
+    بسم الله الرحمن الرحيم
+   
+    In the name of Allah, the Most Compassionate, the Most Merciful
+   
+    This software is authored by Mohamad Omar Nachawati, 1436-1439 AH
+:)
+module namespace op = "http://dgms.io/unity/modules/symbolics/jsoniq/operators";
+
+import module namespace java = "java:io.dgms.unity.modules.symbolics.jsoniq.operators.BaseXModule";
+
+declare namespace u = "http://dgms.io/unity";
+declare option u:symbolic-computation "disabled";
+
+declare function op:symbolic-add($arg1, $arg2)
+{
+	if ($arg1 instance of atomic and $arg2 instance of atomic) then
+		$arg1 + $arg2	
+	else
+        java:add($arg1, $arg2)
+};
+
+declare function op:symbolic-subtract($arg1, $arg2)
+{
+	if ($arg1 instance of atomic and $arg2 instance of atomic) then
+		$arg1 - $arg2	
+	else
+		java:subtract($arg1, $arg2)
+};
+
+declare function op:symbolic-multiply($arg1, $arg2)
+{
+	if ($arg1 instance of atomic and $arg2 instance of atomic) then
+		$arg1 * $arg2
+	else
+		java:multiply($arg1, $arg2)
+};
+
+declare function op:symbolic-divide($arg1, $arg2)
+{
+	if ($arg1 instance of atomic and $arg2 instance of atomic) then
+		$arg1 div $arg2
+	else
+		java:divide($arg1, $arg2)
+};
+
+declare function op:symbolic-integer-divide($arg1, $arg2)
+{
+	if ($arg1 instance of atomic and $arg2 instance of atomic) then
+		$arg1 idiv $arg2
+	else	
+		java:integer_divide($arg1, $arg2)
+};
+
+declare function op:symbolic-mod($arg1, $arg2)
+{
+	if ($arg1 instance of atomic and $arg2 instance of atomic) then
+		$arg1 mod $arg2
+	else
+		java:mod($arg1, $arg2)
+};
+
+declare function op:symbolic-unary-plus($arg)
+{
+	$arg
+};
+
+declare function op:symbolic-unary-minus($arg)
+{
+	if ($arg instance of atomic) then
+    	-$arg
+    else
+    	java:unary_minus($arg)
+};
+
+declare function op:symbolic-value-equal($arg1, $arg2)
+{
+	if ($arg1 instance of atomic and $arg2 instance of atomic) then
+		$arg1 eq $arg2
+	else
+		java:equal($arg1, $arg2)
+};
+
+declare function op:symbolic-general-equal($arg1, $arg2)
+{
+	if ($arg1 instance of atomic and $arg2 instance of atomic) then
+		$arg1 = $arg2
+	else
+		java:equal($arg1, $arg2)
+};
+
+declare function op:symbolic-value-not-equal($arg1, $arg2)
+{
+	if ($arg1 instance of atomic and $arg2 instance of atomic) then
+		$arg1 ne $arg2
+	else
+		java:not_equal($arg1, $arg2)
+};
+
+declare function op:symbolic-general-not-equal($arg1, $arg2)
+{
+	if ($arg1 instance of atomic and $arg2 instance of atomic) then
+		$arg1 != $arg2
+	else
+		java:not_equal($arg1, $arg2)
+};
+
+declare function op:symbolic-value-less-than($arg1, $arg2)
+{
+	if ($arg1 instance of atomic and $arg2 instance of atomic) then
+		$arg1 lt $arg2
+	else
+		java:less_than($arg1, $arg2)
+};
+
+declare function op:symbolic-general-less-than($arg1, $arg2)
+{
+	if ($arg1 instance of atomic and $arg2 instance of atomic) then
+		$arg1 < $arg2
+	else
+		java:less_than($arg1, $arg2)
+};
+
+declare function op:symbolic-value-less-than-or-equal($arg1, $arg2)
+{
+	if ($arg1 instance of atomic and $arg2 instance of atomic) then
+		$arg1 le $arg2
+	else
+		java:less_than_or_equal($arg1, $arg2)
+};
+
+declare function op:symbolic-general-less-than-or-equal($arg1, $arg2)
+{
+	if ($arg1 instance of atomic and $arg2 instance of atomic) then
+		$arg1 <= $arg2
+	else
+		java:less_than_or_equal($arg1, $arg2)
+};
+
+declare function op:symbolic-value-greater-than($arg1, $arg2)
+{
+	if ($arg1 instance of atomic and $arg2 instance of atomic) then
+		$arg1 gt $arg2
+	else
+		java:greater_than($arg1, $arg2)
+};
+
+declare function op:symbolic-general-greater-than($arg1, $arg2)
+{
+	if ($arg1 instance of atomic and $arg2 instance of atomic) then
+		$arg1 > $arg2
+	else
+		java:greater_than($arg1, $arg2)
+};
+
+declare function op:symbolic-value-greater-than-or-equal($arg1, $arg2)
+{
+	if ($arg1 instance of atomic and $arg2 instance of atomic) then
+		$arg1 ge $arg2
+	else
+		java:greater_than_or_equal($arg1, $arg2)
+};
+
+declare function op:symbolic-general-greater-than-or-equal($arg1, $arg2)
+{
+	if ($arg1 instance of atomic and $arg2 instance of atomic) then
+		$arg1 >= $arg2
+	else
+		java:greater_than_or_equal($arg1, $arg2)
+};
+
+declare function op:symbolic-and($arg1, $arg2)
+{
+	if ($arg1 instance of atomic) then
+		if ($arg2 instance of atomic) then
+			$arg1 and $arg2
+		else if ($arg1) then
+			$arg2
+		else
+			false
+	else if ($arg2 instance of atomic) then
+		if ($arg2) then
+			$arg1
+		else
+			false
+    else
+        java:and($arg1, $arg2)
+};
+
+declare function op:symbolic-or($arg1, $arg2)
+{
+	if ($arg1 instance of atomic) then
+		if ($arg2 instance of atomic) then
+			$arg1 or $arg2
+		else if ($arg1) then
+			true
+		else
+			$arg2
+	else if ($arg2 instance of atomic) then
+		if ($arg2) then
+			true
+		else
+			$arg1
+    else
+    	java:or($arg1, $arg2)
+        
+};
+
+declare function op:symbolic-some($values)
+{
+	let $flattened-values := $values[]
+	return
+		if (some $value in $flattened-values satisfies $value instance of boolean and $value eq true) then
+			true
+		else
+			java:some($flattened-values)
+};
+
+declare function op:symbolic-every($values)
+{
+   	let $flattened-values := $values
+	return
+		if (some $value in $flattened-values satisfies $value instance of boolean and $value eq false) then
+			false
+		else
+			java:every($flattened-values)
+};
+
+declare function op:symbolic-instance-of($obj, $type)
+{
+	let $value :=
+		try {
+			if (not(java:isJavaType($obj))) then
+				$obj
+			else
+				0
+		} catch * {
+			0
+		}
+	return switch ($type)
+	case "object"
+		return $value instance of object
+	case "array"
+		return $value instance of array
+	case "integer"
+		return $value instance of integer
+	case "decimal"
+		return $value instance of decimal
+	case "double"
+		return $value instance of double
+	case "string"
+		return $value instance of string
+	case "boolean"
+		return $value instance of boolean
+	default
+		return $type
+};
+
+declare function op:symbolic-if($if, $then, $else)
+{
+    if ($if instance of atomic) then
+    	if ($if) then
+      		$then
+    	else
+      		$else
+    else
+    	java:conditional($if, $then, $else)
+};

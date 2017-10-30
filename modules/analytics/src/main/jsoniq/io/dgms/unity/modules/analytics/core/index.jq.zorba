@@ -1,0 +1,301 @@
+jsoniq version "1.0";
+
+(:
+    بسم الله الرحمن الرحيم
+   
+    In the name of Allah, the Most Compassionate, the Most Merciful
+   
+    This software is authored by Mohamad Omar Nachawati, 1436-1439 AH
+:)
+
+module namespace acore = "http://dgms.io/unity/modules/analytics/core";
+
+import module namespace math = "http://www.w3.org/2005/xpath-functions/math";
+import module namespace r = "http://zorba.io/modules/random";
+(:import module namespace functx = "http://www.functx.com";:)
+import module namespace reflection = "http://zorba.io/modules/reflection";
+import module namespace libjn = "http://jsoniq.org/function-library";
+import module namespace ampl = "http://dgms.io/unity/modules/languages/ampl";
+
+declare namespace an = "http://zorba.io/annotations";
+declare namespace u = "http://dgms.io/unity";
+declare option u:symbolic-computation "disabled";
+
+declare %an:nondeterministic %public function acore:argmin($model, $input, $objective, $options)
+{
+    acore:optimize("min", $model, $input, $objective, $options)
+};
+
+declare %an:nondeterministic %public function acore:argmin($object)
+{
+    acore:optimize("min", $object.model, $object.input, $object.objective, $object.options)
+};
+
+declare %an:nondeterministic %public function acore:argmax($model, $input, $objective, $options)
+{
+    acore:optimize("max", $model, $input, $objective, $options)
+};
+
+declare %an:nondeterministic %public function acore:argmax($object)
+{
+    acore:optimize("max", $object.model, $object.input, $object.objective, $object.options)
+};
+
+declare %an:nondeterministic function acore:merge-types($exprs)
+{
+	if (some $expr in $exprs satisfies $expr.type eq "binary") then
+		"binary"
+	else if (some $expr in $exprs satisfies $expr.type eq "integer") then
+		"integer"
+	else
+		"decimal"
+};
+
+declare %an:nondeterministic function acore:check($expr)
+{
+	typeswitch($expr)
+	case integer
+		return { class: "polynomial", degree: 0, variables: [] }
+	case decimal
+		return { class: "polynomial", degree: 0, variables: [] }
+	case boolean
+		return { class: "polynomial", degree: 0, variables: [] }
+	case object
+		return
+		if (fn:exists($expr."integer?")) then
+            { class: "polynomial", degree: 1, variables: [ "integer" ] }
+        else if (fn:exists($expr."decimal?")) then
+            { class: "polynomial", degree: 1, variables: [ "decimal" ] }
+        else if (fn:exists($expr."binary?")) then
+            { class: "logical", degree: 1, variables: [ "binary" ] }
+        else
+		let $func := jn:keys($expr)[1]
+		let $checked-exprs := for $checked-expr in $expr.$func[] return acore:check($checked-expr)
+        return switch ($func)
+        	case "a.sum"
+        	case "+"
+        	case "-"
+        	case "u+"
+        	case "u-"
+        		return
+        			if (some $checked-expr in $checked-exprs satisfies $checked-expr.class eq "unknown") then
+						{ class: "unknown", type: acore:merge-types($checked-exprs) }
+        			else if (some $checked-expr in $checked-exprs satisfies $checked-expr.class eq "nonlinear") then
+						{ class: "nonlinear", type: acore:merge-types($checked-exprs) }
+					else
+						{ class: "linear", type: acore:merge-types($checked-exprs) }
+        	case "*"
+        	case "/"
+        	case "//"
+        	case "%"
+        	case "%%"
+        	case "**"
+        	case "max"
+        	case "min"
+            case "m.acos"
+            case "m.acosh"
+            case "m.asin"
+            case "m.asinh"
+            case "m.atan"
+            case "m.atan2"
+            case "m.atanh"
+            case "m.ceil"
+            case "m.cos"
+            case "m.floor"
+            case "m.round"
+            case "m.sin"
+            case "m.sinh"
+            case "m.tan"
+            case "m.tanh"
+        		return
+        			if (some $checked-expr in $checked-exprs satisfies $checked-expr.class eq "nonlinear") then
+						{ class: "nonlinear", type: acore:merge-types($checked-exprs) }
+					else if (sum(for $checked-expr in $checked-exprs where $checked-expr.class ne "constant" return 1) gt 1) then
+						{ class: "nonlinear", type: acore:merge-types($checked-exprs) }
+        			else
+						{ class: "linear", type: acore:merge-types($checked-exprs) }
+			case "=="
+			case ">="
+			case ">"
+			case "!="
+			case "<"
+			case "<="
+			case "&&"
+			case "||"
+			case "!"
+				return
+        			if (some $checked-expr in $checked-exprs satisfies $checked-expr.class eq "nonlinear") then
+						{ class: "nonlinear", type: "binary" }
+					else
+						{ class: "linear", type: "binary" }
+			case "m.pi"
+			case "m.e"
+				return
+					{ class: "constant", type: "decimal" }
+			case "m.abs"
+        	case "m.exp"
+            case "m.ln"
+            case "m.log10"
+            case "m.sqrt"
+        		return
+					{ class: "nonlinear", type: acore:merge-types($checked-exprs) }
+        	default
+        		return { class: "unknown", type: "unknown", func: $func }
+	default
+		return { class: "unknown", type: "unknown" }
+};
+
+declare %an:nondeterministic function acore:choose-solver($expression, $constraints)
+{
+	let $checked-expression := acore:check($expression)
+	let $checked-constraints := acore:check($constraints)
+	return switch ($checked-expression.class)
+	case "nonlinear"
+		return switch ($checked-constraints.class)
+		case "nonlinear"
+			return "snopt"
+		case "linear"
+			return "snopt"
+		default
+			return "simulation"
+	case "linear"
+		return switch ($checked-constraints.class)
+		case "nonlinear"
+			return "snopt"
+		case "linear"
+			return "cplex"
+		default
+			return "simulation"
+	default
+		return "simulation"
+};
+
+declare %an:nondeterministic function acore:optimize($mode, $model, $input, $objective, $options)
+{
+    let $reinput := acore:reindex($input)
+    let $output := acore:resolve-model($model)($reinput)
+
+    let $expression := reflection:eval("($output)!($$." || $objective || ")")
+    let $constraints := $output.constraints
+    let $objects := libjn:descendant-objects($reinput)
+
+    let $ivariables := {| for $id at $pos in fn:distinct-values($objects[fn:exists($$."integer?")]!$$."integer?") return { $id: {| { name: "vi"||$pos, kind: "integer" }, fn:head($objects[$$."integer?" eq $id]) |} } |}
+    let $dvariables := {| for $id at $pos in fn:distinct-values($objects[fn:exists($$."decimal?")]!$$."decimal?") return { $id: {| { name: "vd"||$pos, kind: "decimal" }, fn:head($objects[$$."decimal?" eq $id]) |} } |}
+    let $bvariables := {| for $id at $pos in fn:distinct-values($objects[fn:exists($$."binary?")]!$$."binary?") return { $id: {| { name: "vb"||$pos, kind: "binary" }, fn:head($objects[$$."binary?" eq $id]) |} } |}
+    let $variables := {| $ivariables, $dvariables, $bvariables |}
+
+	let $solver := if (not(exists($options.solver))) then acore:choose-solver($expression, $constraints) else $options.solver 
+    return
+    if ($options.solver eq "debug") then
+    	{ ampl: ampl:reduce({mode: $mode, objective: $expression, constraints: $constraints, variables: $variables, options: $options}), "check-expression": acore:check($expression), "check-constraints": acore:check($constraints), "expression": $expression, "constraints": $constraints, "solver": acore:choose-solver($expression, $constraints) }
+    else
+    	let $solution := ampl:solve(ampl:reduce({mode: $mode, objective: $expression, constraints: $constraints, variables: $variables, options: $options}), $solver)
+    	return acore:instantiate-variables($reinput, $variables, $solution)
+};
+
+declare %public function acore:resolve-model($model) as function(*)
+{
+    if ($model instance of function(*)) then
+        $model
+    else
+        let $model-id := normalize-space($model)
+        return if (starts-with($model-id, "Q{")) then
+            reflection:eval("jsoniq version \"1.0\"; import module namespace ns = \"" || substring-before(substring-after($model-id, "Q{"), "}")  || "\"; ns:" || substring-before(substring-after($model-id, "}"), "#") || "#" || substring-after($model-id, "#"))
+        else
+            reflection:eval($model-id)
+};
+
+declare %an:nondeterministic %private function acore:instantiate-variables($input, $variables, $solution)
+{
+  let $i :=  $input
+  return
+    if ($i instance of object) then
+      if ($i."integer?" and exists($solution.($variables.($i."integer?").name))) then
+      	number($solution.($variables.($i."integer?").name))
+      else if ($i."decimal?" and exists($solution.($variables.($i."decimal?").name))) then
+        number($solution.($variables.($i."decimal?").name))
+      else if ($i."binary?" and exists($solution.($variables.($i."binary?").name))) then
+        $solution.($variables.($i."binary?").name)
+      else if ($i."integer..." and exists($solution.($variables.($i."integer...").name))) then
+        $solution.($variables.($i."integer...").name)
+      else if ($i."decimal..." and exists($solution.($variables.($i."decimal...").name))) then
+        $solution.($variables.($i."decimal...").name)
+      else if ($i."binary..." and exists($solution.($variables.($i."binary...").name))) then
+        $solution.($variables.($i."binary...").name)
+      else
+      {|
+        for $k in jn:keys($i)
+        return
+          { $k : acore:instantiate-variables($i.$k,$variables,$solution) }
+      |}
+    else if ($i instance of array) then
+      [ for $j in $i[] return acore:instantiate-variables($j,$variables,$solution) ]
+    else $i
+};
+
+declare %an:nondeterministic %private function acore:reindex($item)
+{
+    for $i in $item
+    return
+        if ($i instance of object) then {|
+            for $k in jn:keys($i)
+            return
+                if ($k eq "integer?") then
+                    if ($i.$k eq null) then
+                        { "integer?" : "vi" || fn:replace(r:uuid(), "-", "_") }
+                    else
+                        { "integer?" : $i.$k }
+                else if ($k eq "decimal?") then
+                    if ($i.$k eq null) then
+                        { "decimal?" : "vd" || fn:replace(r:uuid(), "-", "_") }
+                    else
+                        { "decimal?" : $i.$k }
+                else if ($k eq "float?") then
+                    if ($i.$k eq null) then
+                        { "decimal?" : "vd" || fn:replace(r:uuid(), "-", "_") }
+                    else
+                        { "decimal?" : $i.$k }
+                else if ($k eq "binary?") then
+                    if ($i.$k eq null) then
+                        { "binary?" : "vb" || fn:replace(r:uuid(), "-", "_") }
+                    else
+                        { "binary?" : $i.$k }
+                else if ($k eq "logical?") then
+                    if ($i.$k eq null) then
+                        { "binary?" : "vb" || fn:replace(r:uuid(), "-", "_") }
+                    else
+                        { "binary?" : $i.$k }
+                else if ($k eq "integer...") then
+                    if ($i.$k eq null) then
+                        { "integer..." : "pi" || fn:replace(r:uuid(), "-", "_") }
+                    else
+                        { "integer..." : $i.$k }
+                else if ($k eq "decimal...") then
+                    if ($i.$k eq null) then
+                        { "decimal..." : "pd" || fn:replace(r:uuid(), "-", "_") }
+                    else
+                        { "decimal..." : $i.$k }
+                else if ($k eq "float...") then
+                    if ($i.$k eq null) then
+                        { "decimal..." : "pd" || fn:replace(r:uuid(), "-", "_") }
+                    else
+                        { "decimal..." : $i.$k }
+                else if ($k eq "binary...") then
+                    if ($i.$k eq null) then
+                        { "binary..." : "pb" || fn:replace(r:uuid(), "-", "_") }
+                    else
+                        { "binary..." : $i.$k }
+                else if ($k eq "logical...") then
+                    if ($i.$k eq null) then
+                        { "binary..." : "pb" || fn:replace(r:uuid(), "-", "_") }
+                    else
+                        { "binary..." : $i.$k }
+                else if ($i.$k instance of array) then
+                    { $k : [ acore:reindex($i.$k) ] }
+                else
+                    { $k : acore:reindex($i.$k) }
+        |}
+        else if ($i instance of array) then
+            for $j in $i[] return acore:reindex($j)
+        else $i
+};
