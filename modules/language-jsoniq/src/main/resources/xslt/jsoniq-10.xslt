@@ -555,42 +555,6 @@
 					</xsl:when>
 					<xsl:when test="not(contains(., ':'))">
 						<xsl:choose>
-							<xsl:choose>
-								<xsl:when test=". = 'abs'">
-									<xsl:text>_op:symbolic-abs</xsl:text>
-								</xsl:when>
-								<xsl:when test=". = 'ceiling'">
-									<xsl:text>_op:symbolic-ceiling</xsl:text>
-								</xsl:when>
-								<xsl:when test=". = 'floor'">
-									<xsl:text>_op:symbolic-floor</xsl:text>
-								</xsl:when>
-								<xsl:when test=". = 'max'">
-									<xsl:text>_op:symbolic-max</xsl:text>
-								</xsl:when>
-								<xsl:when test=". = 'min'">
-									<xsl:text>_op:symbolic-min</xsl:text>
-								</xsl:when>
-								<xsl:when test=". = 'round'">
-									<xsl:text>_op:symbolic-round</xsl:text>
-								</xsl:when>
-								<xsl:when test=". = 'sum'">
-									<xsl:text>_op:symbolic-sum</xsl:text>
-								</xsl:when>
-								<xsl:otherwise>
-									<xsl:value-of select="." />
-								</xsl:otherwise>
-							</xsl:choose>
-							<xsl:otherwise>
-								<xsl:value-of select="." />
-							</xsl:otherwise>
-						</xsl:choose>
-					</xsl:when>
-					<xsl:when test="starts-with(., 'jn:')">
-						<xsl:value-of select="." />
-					</xsl:when>
-					<xsl:when test="starts-with(., 'fn:')">
-						<xsl:choose>
 							<xsl:when test=". = 'abs'">
 								<xsl:text>_op:symbolic-abs</xsl:text>
 							</xsl:when>
@@ -610,6 +574,37 @@
 								<xsl:text>_op:symbolic-round</xsl:text>
 							</xsl:when>
 							<xsl:when test=". = 'sum'">
+								<xsl:text>_op:symbolic-sum</xsl:text>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:value-of select="." />
+							</xsl:otherwise>
+						</xsl:choose>
+					</xsl:when>
+					<xsl:when test="starts-with(., 'jn:')">
+						<xsl:value-of select="." />
+					</xsl:when>
+					<xsl:when test="starts-with(., 'fn:')">
+						<xsl:choose>
+							<xsl:when test=". = 'fn:abs'">
+								<xsl:text>_op:symbolic-abs</xsl:text>
+							</xsl:when>
+							<xsl:when test=". = 'fn:ceiling'">
+								<xsl:text>_op:symbolic-ceiling</xsl:text>
+							</xsl:when>
+							<xsl:when test=". = 'fn:floor'">
+								<xsl:text>_op:symbolic-floor</xsl:text>
+							</xsl:when>
+							<xsl:when test=". = 'fn:max'">
+								<xsl:text>_op:symbolic-max</xsl:text>
+							</xsl:when>
+							<xsl:when test=". = 'fn:min'">
+								<xsl:text>_op:symbolic-min</xsl:text>
+							</xsl:when>
+							<xsl:when test=". = 'fn:round'">
+								<xsl:text>_op:symbolic-round</xsl:text>
+							</xsl:when>
+							<xsl:when test=". = 'fn:sum'">
 								<xsl:text>_op:symbolic-sum</xsl:text>
 							</xsl:when>
 							<xsl:otherwise>

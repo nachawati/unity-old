@@ -243,8 +243,8 @@ declare function op:symbolic-every($values)
 declare function op:symbolic-instance-of($obj, $type)
 {
 	let $value :=
-		if ($obj instance of object and fn:exists($obj."@type") and $obj."@type" = null) then
-			0
+		if ($obj instance of object) then
+			if (fn:exists($obj."integer?")) then 0 else if (fn:exists($obj."decimal?") or fn:exists($obj."float?") or $obj."@type" instance of null) then 0.0 else if (fn:exists($obj."binary?") or fn:exists($obj."logical?")) then false else $obj
 		else
 			$obj
 	return switch ($type)
@@ -262,8 +262,7 @@ declare function op:symbolic-instance-of($obj, $type)
 		return $value instance of string
 	case "boolean"
 		return $value instance of boolean
-	default
-		return $type
+	default return false
 };
 
 declare function op:symbolic-if($if, $then, $else)
@@ -401,7 +400,7 @@ declare function op:symbolic-exp($arg)
 
 declare function op:symbolic-exp10($arg)
 {
-    rt:pow(10, $arg)
+    op:symbolic-pow(10, $arg)
 };
 
 declare function op:symbolic-log($arg)

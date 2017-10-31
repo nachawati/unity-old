@@ -438,17 +438,19 @@ public class ZorbaDGScriptContext extends SimpleScriptContext implements DGScrip
                 final String script = getResourceAsString(identifier);
                 if (script == null)
                     return null;
-                /*
-                 * System.out.println("-------------------------");
-                 * System.out.println("-------------------------"); System.out.println("START "
-                 * + identifier); System.out.println("-------------------------");
-                 * System.out.println("-------------------------");
-                 * System.out.println(engine.translate(script));
-                 * System.out.println("-------------------------");
-                 * System.out.println("-------------------------"); System.out.println("END " +
-                 * identifier); System.out.println("-------------------------");
-                 * System.out.println("-------------------------");
-                 */
+
+                // System.out.println("-------------------------");
+                // System.out.println("-------------------------");
+                // System.out.println("START " + identifier);
+                // System.out.println("-------------------------");
+                // System.out.println("-------------------------");
+                // System.out.println(engine.translate(script));
+                // System.out.println("-------------------------");
+                // System.out.println("-------------------------");
+                // System.out.println("END " + identifier);
+                // System.out.println("-------------------------");
+                // System.out.println("-------------------------");
+
                 return engine.translate(script);
             case 6:
                 if (identifier.startsWith("file:///"))

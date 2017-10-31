@@ -89,7 +89,7 @@
 									<arguments>
 										<argument>build</argument>
 										<argument>-t</argument>
-										<argument>dgms-cloud:${project.version}</argument>
+										<argument>registry.gitlab.com/nachawati/unity/cloud:${project.version}</argument>
 										<argument>.</argument>
 									</arguments>
 									<workingDirectory>${project.basedir}/../../target/linux-gcc-x86_64</workingDirectory>
