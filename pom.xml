@@ -5,10 +5,7 @@
     In the name of Allah, the Most Compassionate, the Most Merciful
    
     This software is authored by Mohamad Omar Nachawati, 1436-1439 AH
- -->
-
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+ --><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
 
@@ -55,7 +52,8 @@
 		<module>vendor/basex</module>
 		<module>vendor/rex</module>
 		<module>vendor/symjava</module>
-	</modules>
+    <module>server</module>
+  </modules>
 
 	<scm>
 		<connection>scm:git:git://github.com/nachawati/unity.git</connection>
@@ -166,7 +164,7 @@
 										</goals>
 									</pluginExecutionFilter>
 									<action>
-										<ignore />
+										<ignore/>
 									</action>
 								</pluginExecution>
 								<pluginExecution>
@@ -179,7 +177,7 @@
 										</goals>
 									</pluginExecutionFilter>
 									<action>
-										<ignore />
+										<ignore/>
 									</action>
 								</pluginExecution>
 								<pluginExecution>
@@ -192,7 +190,7 @@
 										</goals>
 									</pluginExecutionFilter>
 									<action>
-										<ignore />
+										<ignore/>
 									</action>
 								</pluginExecution>
 							</pluginExecutions>
@@ -218,10 +216,10 @@
 						</goals>
 						<configuration>
 							<target>
-								<copy file="${project.basedir}/NOTICE" tofile="${project.build.directory}/NOTICE" />
-								<copy file="${project.basedir}/NOTICE-3RD-PARTY" tofile="${project.build.directory}/NOTICE-3RD-PARTY" />
-								<copy file="${project.basedir}/package.json" tofile="${project.build.directory}/package.json" />
-								<copy file="${project.basedir}/README.md" tofile="${project.build.directory}/README.md" />
+								<copy file="${project.basedir}/NOTICE" tofile="${project.build.directory}/NOTICE"/>
+								<copy file="${project.basedir}/NOTICE-3RD-PARTY" tofile="${project.build.directory}/NOTICE-3RD-PARTY"/>
+								<copy file="${project.basedir}/package.json" tofile="${project.build.directory}/package.json"/>
+								<copy file="${project.basedir}/README.md" tofile="${project.build.directory}/README.md"/>
 							</target>
 						</configuration>
 					</execution>
