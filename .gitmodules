@@ -1,18 +1,18 @@
 [submodule "vendor/prebuilt"]
 	path = vendor/prebuilt
-	url = https://github.com/nachawati/unity-vendor-prebuilt.git
+	url = git@github.com:nachawati/unity-vendor-prebuilt.git
 [submodule "vendor/basex"]
 	path = vendor/basex
-	url = https://github.com/nachawati/basex.git
+	url = git@github.com:nachawati/basex.git
 [submodule "vendor/zorba"]
 	path = vendor/zorba
-	url = https://github.com/nachawati/zorba.git
+	url = git@github.com:nachawati/zorba.git
 [submodule "vendor/symengine"]
 	path = vendor/symengine
-	url = https://github.com/nachawati/symengine.git
+	url = git@github.com:nachawati/symengine.git
 [submodule "vendor/SymJava"]
 	path = vendor/SymJava
-	url = https://github.com/nachawati/SymJava.git
+	url = git@github.com:nachawati/SymJava.git
 [submodule "vendor/rex"]
 	path = vendor/rex
-	url = https://github.com/nachawati/rex.git
+	url = git@github.com:nachawati/rex.git
