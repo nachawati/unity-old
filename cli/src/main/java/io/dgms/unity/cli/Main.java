@@ -193,9 +193,11 @@ public final class Main
             JSch.setConfig("StrictHostKeyChecking", "no");
 
             commands.put("init", new Init());
+            commands.put("kernel", new Kernel());
             commands.put("key", new Key());
             commands.put("login", new Login());
             commands.put("logout", new Logout());
+            commands.put("notebook", new Notebook());
             commands.put("projects", new Projects());
             commands.put("run", new Run());
             commands.put("submit", new Submit());
