@@ -1,4 +1,28 @@
-language: java
-sudo: false
+language: java cpp
+sudo: required
+before_install:
+- sudo apt-get update -yq
+
+- sudo apt-get install -yq apt-transport-https
+- sudo apt-get install -yq ca-certificates
+- sudo apt-get install -yq curl
+- sudo apt-get install -yq gnupg2
+- sudo apt-get install -yq software-properties-common
+- sudo apt-get install -yq build-essential 
+- sudo apt-get install -yq cmake
+
+- sudo apt-get install -yq sudo
+- sudo useradd -m docker && echo "docker:docker" | chpasswd && adduser docker sudo
+
+- sudo curl -fsSL https://download.docker.com/linux/$(. /etc/os-release; echo "$ID")/gpg | sudo apt-key add -
+- sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/$(. /etc/os-release; echo "$ID") $(lsb_release -cs) stable"
+- sudo apt-get update -yq
+- sudo apt-get install -yq docker-ce
+
+- sudo curl -sL https://deb.nodesource.com/setup_8.x | bash -
+- sudo apt-get update -yq
+
+- sudo apt-get install -yq nodejs
+
 script:
 - mvn clean install
