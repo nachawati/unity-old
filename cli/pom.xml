@@ -76,8 +76,77 @@
 				</executions>
 			</plugin>
 
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>3.0.2</version>
+				<executions>
+
+					<execution>
+						<id>copy-kernels</id>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.basedir}/../target/${target}/kernels</outputDirectory>
+							<overwrite>true</overwrite>
+							<resources>
+								<resource>
+									<directory>${project.basedir}/src/main/kernels</directory>
+									<filtering>true</filtering>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+
+				</executions>
+			</plugin>
+
 		</plugins>
 	</build>
+
+	<profiles>
+
+		<profile>
+
+			<id>windows-msvc-x86_64</id>
+
+			<activation>
+
+				<os>
+					<arch>amd64</arch>
+					<family>windows</family>
+				</os>
+
+			</activation>
+
+			<properties>
+				<dgms.command>"cmd", "/C", "dgms-windows-msvc-x86_64"</dgms.command>
+			</properties>
+
+		</profile>
+
+		<profile>
+
+			<id>linux-gcc-x86_64</id>
+
+			<activation>
+
+				<os>
+					<arch>amd64</arch>
+					<family>linux</family>
+				</os>
+
+			</activation>
+
+			<properties>
+				<dgms.command>"dgms-linux-gcc-x86_64"</dgms.command>
+			</properties>
+
+		</profile>
+
+	</profiles>
 
 	<dependencies>
 

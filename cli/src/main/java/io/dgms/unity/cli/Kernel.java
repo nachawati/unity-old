@@ -18,6 +18,9 @@ public class Kernel extends Command
     @Parameter(description = "[connection_file]", required = true)
     private List<String> connectionFiles;
 
+    @Parameter(names = { "-e", "--engine" }, description = "Engine")
+    protected String     engine = "basex";
+
     @Override
     public void action() throws DGException, IOException
     {

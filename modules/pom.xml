@@ -30,7 +30,6 @@
 		<module>language-ampl</module>
 		<module>language-jsoniq</module>
 		<module>symbolics</module>
-		<module>unity-modules-kernel</module>
 	</modules>
 
 </project>

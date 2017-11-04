@@ -188,7 +188,6 @@ public final class Main
         final Map<String, Command> commands = new TreeMap<>();
         JCommander jCommander = null;
         try {
-            final DGSession session = restore();
             AnsiConsole.systemInstall();
             JSch.setConfig("StrictHostKeyChecking", "no");
 
@@ -219,9 +218,13 @@ public final class Main
                 final String implementationVersion = Main.class.getPackage().getImplementationVersion();
                 final Object version = ansi().fgBright(GREEN).a(implementationVersion).reset();
                 System.out.println("Unity DGMS, Version " + version);
-            } else if (commands.containsKey(jCommander.getParsedCommand() != null ? jCommander.getParsedCommand() : ""))
-                commands.get(jCommander.getParsedCommand()).run(session);
-            else
+            } else if (commands
+                    .containsKey(jCommander.getParsedCommand() != null ? jCommander.getParsedCommand() : "")) {
+                if ("notebook".equals(jCommander.getParsedCommand()))
+                    commands.get(jCommander.getParsedCommand()).run(null);
+                else
+                    commands.get(jCommander.getParsedCommand()).run(restore());
+            } else
                 throw new ParameterException("unknown command: " + jCommander.getParsedCommand());
         } catch (final ParameterException e) {
             System.out.println(ansi().fgBright(RED).a("[ERROR]").reset() + " " + e.getMessage());

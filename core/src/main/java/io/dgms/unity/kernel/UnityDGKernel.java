@@ -13,6 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
@@ -39,6 +40,8 @@ import com.google.gson.reflect.TypeToken;
 
 import io.dgms.unity.UnityDGSession;
 import io.dgms.unity.UnityDGSessionObject;
+import io.dgms.unity.modules.engines.basex.BaseXDGScriptEngine;
+import io.dgms.unity.modules.engines.basex.BaseXDGScriptEngineFactory;
 
 public class UnityDGKernel extends UnityDGSessionObject implements AutoCloseable
 {
@@ -63,16 +66,19 @@ public class UnityDGKernel extends UnityDGSessionObject implements AutoCloseable
             settings = new Gson().fromJson(reader, ConnectionSettings.class);
             context = ZMQ.context(1);
             running = new AtomicBoolean(true);
-            heartBeatChannel = new HeartBeatChannel();
-            shellChannel = new ShellChannel();
+
             outputChannel = new OutputChannel();
+            heartBeatChannel = new HeartBeatChannel();
             controlChannel = new ControlChannel();
-            inputChannel = new InputChannel();
-            heartBeatChannel.start();
+            shellChannel = new ShellChannel();
+            inputChannel = null;// new InputChannel();
+
+            // outputChannel.start();
             shellChannel.start();
-            outputChannel.start();
             controlChannel.start();
-            inputChannel.start();
+            heartBeatChannel.start();
+
+            // inputChannel.start();
         }
     }
 
@@ -109,6 +115,7 @@ public class UnityDGKernel extends UnityDGSessionObject implements AutoCloseable
             final ZMsg zMsg = ZMsg.recvMsg(socket);
             try {
                 final Message message = new Message();
+                message.identities = new LinkedList<>();
                 final ZFrame[] zFrames = zMsg.toArray(new ZFrame[zMsg.size()]);
                 boolean found = false;
                 int current = 0;
@@ -168,6 +175,7 @@ public class UnityDGKernel extends UnityDGSessionObject implements AutoCloseable
                 try {
                     onMessage(receive(socket, key));
                 } catch (final Exception e) {
+                    e.printStackTrace();
                 }
         }
 
@@ -177,7 +185,7 @@ public class UnityDGKernel extends UnityDGSessionObject implements AutoCloseable
             final ZMsg zMsg = new ZMsg();
             if (message.identities != null)
                 for (final String identity : message.identities)
-                    zMsg.add(identity);
+                    zMsg.add(identity.getBytes(StandardCharsets.UTF_8));
             zMsg.add("<IDS|MSG>");
 
             byte[] header = null;
@@ -208,8 +216,8 @@ public class UnityDGKernel extends UnityDGSessionObject implements AutoCloseable
             final SecretKeySpec keySpec = new SecretKeySpec(key, "HmacSHA256");
             final Mac mac = Mac.getInstance("HmacSHA256");
             mac.init(keySpec);
-            for (int i = 0; i < 4; i++)
-                mac.update(data[i]);
+            for (final byte[] d : data)
+                mac.update(d);
             final byte[] signature = DatatypeConverter.printHexBinary(mac.doFinal()).toLowerCase()
                     .getBytes(StandardCharsets.UTF_8);
 
@@ -254,12 +262,6 @@ public class UnityDGKernel extends UnityDGSessionObject implements AutoCloseable
         ControlChannel()
         {
             super(settings.address, settings.controlPort, ZMQ.ROUTER);
-        }
-
-        @Override
-        void onMessage(Message message)
-        {
-            // TODO Auto-generated method stub
         }
     }
 
@@ -318,12 +320,6 @@ public class UnityDGKernel extends UnityDGSessionObject implements AutoCloseable
         {
             super(settings.address, settings.stdinPort, ZMQ.ROUTER);
         }
-
-        @Override
-        void onMessage(Message message)
-        {
-            // TODO Auto-generated method stub
-        }
     }
 
     static class Message
@@ -352,20 +348,13 @@ public class UnityDGKernel extends UnityDGSessionObject implements AutoCloseable
         {
             header = new Header(messageType, sessionId, username);
         }
-
     }
 
     class OutputChannel extends Channel
     {
         OutputChannel()
         {
-            super(settings.address, settings.iopubPort, ZMQ.ROUTER);
-        }
-
-        @Override
-        void onMessage(Message message)
-        {
-            // TODO Auto-generated method stub
+            super(settings.address, settings.iopubPort, ZMQ.PUB);
         }
     }
 
@@ -400,37 +389,35 @@ public class UnityDGKernel extends UnityDGSessionObject implements AutoCloseable
                 kernelInfoReply.content.put("language_info", languageInfo);
                 kernelInfoReply.content.put("banner", "Unity DGMS Kernel");
                 send(kernelInfoReply);
-                sendStatus(message, "idle");
+                outputChannel.sendStatus(message, "idle");
             } else if ("execute_request".equals(message.header.messageType)) {
 
-                sendStatus(message, "busy");
+                outputChannel.sendStatus(message, "busy");
 
                 final Message executeInput = new Message(message, "execute_input");
                 executeInput.content.put("execution_count", globalExecutionCount);
                 executeInput.content.put("code", message.content.get("code"));
 
-                send(executeInput);
+                outputChannel.send(executeInput);
 
                 final Message stream = new Message(message, "stream");
                 stream.content.put("name", "stdout");
-                send(stream);
+                outputChannel.send(stream);
 
                 final Message executeResult = new Message(message, "execute_result");
                 executeResult.content.put("execution_count", globalExecutionCount);
                 final Map<String, Object> data = new HashMap<>();
 
-                final QueryProcessor processor = new QueryProcessor(message.content.get("code").toString(),
-                        new Context());
-                final ByteArrayOutputStream bout = new ByteArrayOutputStream();
-                final Serializer serializer = processor.getSerializer(bout);
-                for (final Item item : processor.value())
-                    serializer.serialize(item);
-                data.put("text/plain", new String(bout.toByteArray()));
+                try (BaseXDGScriptEngine engine = new BaseXDGScriptEngineFactory().getScriptEngine()) {
+                    final Object result = engine.eval(message.content.get("code").toString());
+                    data.put("text/plain", result.toString());
+                }
+
                 executeResult.content.put("data", data);
                 executeResult.content.put("metadata", new HashMap<>());
-                send(executeResult);
+                outputChannel.send(executeResult);
 
-                sendStatus(message, "idle");
+                outputChannel.sendStatus(message, "idle");
 
                 final Message executeReply = new Message(message, "execute_reply");
                 executeReply.content.put("status", "ok");
