@@ -1,7 +1,7 @@
 {
 	"name": "language-jsoniq",
 	"version": "${project.version}",
-	"description": "JSONiq for Unity",
+	"description": "JSONiq language for Unity",
 	"homepage": "https://github.com/nachawati/unity#readme",
 	"bugs": {
 		"url": "https://github.com/nachawati/unity/issues"

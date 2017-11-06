@@ -14,13 +14,13 @@
 
 	<parent>
 		<groupId>io.dgms.unity</groupId>
-		<artifactId>unity-modules</artifactId>
+		<artifactId>unity-modules-languages</artifactId>
 		<version>0.1.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>module-engine-basex</artifactId>
+	<artifactId>module-language-jsoniq</artifactId>
 
-	<name>Unity / Modules / Engines / BaseX</name>
+	<name>Unity / Modules / Languages / JSONiq</name>
 
 	<build>
 		<plugins>
@@ -36,7 +36,7 @@
 							<goal>copy-resources</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>${project.basedir}/../../target/${target}/modules/engine-basex</outputDirectory>
+							<outputDirectory>${project.basedir}/../../../target/${target}/modules/language-jsoniq</outputDirectory>
 							<overwrite>true</overwrite>
 							<resources>
 
@@ -66,8 +66,8 @@
 	<dependencies>
 
 		<dependency>
-			<groupId>commons-io</groupId>
-			<artifactId>commons-io</artifactId>
+			<groupId>org.basex</groupId>
+			<artifactId>basex</artifactId>
 		</dependency>
 
 		<dependency>
@@ -75,27 +75,10 @@
 			<artifactId>unity-api</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-
-		<dependency>
-			<groupId>io.dgms.unity</groupId>
-			<artifactId>module-language-jsoniq</artifactId>
-			<version>${project.version}</version>
-		</dependency>
 		
 		<dependency>
-			<groupId>io.dgms.unity</groupId>
-			<artifactId>module-symbolics</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.basex</groupId>
-			<artifactId>basex</artifactId>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
 		</dependency>
 
 	</dependencies>

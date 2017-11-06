@@ -5,7 +5,7 @@
 
 [![Build Status](https://travis-ci.com/nachawati/unity.svg?token=q1txUcHApehcMiQJcA2S&branch=master)](https://travis-ci.com/nachawati/unity) [![NPM version](http://img.shields.io/npm/v/dgms.svg?style=flat)](http://badge.fury.io/js/dgms)
 
-Unity is a research prototype of a decision guidance management system (DGMS) for rapid decision guidance application development.
+Unity is a research prototype of a decision guidance management system (DGMS) for rapid decision guidance system development.
 
 ## About Unity DGMS
 Enterprises across all industries depend on decision guidance to facilitate decision-making across all lines of business. Despite significant technological advances, current development paradigms for decision guidance systems are ad-hoc and lead to systems that exhibit an overly tight coupling of analytical models, algorithms and underlying tools. This inhibits both the reusability and the interoperability of such systems. To address these limitations, a paradigm shift for decision guidance systems development is needed.

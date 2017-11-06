@@ -14,14 +14,14 @@
 
 	<parent>
 		<groupId>io.dgms.unity</groupId>
-		<artifactId>unity-distros</artifactId>
+		<artifactId>unity-distro</artifactId>
 		<version>0.1.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>distro-node</artifactId>
+	<artifactId>distro-nodejs</artifactId>
 	<packaging>pom</packaging>
 
-	<name>Unity / Distros / Node</name>
+	<name>Unity / Distro / Node.js</name>
 
 	<build>
 
@@ -88,7 +88,7 @@
 										<argument>install</argument>
 										<argument>-g</argument>
 									</arguments>
-									<workingDirectory>${project.basedir}/../../target/windows-msvc-x86_64</workingDirectory>
+									<workingDirectory>${project.basedir}/../../target/${target}</workingDirectory>
 								</configuration>
 							</execution>
 
@@ -136,7 +136,7 @@
 										<argument>install</argument>
 										<argument>--no-bin-links</argument>
 									</arguments>
-									<workingDirectory>${project.basedir}/../../target/linux-gcc-x86_64</workingDirectory>
+									<workingDirectory>${project.basedir}/../../target/${target}</workingDirectory>
 								</configuration>
 							</execution>
 
@@ -158,7 +158,7 @@
 			<artifactId>unity-cli</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-
+		
 	</dependencies>
 
 </project>

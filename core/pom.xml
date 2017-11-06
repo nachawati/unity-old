@@ -111,24 +111,6 @@
 		</dependency>
 
 		<dependency>
-			<groupId>io.dgms.unity</groupId>
-			<artifactId>module-engine-basex</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>io.dgms.unity</groupId>
-			<artifactId>module-engine-zorba</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>io.dgms.unity</groupId>
-			<artifactId>module-analytics</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-
-		<dependency>
 			<groupId>org.zeromq</groupId>
 			<artifactId>jeromq</artifactId>
 		</dependency>

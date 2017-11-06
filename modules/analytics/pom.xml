@@ -53,6 +53,11 @@
 									<directory>${project.basedir}/src/main/jsoniq</directory>
 									<filtering>false</filtering>
 								</resource>
+								
+								<resource>
+									<directory>${project.basedir}/src/main/xquery</directory>
+									<filtering>false</filtering>
+								</resource>
 
 							</resources>
 						</configuration>

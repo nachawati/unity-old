@@ -14,14 +14,14 @@
 
 	<parent>
 		<groupId>io.dgms.unity</groupId>
-		<artifactId>unity-distros</artifactId>
+		<artifactId>unity-distro</artifactId>
 		<version>0.1.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>distro-cloud</artifactId>
+	<artifactId>distro-docker</artifactId>
 	<packaging>pom</packaging>
 
-	<name>Unity / Distros / Cloud</name>
+	<name>Unity / Distro / Docker</name>
 
 	<profiles>
 
@@ -89,10 +89,10 @@
 									<arguments>
 										<argument>build</argument>
 										<argument>-t</argument>
-										<argument>registry.gitlab.com/nachawati/unity/cloud:${project.version}</argument>
+										<argument>registry.gitlab.com/nachawati/unity/docker:${project.version}</argument>
 										<argument>.</argument>
 									</arguments>
-									<workingDirectory>${project.basedir}/../../target/linux-gcc-x86_64</workingDirectory>
+									<workingDirectory>${project.basedir}/../../target/${target}</workingDirectory>
 								</configuration>
 							</execution>
 
@@ -111,7 +111,7 @@
 
 		<dependency>
 			<groupId>io.dgms.unity</groupId>
-			<artifactId>distro-node</artifactId>
+			<artifactId>distro-nodejs</artifactId>
 			<version>${project.version}</version>
 			<type>pom</type>
 		</dependency>

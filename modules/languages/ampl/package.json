@@ -1,7 +1,7 @@
 {
 	"name": "language-ampl",
 	"version": "${project.version}",
-	"description": "AMPL for Unity",
+	"description": "AMPL language for Unity",
 	"homepage": "https://github.com/nachawati/unity#readme",
 	"bugs": {
 		"url": "https://github.com/nachawati/unity/issues"

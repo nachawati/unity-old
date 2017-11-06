@@ -1,6 +1,5 @@
 package io.dgms.unity.kernel;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
@@ -24,10 +23,6 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
 
-import org.basex.core.Context;
-import org.basex.io.serial.Serializer;
-import org.basex.query.QueryProcessor;
-import org.basex.query.value.item.Item;
 import org.zeromq.ZFrame;
 import org.zeromq.ZMQ;
 import org.zeromq.ZMQ.Socket;
@@ -40,8 +35,8 @@ import com.google.gson.reflect.TypeToken;
 
 import io.dgms.unity.UnityDGSession;
 import io.dgms.unity.UnityDGSessionObject;
-import io.dgms.unity.modules.engines.basex.BaseXDGScriptEngine;
-import io.dgms.unity.modules.engines.basex.BaseXDGScriptEngineFactory;
+import io.dgms.unity.api.DGScriptEngine;
+import io.dgms.unity.system.UnityDGSystem;
 
 public class UnityDGKernel extends UnityDGSessionObject implements AutoCloseable
 {
@@ -408,7 +403,7 @@ public class UnityDGKernel extends UnityDGSessionObject implements AutoCloseable
                 executeResult.content.put("execution_count", globalExecutionCount);
                 final Map<String, Object> data = new HashMap<>();
 
-                try (BaseXDGScriptEngine engine = new BaseXDGScriptEngineFactory().getScriptEngine()) {
+                try (DGScriptEngine engine = UnityDGSystem.getLocalEngineByName("basex")) {
                     final Object result = engine.eval(message.content.get("code").toString());
                     data.put("text/plain", result.toString());
                 }

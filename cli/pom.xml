@@ -72,16 +72,7 @@
 							</resources>
 						</configuration>
 					</execution>
-
-				</executions>
-			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-resources-plugin</artifactId>
-				<version>3.0.2</version>
-				<executions>
-
+					
 					<execution>
 						<id>copy-kernels</id>
 						<phase>process-resources</phase>
@@ -122,7 +113,7 @@
 			</activation>
 
 			<properties>
-				<dgms.command>"cmd", "/C", "dgms-windows-msvc-x86_64"</dgms.command>
+				<dgms.command>"cmd", "/C", "dgms"</dgms.command>
 			</properties>
 
 		</profile>
@@ -141,7 +132,7 @@
 			</activation>
 
 			<properties>
-				<dgms.command>"dgms-linux-gcc-x86_64"</dgms.command>
+				<dgms.command>"dgms"</dgms.command>
 			</properties>
 
 		</profile>
@@ -191,6 +182,82 @@
 		<dependency>
 			<groupId>org.eclipse.jetty</groupId>
 			<artifactId>jetty-runner</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>io.dgms.unity</groupId>
+			<artifactId>module-analysis</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.dgms.unity</groupId>
+			<artifactId>module-analytics</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.dgms.unity</groupId>
+			<artifactId>module-engine-basex</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.dgms.unity</groupId>
+			<artifactId>module-engine-zorba</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.dgms.unity</groupId>
+			<artifactId>module-language-ampl</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.dgms.unity</groupId>
+			<artifactId>module-language-jsoniq</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.dgms.unity</groupId>
+			<artifactId>module-language-xquery</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.dgms.unity</groupId>
+			<artifactId>module-learning</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.dgms.unity</groupId>
+			<artifactId>module-numerics</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.dgms.unity</groupId>
+			<artifactId>module-optimization</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.dgms.unity</groupId>
+			<artifactId>module-random</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.dgms.unity</groupId>
+			<artifactId>module-search</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.dgms.unity</groupId>
+			<artifactId>module-statistics</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.dgms.unity</groupId>
+			<artifactId>module-symbolics</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.dgms.unity</groupId>
+			<artifactId>module-visualization</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 
 	</dependencies>

@@ -32,7 +32,7 @@ import io.dgms.unity.system.UnityDGSystem;
  * @author Mohamad Omar Nachawati
  *
  */
-@Parameters(commandNames = "run", commandDescription = "Execute local script or query")
+@Parameters(commandNames = "run", commandDescription = "Execute local script or query", hidden = true)
 public class Run extends Command
 {
     /**

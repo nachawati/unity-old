@@ -18,14 +18,14 @@
 		<version>0.1.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>unity-distros</artifactId>
+	<artifactId>unity-distro</artifactId>
 	<packaging>pom</packaging>
 
-	<name>Unity / Distros</name>
+	<name>Unity / Distro</name>
 
 	<modules>
-		<module>cloud</module>
-		<module>node</module>
+		<module>docker</module>
+		<module>nodejs</module>
 	</modules>
 
 </project>

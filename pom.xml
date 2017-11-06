@@ -14,7 +14,7 @@
 	<packaging>pom</packaging>
 
 	<name>Unity</name>
-	<description>Unity is a research prototype of a decision guidance management system (DGMS) for rapid decision guidance application development.</description>
+	<description>Unity is a research prototype of a decision guidance management system (DGMS) for rapid decision guidance system development.</description>
 
 	<url>https://github.com/nachawati/unity</url>
 
@@ -45,7 +45,7 @@
 		<module>cli</module>
 		<module>client</module>
 		<module>core</module>
-		<module>distros</module>
+		<module>distro</module>
 		<module>modules</module>
 		<module>server</module>
 		<module>vendor/basex</module>

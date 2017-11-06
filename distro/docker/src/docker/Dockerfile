@@ -5,12 +5,11 @@ RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
 RUN apt-get update -yq
 RUN apt-get install -yq nodejs
 
-ADD . /unity
+ADD . /opt/unity
 
-RUN npm install -g /unity
-
+RUN npm install -g /opt/unity
 
 VOLUME "/root/.dgms"
-VOLUME "/root/workspace"
-WORKDIR "/root/workspace"
-ENTRYPOINT [ "dgms-linux-gcc-x86_64" ]
+VOLUME "/workspace"
+WORKDIR "/workspace"
+ENTRYPOINT [ "dgms" ]

@@ -15,4 +15,4 @@ SET homedir=%homedir:~1%
 SET homedir=/c%homedir::=%
 
 docker build -t unity-build:latest %~dp0src\docker
-docker run -it --rm -v /var/run/docker.sock:/var/run/docker.sock -v "%basedir%:/opt/unity" -v "%homedir%/.m2:/root/.m2" -w /opt/unity unity-build:latest mvn clean
+docker run -it --rm -v /var/run/docker.sock:/var/run/docker.sock -v "%basedir%:/build" -v "%homedir%/.m2:/root/.m2" -w /build unity-build:latest mvn clean

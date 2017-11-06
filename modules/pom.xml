@@ -24,12 +24,18 @@
 	<name>Unity / Modules</name>
 
 	<modules>
+		<module>analysis</module>
 		<module>analytics</module>
-		<module>engine-basex</module>
-		<module>engine-zorba</module>
-		<module>language-ampl</module>
-		<module>language-jsoniq</module>
+		<module>engines</module>
+		<module>languages</module>
+		<module>learning</module>
+		<module>numerics</module>
+		<module>optimization</module>
+		<module>random</module>
+		<module>search</module>
+		<module>statistics</module>
 		<module>symbolics</module>
+		<module>visualization</module>
 	</modules>
 
 </project>

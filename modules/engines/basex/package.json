@@ -1,7 +1,7 @@
 {
-	"name": "engine-zorba",
+	"name": "engine-basex",
 	"version": "${project.version}",
-	"description": "Zorba for Unity",
+	"description": "BaseX engine for Unity",
 	"homepage": "https://github.com/nachawati/unity#readme",
 	"bugs": {
 		"url": "https://github.com/nachawati/unity/issues"

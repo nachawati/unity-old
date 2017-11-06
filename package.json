@@ -16,7 +16,7 @@
 	"license": "SEE LICENSE IN NOTICE",
 	"author": "Mohamad Omar Nachawati",
 	"bin": {
-		"dgms-${target}": "bin/dgms.js"
+		"dgms": "bin/dgms.js"
 	},
 	"repository": {
 		"type": "git",
