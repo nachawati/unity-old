@@ -53,7 +53,7 @@
 									<directory>${project.basedir}/src/main/jsoniq</directory>
 									<filtering>false</filtering>
 								</resource>
-								
+
 								<resource>
 									<directory>${project.basedir}/src/main/xquery</directory>
 									<filtering>false</filtering>
@@ -67,5 +67,26 @@
 
 		</plugins>
 	</build>
+
+	<dependencies>
+
+		<dependency>
+			<groupId>org.basex</groupId>
+			<artifactId>basex</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>io.dgms.unity</groupId>
+			<artifactId>unity-api</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jzy3d</groupId>
+			<artifactId>jzy3d-api</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+
+	</dependencies>
 
 </project>

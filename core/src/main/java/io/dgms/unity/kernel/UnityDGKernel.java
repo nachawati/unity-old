@@ -1,5 +1,7 @@
 package io.dgms.unity.kernel;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
@@ -10,6 +12,7 @@ import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -21,6 +24,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+import javax.imageio.ImageIO;
 import javax.xml.bind.DatatypeConverter;
 
 import org.zeromq.ZFrame;
@@ -405,6 +409,12 @@ public class UnityDGKernel extends UnityDGSessionObject implements AutoCloseable
 
                 try (DGScriptEngine engine = UnityDGSystem.getLocalEngineByName("basex")) {
                     final Object result = engine.eval(message.content.get("code").toString());
+                    if (result instanceof BufferedImage)
+                        try (ByteArrayOutputStream o = new ByteArrayOutputStream()) {
+                            ImageIO.write((BufferedImage) result, "png", o);
+                            data.put("image/png",
+                                    new String(Base64.getEncoder().encode(o.toByteArray()), StandardCharsets.UTF_8));
+                        }
                     data.put("text/plain", result.toString());
                 }
 

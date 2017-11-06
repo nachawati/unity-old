@@ -191,6 +191,7 @@ public final class Main
             AnsiConsole.systemInstall();
             JSch.setConfig("StrictHostKeyChecking", "no");
 
+            commands.put("console", new Console());
             commands.put("init", new Init());
             commands.put("kernel", new Kernel());
             commands.put("key", new Key());
@@ -221,6 +222,8 @@ public final class Main
             } else if (commands
                     .containsKey(jCommander.getParsedCommand() != null ? jCommander.getParsedCommand() : "")) {
                 if ("notebook".equals(jCommander.getParsedCommand()))
+                    commands.get(jCommander.getParsedCommand()).run(null);
+                if ("console".equals(jCommander.getParsedCommand()))
                     commands.get(jCommander.getParsedCommand()).run(null);
                 else
                     commands.get(jCommander.getParsedCommand()).run(restore());
