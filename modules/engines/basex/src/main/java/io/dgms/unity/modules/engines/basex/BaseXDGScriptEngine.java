@@ -227,7 +227,7 @@ public class BaseXDGScriptEngine implements DGScriptEngine
         try (QueryProcessor processor = new QueryProcessor(translate(script),
                 ((BaseXDGScriptContext) context).context)) {
             processor.uriResolver((BaseXDGScriptContext) context);
-            return processor.value();
+            return processor.value().toJava();
         } catch (final Exception e) {
             throw new ScriptException(e);
         }
@@ -341,6 +341,7 @@ public class BaseXDGScriptEngine implements DGScriptEngine
     protected String translate(String script)
     {
         try {
+            System.out.println(translator.translate(script));
             return translator.translate(script);
         } catch (final DGException e) {
             return script;

@@ -12,6 +12,7 @@ import javax.script.ScriptContext;
 import javax.script.ScriptException;
 
 import org.basex.query.QueryProcessor;
+import org.basex.query.value.Value;
 
 import io.dgms.unity.api.DGCompiledScript;
 
@@ -61,7 +62,8 @@ public class BaseXDGCompiledScript extends DGCompiledScript
     public Object eval(ScriptContext context) throws ScriptException
     {
         try {
-            return processor.value();
+            final Value value = processor.value();
+            return value.toJava();
         } catch (final Exception e) {
             throw new ScriptException(e);
         }

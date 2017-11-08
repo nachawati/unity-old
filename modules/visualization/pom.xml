@@ -24,6 +24,7 @@
 
 	<build>
 		<plugins>
+
 			<plugin>
 				<artifactId>maven-resources-plugin</artifactId>
 				<version>3.0.2</version>
@@ -71,6 +72,11 @@
 	<dependencies>
 
 		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+		</dependency>
+
+		<dependency>
 			<groupId>org.basex</groupId>
 			<artifactId>basex</artifactId>
 		</dependency>
@@ -82,9 +88,9 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.jzy3d</groupId>
-			<artifactId>jzy3d-api</artifactId>
-			<version>1.0.0</version>
+			<groupId>aliceinnets</groupId>
+			<artifactId>java-jyplot</artifactId>
+			<version>1.0.3</version>
 		</dependency>
 
 	</dependencies>

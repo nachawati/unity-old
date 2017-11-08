@@ -4,8 +4,7 @@ module namespace p = "http://dgms.io/unity/modules/visualization/plotting";
 
 import module namespace java = "java:io.dgms.unity.modules.visualization.plotting.BaseXModule";
 
-
-declare function p:plot()
+declare function p:plot2d($input)
 {
-	java:plot()
+	java:plot2d($input)
 };

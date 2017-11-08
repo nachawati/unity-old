@@ -694,7 +694,7 @@
 
 		<xsl:text>array { </xsl:text>
 		<xsl:copy>
-			<xsl:apply-templates select="Expr">
+			<xsl:apply-templates select="*[not(@type='whitespace')][2]">
 				<xsl:with-param name="symbolic-module" select="$symbolic-module" />
 				<xsl:with-param name="symbolic-context" select="$symbolic-context" />
 			</xsl:apply-templates>

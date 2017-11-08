@@ -25,7 +25,9 @@
 
 	<modules>
 		<module>ampl</module>
+		<module>javascript</module>
 		<module>jsoniq</module>
+		<module>typescript</module>
 		<module>xquery</module>
 	</modules>
 

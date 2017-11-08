@@ -259,7 +259,7 @@
 			<artifactId>module-visualization</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-
+		
 	</dependencies>
 
 </project>

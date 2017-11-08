@@ -9,8 +9,12 @@ import io.dgms.unity.api.DGSystem;
 public class NotebookTest
 {
     @Test
-    public void test() throws IOException
+    public void test() throws IOException, InterruptedException
     {
+        Runtime.getRuntime().exec("taskkill /F /IM java.exe").waitFor();
+        Runtime.getRuntime().exec("taskkill /F /IM jupyter.exe").waitFor();
+        Runtime.getRuntime().exec("taskkill /F /IM jupyter-notebook.exe").waitFor();
+
         final ProcessBuilder processBuilder = new ProcessBuilder("jupyter", "notebook");
         processBuilder.environment().put("JUPYTER_PATH", DGSystem.getInstallPath().toString());
         processBuilder.redirectOutput(ProcessBuilder.Redirect.INHERIT);

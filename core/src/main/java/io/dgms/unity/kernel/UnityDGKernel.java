@@ -3,7 +3,9 @@ package io.dgms.unity.kernel;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.Reader;
+import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -47,6 +49,7 @@ public class UnityDGKernel extends UnityDGSessionObject implements AutoCloseable
     private final ZMQ.Context        context;
     private final ControlChannel     controlChannel;
     private final HeartBeatChannel   heartBeatChannel;
+    private final String             id;
     private final InputChannel       inputChannel;
     private final OutputChannel      outputChannel;
     private final AtomicBoolean      running;
@@ -62,6 +65,7 @@ public class UnityDGKernel extends UnityDGSessionObject implements AutoCloseable
     {
         super(session);
         try (Reader reader = Files.newBufferedReader(connectionFile)) {
+            id = UUID.randomUUID().toString();
             settings = new Gson().fromJson(reader, ConnectionSettings.class);
             context = ZMQ.context(1);
             running = new AtomicBoolean(true);
@@ -90,6 +94,13 @@ public class UnityDGKernel extends UnityDGSessionObject implements AutoCloseable
         outputChannel.interrupt();
         controlChannel.interrupt();
         inputChannel.interrupt();
+    }
+
+    static DateFormat DF;
+
+    static {
+        DF = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.S'Z'");
+        DF.setTimeZone(TimeZone.getTimeZone("UTC"));
     }
 
     protected abstract class Channel extends Thread
@@ -217,7 +228,7 @@ public class UnityDGKernel extends UnityDGSessionObject implements AutoCloseable
             mac.init(keySpec);
             for (final byte[] d : data)
                 mac.update(d);
-            final byte[] signature = DatatypeConverter.printHexBinary(mac.doFinal()).toLowerCase()
+            final byte[] signature = DatatypeConverter.printHexBinary(mac.doFinal()).replaceAll("-", "").toLowerCase()
                     .getBytes(StandardCharsets.UTF_8);
 
             zMsg.add(signature);
@@ -264,7 +275,7 @@ public class UnityDGKernel extends UnityDGSessionObject implements AutoCloseable
         }
     }
 
-    static class Header
+    class Header
     {
         String date;
         @SerializedName("msg_id")
@@ -280,21 +291,14 @@ public class UnityDGKernel extends UnityDGSessionObject implements AutoCloseable
         {
         }
 
-        Header(String messageType, String sessionId, String username)
+        Header(String messageType)
         {
             date = DF.format(new Date());
             messageId = UUID.randomUUID().toString();
             this.messageType = messageType;
-            this.sessionId = sessionId;
-            this.username = username;
+            sessionId = id;
+            username = "kernel";
             version = "5.0";
-        }
-
-        static DateFormat DF;
-
-        static {
-            DF = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.S'Z'");
-            DF.setTimeZone(TimeZone.getTimeZone("UTC"));
         }
     }
 
@@ -321,7 +325,7 @@ public class UnityDGKernel extends UnityDGSessionObject implements AutoCloseable
         }
     }
 
-    static class Message
+    class Message
     {
         transient List<byte[]> buffers;
         Map<String, Object>    content;
@@ -337,15 +341,17 @@ public class UnityDGKernel extends UnityDGSessionObject implements AutoCloseable
 
         Message(Message parentMessage, String messageType)
         {
-            header = new Header(messageType, parentMessage.header.sessionId, parentMessage.header.username);
+            header = new Header(messageType);
             parentHeader = parentMessage.header;
             metadata = new HashMap<>();
             content = new HashMap<>();
         }
 
-        Message(String messageType, String sessionId, String username)
+        Message(String messageType)
         {
-            header = new Header(messageType, sessionId, username);
+            header = new Header(messageType);
+            metadata = new HashMap<>();
+            content = new HashMap<>();
         }
     }
 
@@ -359,82 +365,147 @@ public class UnityDGKernel extends UnityDGSessionObject implements AutoCloseable
 
     class ShellChannel extends Channel
     {
-        int globalExecutionCount;
+        int globalExecutionCount = 1;
 
         ShellChannel()
         {
             super(settings.address, settings.shellPort, ZMQ.ROUTER);
         }
 
+        void doExecuteRequest(Message message) throws Exception
+        {
+            outputChannel.sendStatus(message, "busy");
+
+            final Message executeInput = new Message(message, "execute_input");
+            executeInput.content.put("execution_count", globalExecutionCount);
+            executeInput.content.put("code", message.content.get("code"));
+
+            outputChannel.send(executeInput);
+
+            final Message stream = new Message(message, "stream");
+            stream.content.put("name", "stdout");
+            outputChannel.send(stream);
+
+            final Message executeResult = new Message(message, "execute_result");
+            executeResult.content.put("execution_count", globalExecutionCount);
+            final Map<String, Object> data = new HashMap<>();
+
+            try (DGScriptEngine engine = UnityDGSystem.getLocalEngineByName("basex")) {
+                final Object result = engine.eval(message.content.get("code").toString());
+                if (result instanceof double[]) {
+                    final StringBuilder sb = new StringBuilder();
+                    final double[] rr = (double[]) result;
+                    for (final double r : rr)
+                        sb.append(r + ",");
+                    data.put("text/plain", sb.toString());
+                } else if (result instanceof Object[]) {
+                    final Object[] rr = (Object[]) result;
+                    final List<String> d1 = new LinkedList<>();
+                    final List<String> d2 = new LinkedList<>();
+                    for (int i = 0; i < rr.length; i++)
+                        if (rr[i] instanceof BufferedImage)
+                            try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+                                ImageIO.write((BufferedImage) rr[i], "png", baos);
+                                baos.flush();
+                                d1.add(new String(Base64.getEncoder().encode(baos.toByteArray()),
+                                        StandardCharsets.UTF_8));
+                            }
+                        else
+                            d2.add(rr[i].toString());
+                    if (!d1.isEmpty())
+                        data.put("image/png", d1.toArray());
+                    if (!d2.isEmpty())
+                        data.put("text/plain", d2.toArray());
+
+                } else if (result instanceof BufferedImage)
+                    try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+                        ImageIO.write((BufferedImage) result, "png", baos);
+                        baos.flush();
+                        data.put("image/png",
+                                new String(Base64.getEncoder().encode(baos.toByteArray()), StandardCharsets.UTF_8));
+                    }
+                else
+                    data.put("text/plain", result.toString());
+            } catch (final Exception e) {
+                final StringWriter sw = new StringWriter();
+                final PrintWriter pw = new PrintWriter(sw);
+                e.printStackTrace(pw);
+                pw.flush();
+                data.put("text/plain", sw.toString());
+            }
+
+            executeResult.content.put("data", data);
+            executeResult.content.put("metadata", new HashMap<>());
+            outputChannel.send(executeResult);
+
+            outputChannel.sendStatus(message, "idle");
+
+            final Message executeReply = new Message(message, "execute_reply");
+            executeReply.content.put("status", "ok");
+            executeReply.content.put("output_type", "execute_result");
+            executeReply.content.put("execution_count", globalExecutionCount);
+            executeReply.content.put("user_variables", new HashMap<>());
+            executeReply.content.put("payload", new ArrayList<>());
+            final HashMap<String, Object> ex = new HashMap<>();
+            ex.put("abc", 123);
+            executeReply.content.put("user_expressions", ex);
+            executeReply.identities = message.identities;
+
+            send(executeReply);
+            globalExecutionCount++;
+        }
+
+        void doKernelInfoRequest(Message message) throws Exception
+        {
+            final Message kernelInfoReply = new Message("kernel_info_reply");
+            kernelInfoReply.identities = message.identities;
+            kernelInfoReply.content.put("protocol_version", "5.0");
+            kernelInfoReply.content.put("implementation", "unity-kernel");
+            kernelInfoReply.content.put("implementation_version", "0.0.1");
+
+            final Map<String, Object> languageInfo = new HashMap<>();
+            languageInfo.put("name", "unity-kernel");
+            languageInfo.put("version", "0.0.1");
+            languageInfo.put("mimetype", "application/xquery");
+            languageInfo.put("file_extension", ".xq");
+            languageInfo.put("pygments_lexer", "xquery");
+            languageInfo.put("codemirror_mode", "xquery");
+            languageInfo.put("nbconvert_exporter", "");
+
+            kernelInfoReply.content.put("language_info", languageInfo);
+            kernelInfoReply.content.put("banner", "Unity DGMS Kernel");
+            // kernelInfoReply.content.put("status", "ok");
+
+            send(kernelInfoReply);
+            outputChannel.sendStatus(message, "idle");
+        }
+
+        void doShutdownRequest(Message message)
+        {
+        }
+
         @Override
         void onMessage(Message message) throws Exception
         {
-            if ("kernel_info_request".equals(message.header.messageType)) {
-                final Message kernelInfoReply = new Message(message, "kernel_info_reply");
-                kernelInfoReply.identities = message.identities;
-                kernelInfoReply.content.put("protocol_version", "5.0");
-                kernelInfoReply.content.put("implementation", "unity-kernel");
-                kernelInfoReply.content.put("implementation_version", "0.0.1");
-
-                final Map<String, Object> languageInfo = new HashMap<>();
-                languageInfo.put("name", "unity-kernel");
-                languageInfo.put("version", "0.0.1");
-                languageInfo.put("mimetype", "application/xquery");
-                languageInfo.put("file_extension", ".xq");
-                languageInfo.put("pygments_lexer", "xquery");
-                languageInfo.put("codemirror_mode", "xquery");
-                languageInfo.put("nbconvert_exporter", "");
-
-                kernelInfoReply.content.put("language_info", languageInfo);
-                kernelInfoReply.content.put("banner", "Unity DGMS Kernel");
-                send(kernelInfoReply);
-                outputChannel.sendStatus(message, "idle");
-            } else if ("execute_request".equals(message.header.messageType)) {
-
-                outputChannel.sendStatus(message, "busy");
-
-                final Message executeInput = new Message(message, "execute_input");
-                executeInput.content.put("execution_count", globalExecutionCount);
-                executeInput.content.put("code", message.content.get("code"));
-
-                outputChannel.send(executeInput);
-
-                final Message stream = new Message(message, "stream");
-                stream.content.put("name", "stdout");
-                outputChannel.send(stream);
-
-                final Message executeResult = new Message(message, "execute_result");
-                executeResult.content.put("execution_count", globalExecutionCount);
-                final Map<String, Object> data = new HashMap<>();
-
-                try (DGScriptEngine engine = UnityDGSystem.getLocalEngineByName("basex")) {
-                    final Object result = engine.eval(message.content.get("code").toString());
-                    if (result instanceof BufferedImage)
-                        try (ByteArrayOutputStream o = new ByteArrayOutputStream()) {
-                            ImageIO.write((BufferedImage) result, "png", o);
-                            data.put("image/png",
-                                    new String(Base64.getEncoder().encode(o.toByteArray()), StandardCharsets.UTF_8));
-                        }
-                    data.put("text/plain", result.toString());
-                }
-
-                executeResult.content.put("data", data);
-                executeResult.content.put("metadata", new HashMap<>());
-                outputChannel.send(executeResult);
-
-                outputChannel.sendStatus(message, "idle");
-
-                final Message executeReply = new Message(message, "execute_reply");
-                executeReply.content.put("status", "ok");
-                executeReply.content.put("execution_count", globalExecutionCount);
-                executeReply.content.put("user_variables", new HashMap<>());
-                executeReply.content.put("payload", new ArrayList<>());
-                final HashMap<String, Object> ex = new HashMap<>();
-                ex.put("abc", 123);
-                executeReply.content.put("user_expressions", ex);
-                executeReply.identities = message.identities;
-                send(executeReply);
-                globalExecutionCount++;
+            switch (message.header.messageType) {
+            case "execute_request":
+                doExecuteRequest(message);
+                break;
+            case "kernel_info_request":
+                doKernelInfoRequest(message);
+                break;
+            case "history_request":
+                break;
+            case "object_info_request":
+                break;
+            case "complete_request":
+                break;
+            case "comm_msg":
+                break;
+            case "shutdown_request":
+                doShutdownRequest(message);
+                break;
+            default:
             }
         }
     }

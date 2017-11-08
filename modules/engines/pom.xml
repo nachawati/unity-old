@@ -24,7 +24,9 @@
 	<name>Unity / Modules / Engines</name>
 
 	<modules>
+		<module>ampl</module>
 		<module>basex</module>
+		<module>nashorn</module>
 		<module>zorba</module>
 	</modules>
 
