@@ -24,10 +24,28 @@
 	<name>Unity / Server</name>
 
 	<build>
-		<finalName>babhara-server</finalName>
+		<finalName>unity-server</finalName>
 	</build>
 
 	<dependencies>
+	
+		<dependency>
+			<groupId>io.dgms.unity</groupId>
+			<artifactId>unity-api</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>io.dgms.unity</groupId>
+			<artifactId>unity-core</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>io.dgms.unity</groupId>
+			<artifactId>unity-client</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 
 		<dependency>
 			<groupId>org.glassfish.jersey.ext</groupId>

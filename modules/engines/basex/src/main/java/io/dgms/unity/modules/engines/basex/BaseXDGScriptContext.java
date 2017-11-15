@@ -53,12 +53,18 @@ public class BaseXDGScriptContext extends SimpleScriptContext implements DGScrip
     /**
      *
      */
-    private final Set<DGPackage>      packages = new LinkedHashSet<>();
+    private final String[]            extensions = new String[] { ".jqm", ".xqm", ".module", ".jq", ".xq", ".jqy",
+            ".xqy", ".jql", ".xql", ".xqu", ".jsoniq", ".xquery" };
 
     /**
      *
      */
-    private final Set<Path>           paths    = new LinkedHashSet<>();
+    private final Set<DGPackage>      packages   = new LinkedHashSet<>();
+
+    /**
+     *
+     */
+    private final Set<Path>           paths      = new LinkedHashSet<>();
 
     /**
      *
@@ -138,33 +144,23 @@ public class BaseXDGScriptContext extends SimpleScriptContext implements DGScrip
             final Path fullPath = p.resolve(path);
             if (Files.isRegularFile(fullPath))
                 return Files.newInputStream(fullPath);
+
             if (Files.isDirectory(fullPath)) {
-                if (Files.exists(fullPath.resolve("index.jq.basex")))
-                    return Files.newInputStream(fullPath.resolve("index.jq.basex"));
-                if (Files.exists(fullPath.resolve("index.jq")))
-                    return Files.newInputStream(fullPath.resolve("index.jq"));
-                if (Files.exists(fullPath.resolve("index.xq.basex")))
-                    return Files.newInputStream(fullPath.resolve("index.xq.basex"));
-                if (Files.exists(fullPath.resolve("index.xq")))
-                    return Files.newInputStream(fullPath.resolve("index.xq"));
-                if (Files.exists(fullPath.resolve("index.module.basex")))
-                    return Files.newInputStream(fullPath.resolve("index.module.basex"));
-                if (Files.exists(fullPath.resolve("index.module")))
-                    return Files.newInputStream(fullPath.resolve("index.module"));
+                for (final String extension : extensions) {
+                    if (Files.exists(fullPath.resolve("index" + extension + ".basex")))
+                        return Files.newInputStream(fullPath.resolve("index" + extension + ".basex"));
+                    if (Files.exists(fullPath.resolve("index" + extension)))
+                        return Files.newInputStream(fullPath.resolve("index" + extension));
+                }
                 continue;
             }
-            if (Files.isRegularFile(fullPath.getParent().resolve(fullPath.getFileName() + ".jq.basex")))
-                return Files.newInputStream(fullPath.getParent().resolve(fullPath.getFileName() + ".jq.basex"));
-            if (Files.isRegularFile(fullPath.getParent().resolve(fullPath.getFileName() + ".jq")))
-                return Files.newInputStream(fullPath.getParent().resolve(fullPath.getFileName() + ".jq"));
-            if (Files.isRegularFile(fullPath.getParent().resolve(fullPath.getFileName() + ".xq.basex")))
-                return Files.newInputStream(fullPath.getParent().resolve(fullPath.getFileName() + ".xq.basex"));
-            if (Files.isRegularFile(fullPath.getParent().resolve(fullPath.getFileName() + ".xq")))
-                return Files.newInputStream(fullPath.getParent().resolve(fullPath.getFileName() + ".xq"));
-            if (Files.isRegularFile(fullPath.getParent().resolve(fullPath.getFileName() + ".module.basex")))
-                return Files.newInputStream(fullPath.getParent().resolve(fullPath.getFileName() + ".module.basex"));
-            if (Files.isRegularFile(fullPath.getParent().resolve(fullPath.getFileName() + ".module")))
-                return Files.newInputStream(fullPath.getParent().resolve(fullPath.getFileName() + ".module"));
+            for (final String extension : extensions) {
+                if (Files.isRegularFile(fullPath.getParent().resolve(fullPath.getFileName() + extension + ".basex")))
+                    return Files.newInputStream(
+                            fullPath.getParent().resolve(fullPath.getFileName() + extension + ".basex"));
+                if (Files.isRegularFile(fullPath.getParent().resolve(fullPath.getFileName() + extension)))
+                    return Files.newInputStream(fullPath.getParent().resolve(fullPath.getFileName() + extension));
+            }
         }
 
         for (final DGPackage pkg : packages) {
@@ -172,53 +168,25 @@ public class BaseXDGScriptContext extends SimpleScriptContext implements DGScrip
                 return pkg.getResourceAsStream(path);
             } catch (final DGException e) {
             }
-            try {
-                return pkg.getResourceAsStream(path + ".jq.basex");
-            } catch (final DGException e) {
+            for (final String extension : extensions) {
+                try {
+                    return pkg.getResourceAsStream(path + extension + ".basex");
+                } catch (final DGException e) {
+                }
+                try {
+                    return pkg.getResourceAsStream(path + extension);
+                } catch (final DGException e) {
+                }
             }
-            try {
-                return pkg.getResourceAsStream(path + ".jq");
-            } catch (final DGException e) {
-            }
-            try {
-                return pkg.getResourceAsStream(path + ".xq.basex");
-            } catch (final DGException e) {
-            }
-            try {
-                return pkg.getResourceAsStream(path + ".xq");
-            } catch (final DGException e) {
-            }
-            try {
-                return pkg.getResourceAsStream(path + ".module.basex");
-            } catch (final DGException e) {
-            }
-            try {
-                return pkg.getResourceAsStream(path + ".module");
-            } catch (final DGException e) {
-            }
-            try {
-                return pkg.getResourceAsStream(path + "/index.jq.basex");
-            } catch (final DGException e) {
-            }
-            try {
-                return pkg.getResourceAsStream(path + "/index.jq");
-            } catch (final DGException e) {
-            }
-            try {
-                return pkg.getResourceAsStream(path + "/index.xq.basex");
-            } catch (final DGException e) {
-            }
-            try {
-                return pkg.getResourceAsStream(path + "/index.xq");
-            } catch (final DGException e) {
-            }
-            try {
-                return pkg.getResourceAsStream(path + "/index.module.basex");
-            } catch (final DGException e) {
-            }
-            try {
-                return pkg.getResourceAsStream(path + "/index.module");
-            } catch (final DGException e) {
+            for (final String extension : extensions) {
+                try {
+                    return pkg.getResourceAsStream(path + "/index" + extension + ".basex");
+                } catch (final DGException e) {
+                }
+                try {
+                    return pkg.getResourceAsStream(path + "/index" + extension);
+                } catch (final DGException e) {
+                }
             }
         }
 

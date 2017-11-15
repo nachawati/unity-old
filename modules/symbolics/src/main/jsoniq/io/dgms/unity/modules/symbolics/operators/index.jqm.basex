@@ -1,0 +1,273 @@
+jsoniq version "1.0";
+(:
+    بسم الله الرحمن الرحيم
+   
+    In the name of Allah, the Most Compassionate, the Most Merciful
+   
+    This software is authored by Mohamad Omar Nachawati, 1436-1439 AH
+:)
+module namespace op = "http://dgms.io/unity/modules/symbolics/operators";
+
+import module namespace math = "http://www.w3.org/2005/xpath-functions/math";
+
+import module namespace java = "java:io.dgms.unity.modules.symbolics.operators.basex.IndexModule";
+
+declare namespace u = "http://dgms.io/unity";
+declare option u:symbolic-computation "disabled";
+
+declare function op:symbolic-add($arg1, $arg2)
+{
+	java:symbolic_add($arg1, $arg2)
+};
+
+declare function op:symbolic-subtract($arg1, $arg2)
+{
+	java:symbolic_subtract($arg1, $arg2)
+};
+
+declare function op:symbolic-multiply($arg1, $arg2)
+{
+	java:symbolic_multiply($arg1, $arg2)
+};
+
+declare function op:symbolic-divide($arg1, $arg2)
+{
+	java:symbolic_divide($arg1, $arg2)
+};
+
+declare function op:symbolic-integer-divide($arg1, $arg2)
+{
+	java:symbolic_integer_divide($arg1, $arg2)
+};
+
+declare function op:symbolic-mod($arg1, $arg2)
+{
+	java:symbolic_mod($arg1, $arg2)
+};
+
+declare function op:symbolic-unary-plus($arg)
+{
+	$arg
+};
+
+declare function op:symbolic-unary-minus($arg)
+{
+    java:symbolic_unary_minus($arg)
+};
+
+declare function op:symbolic-value-equal($arg1, $arg2)
+{
+	java:symbolic_value_equal($arg1, $arg2)
+};
+
+declare function op:symbolic-general-equal($arg1, $arg2)
+{
+	java:symbolic_general_equal($arg1, $arg2)
+};
+
+declare function op:symbolic-value-not-equal($arg1, $arg2)
+{
+	java:symbolic_value_not_equal($arg1, $arg2)
+};
+
+declare function op:symbolic-general-not-equal($arg1, $arg2)
+{
+	java:symbolic_general_not_equal($arg1, $arg2)
+};
+
+declare function op:symbolic-value-less-than($arg1, $arg2)
+{
+	java:symbolic_value_less_than($arg1, $arg2)
+};
+
+declare function op:symbolic-general-less-than($arg1, $arg2)
+{
+	java:symbolic_general_less_than($arg1, $arg2)
+};
+
+declare function op:symbolic-value-less-than-or-equal($arg1, $arg2)
+{
+	java:symbolic_value_less_than_or_equal($arg1, $arg2)
+};
+
+declare function op:symbolic-general-less-than-or-equal($arg1, $arg2)
+{
+	java:symbolic_general_less_than_or_equal($arg1, $arg2)
+};
+
+declare function op:symbolic-value-greater-than($arg1, $arg2)
+{
+	java:symbolic_value_greater_than($arg1, $arg2)
+};
+
+declare function op:symbolic-general-greater-than($arg1, $arg2)
+{
+	java:symbolic_general_greater_than($arg1, $arg2)
+};
+
+declare function op:symbolic-value-greater-than-or-equal($arg1, $arg2)
+{
+	java:symbolic_value_greater_than_or_equal($arg1, $arg2)
+};
+
+declare function op:symbolic-general-greater-than-or-equal($arg1, $arg2)
+{
+	java:symbolic_general_greater_than_or_equal($arg1, $arg2)
+};
+
+declare function op:symbolic-and($arg1, $arg2)
+{
+	java:symbolic_and($arg1, $arg2)
+};
+
+declare function op:symbolic-or($arg1, $arg2)
+{
+	java:symbolic_or($arg1, $arg2)
+};
+
+declare function op:symbolic-some($values)
+{
+	java:symbolic_some($values)
+};
+
+declare function op:symbolic-every($values)
+{
+	java:symbolic_every($values)
+};
+
+declare function op:symbolic-instance-of($obj, $type)
+{
+	true
+	(:java:symbolic_instance_of($obj, $type):)
+};
+
+declare function op:symbolic-if($if, $then, $else)
+{
+	java:symbolic_if($if, $then, $else)
+};
+
+declare function op:symbolic-pow($arg1, $arg2)
+{
+	java:symbolic_pow($arg1, $arg2)
+};
+
+(:
+declare function op:symbolic-sum($values)
+{
+	java:symbolic_sum($values)
+};
+:)
+(:
+declare function op:symbolic-not($arg)
+{
+	java:symbolic_not($arg)
+};
+:)
+(:
+declare function op:symbolic-abs($arg)
+{
+	java:symbolic_abs($arg)
+};
+:)
+(:
+declare function op:symbolic-ceiling($arg)
+{
+	java:symbolic_ceiling($arg)
+};
+:)
+(:
+declare function op:symbolic-floor($arg)
+{
+	java:symbolic_floor($arg)
+};
+:)
+(:
+declare function op:symbolic-max($values)
+{
+	java:symbolic_max($values)
+};
+:)
+(:
+declare function op:symbolic-min($values)
+{
+	java:symbolic_min($values)
+};
+:)
+(:
+declare function op:symbolic-round($arg)
+{
+	java:symbolic_round($arg)
+};
+:)
+(:
+declare function op:symbolic-acos($arg)
+{
+	java:symbolic_acos($arg)
+};
+:)
+(:
+declare function op:symbolic-asin($arg)
+{
+	java:symbolic_asin($arg)
+};
+:)
+(:
+declare function op:symbolic-atan($arg)
+{
+	java:symbolic_atan($arg)
+};
+:)
+(:
+declare function op:symbolic-atan2($arg1, $arg2)
+{
+	java:symbolic_atan2($arg1, $arg2)
+};
+:)
+(:
+declare function op:symbolic-cos($arg)
+{
+	java:symbolic_cos($arg)
+};
+:)
+(:
+declare function op:symbolic-exp($arg)
+{
+	java:symbolic_exp($arg)
+};
+:)
+(:
+declare function op:symbolic-exp10($arg)
+{
+	java:symbolic_exp10($arg)
+};
+:)
+(:
+declare function op:symbolic-log($arg)
+{
+	java:symbolic_log($arg)
+};
+:)
+(:
+declare function op:symbolic-log10($arg)
+{
+	java:symbolic_log10($arg)
+};
+:)
+(:
+declare function op:symbolic-sin($arg)
+{
+	java:symbolic_sin($arg)
+};
+:)
+(:
+declare function op:symbolic-sqrt($arg)
+{
+	java:symbolic_sqrt($arg)
+};
+:)
+(:
+declare function op:symbolic-tan($arg)
+{
+	java:symbolic_tan($arg)
+};
+:)

@@ -1,0 +1,19 @@
+jsoniq version "1.0";
+
+(:
+    بسم الله الرحمن الرحيم
+   
+    In the name of Allah, the Most Compassionate, the Most Merciful
+   
+    This software is authored by Mohamad Omar Nachawati, 1436-1439 AH
+:)
+
+declare module namespace optimization = "http://dgms.io/unity/modules/optimization";
+
+declare function optimization:maximize()
+{
+};
+
+declare function optimization:minimize()
+{
+};

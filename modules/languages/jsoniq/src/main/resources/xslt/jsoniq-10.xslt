@@ -506,7 +506,7 @@
 			</xsl:apply-templates>
 		</xsl:copy>
 		<xsl:if test="$symbolic-module">
-			<xsl:text>import module namespace _op = "http://dgms.io/unity/modules/symbolics/jsoniq/operators";</xsl:text>
+			<xsl:text>import module namespace _op = "http://dgms.io/unity/modules/symbolics/operators";</xsl:text>
 		</xsl:if>
 	</xsl:template>
 
@@ -523,7 +523,7 @@
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:if test="not(//Module/LibraryModule)">
-					<xsl:text>import module namespace _op = "http://dgms.io/unity/modules/symbolics/jsoniq/operators";</xsl:text>
+					<xsl:text>import module namespace _op = "http://dgms.io/unity/modules/symbolics/operators";</xsl:text>
 				</xsl:if>
 				<xsl:apply-templates>
 					<xsl:with-param name="symbolic-module" select="true()" />

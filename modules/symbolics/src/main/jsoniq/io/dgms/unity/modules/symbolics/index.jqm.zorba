@@ -1,0 +1,51 @@
+jsoniq version "1.0";
+(:
+    بسم الله الرحمن الرحيم
+   
+    In the name of Allah, the Most Compassionate, the Most Merciful
+   
+    This software is authored by Mohamad Omar Nachawati, 1436-1439 AH
+:)
+module namespace symbolics = "http://dgms.io/unity/modules/symbolics";
+
+declare function symbolics:variable()
+{
+	{
+		"decimal?": null
+	}
+};
+
+declare function symbolics:variable($name)
+{
+	{
+		"decimal?": $name
+	}
+};
+
+declare function symbolics:variable($name, $type)
+{
+	{
+		$type || "?": $name
+	}
+};
+
+declare function symbolics:parameter()
+{
+	{
+		"decimal...": null
+	}
+};
+
+declare function symbolics:parameter($name)
+{
+	{
+		"decimal...": $name
+	}
+};
+
+declare function symbolics:parameter($name, $type)
+{
+	{
+		$type || ".": $name
+	}
+};

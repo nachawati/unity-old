@@ -1,0 +1,30 @@
+jsoniq version "1.0";
+
+(:
+    بسم الله الرحمن الرحيم
+   
+    In the name of Allah, the Most Compassionate, the Most Merciful
+   
+    This software is authored by Mohamad Omar Nachawati, 1436-1439 AH
+:)
+
+module namespace learning = "http://dgms.io/unity/modules/learning";
+
+import module namespace java = "java:io.dgms.unity.modules.learning.BaseXIndexModule"
+
+declare namespace u = "http://dgms.io/unity";
+declare option u:symbolic-computation "disabled";
+
+declare function learning:classify($arguments)
+{
+	1
+};
+
+declare function learning:predict($arguments)
+{
+	let $dataset := $arguments.dataset
+	
+};
+
+symbolic
+autodiff

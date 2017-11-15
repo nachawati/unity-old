@@ -47,7 +47,6 @@
 		<module>core</module>
 		<module>distro</module>
 		<module>modules</module>
-		<module>server</module>
 		<module>vendor/basex</module>
 		<module>vendor/rex</module>
 		<module>vendor/SymJava</module>
@@ -84,6 +83,12 @@
 			<name>master</name>
 			<url>https://raw.github.com/aliceinnets/maven-repository/master/</url>
 			<layout>default</layout>
+		</repository>
+		
+		<repository>
+			<id>javacpp-snapshots</id>
+			<name>JavaCPP Snapshots</name>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
 		</repository>
 
 	</repositories>
@@ -374,6 +379,24 @@
 												<include>zorba_api_java.dll</include>
 											</includes>
 										</resource>
+										
+										<resource>
+											<directory>${project.basedir}/vendor/prebuilt/windows-msvc-x86_64/symengine/bin</directory>
+											<targetPath>${project.build.directory}/windows-msvc-x86_64/bin</targetPath>
+											<filtering>false</filtering>
+										</resource>
+										
+										<resource>
+											<directory>${project.basedir}/vendor/prebuilt/windows-msvc-x86_64/symengine/include</directory>
+											<targetPath>${project.build.directory}/windows-msvc-x86_64/include</targetPath>
+											<filtering>false</filtering>
+										</resource>
+										
+										<resource>
+											<directory>${project.basedir}/vendor/prebuilt/windows-msvc-x86_64/symengine/lib</directory>
+											<targetPath>${project.build.directory}/windows-msvc-x86_64/lib</targetPath>
+											<filtering>false</filtering>
+										</resource>
 
 										<resource>
 											<directory>${project.build.directory}</directory>
@@ -521,6 +544,7 @@
 				<groupId>javax.servlet</groupId>
 				<artifactId>javax.servlet-api</artifactId>
 				<version>4.0.0</version>
+				<scope>provided</scope>
 			</dependency>
 
 			<dependency>
@@ -532,7 +556,7 @@
 			<dependency>
 				<groupId>javax.servlet.jsp</groupId>
 				<artifactId>javax.servlet.jsp-api</artifactId>
-				<version>2.3.1</version>
+				<version>2.3.2-b02</version>
 			</dependency>
 
 			<dependency>
@@ -696,6 +720,12 @@
 				<groupId>org.zeromq</groupId>
 				<artifactId>jeromq</artifactId>
 				<version>0.4.2</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-math3</artifactId>
+				<version>3.6.1</version>
 			</dependency>
 
 		</dependencies>

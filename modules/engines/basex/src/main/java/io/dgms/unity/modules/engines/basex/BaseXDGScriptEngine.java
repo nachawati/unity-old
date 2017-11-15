@@ -20,6 +20,7 @@ import javax.script.ScriptException;
 import javax.script.SimpleBindings;
 
 import org.apache.commons.io.IOUtils;
+import org.basex.query.QueryException;
 import org.basex.query.QueryProcessor;
 
 import io.dgms.unity.api.DGException;
@@ -228,6 +229,8 @@ public class BaseXDGScriptEngine implements DGScriptEngine
                 ((BaseXDGScriptContext) context).context)) {
             processor.uriResolver((BaseXDGScriptContext) context);
             return processor.value().toJava();
+        } catch (final QueryException e) {
+            throw new ScriptException(e.getMessage());
         } catch (final Exception e) {
             throw new ScriptException(e);
         }
@@ -341,7 +344,6 @@ public class BaseXDGScriptEngine implements DGScriptEngine
     protected String translate(String script)
     {
         try {
-            System.out.println(translator.translate(script));
             return translator.translate(script);
         } catch (final DGException e) {
             return script;

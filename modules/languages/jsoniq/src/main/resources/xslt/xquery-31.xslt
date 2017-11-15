@@ -12,6 +12,10 @@
 	xmlns:t="io.dgms.unity.modules.languages.jsoniq.compiler.util.StringEscape">
 	<xsl:output method="text" />
 
+	<xsl:key name="uri"
+		match="/XQuery/Module/*/Prolog/ModuleImport|/XQuery/Module/*/Prolog/NamespaceDecl"
+		use="./NCName/terminal[@name='NCName']/text()" />
+
 	<xsl:template match="QuantifiedExpr">
 		<xsl:param name="symbolic-module" select="false()" />
 		<xsl:param name="symbolic-context" select="false()" />
@@ -287,10 +291,10 @@
 		</xsl:choose>
 	</xsl:template>
 
-<!-- 
 	<xsl:template match="InstanceofExpr">
 		<xsl:param name="symbolic-module" select="false()" />
 		<xsl:param name="symbolic-context" select="false()" />
+
 		<xsl:choose>
 			<xsl:when test="$symbolic-context">
 				<xsl:variable name="nodes" select="*[not(@type='whitespace')]" />
@@ -314,7 +318,7 @@
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
- -->
+
 	<xsl:template match="OrExpr">
 		<xsl:param name="symbolic-module" select="false()" />
 		<xsl:param name="symbolic-context" select="false()" />
@@ -359,6 +363,7 @@
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
+
 
 	<xsl:template match="IfExpr">
 		<xsl:param name="symbolic-module" select="false()" />
@@ -456,144 +461,7 @@
 		</xsl:choose>
 	</xsl:template>
 
-	<xsl:template
-		match="FunctionCall[starts-with(terminal[@name='EQName'][1],'fn:')]">
-		<xsl:param name="symbolic-module" select="false()" />
-		<xsl:param name="symbolic-context" select="false()" />
-
-		<xsl:choose>
-			<xsl:when test="$symbolic-context">
-				<xsl:value-of
-					select="concat('_op:', substring-after(terminal[@name='EQName'][1], 'fn:'))" />
-				<xsl:apply-templates select="ArgumentList">
-					<xsl:with-param name="symbolic-module" select="$symbolic-module" />
-					<xsl:with-param name="symbolic-context" select="$symbolic-context" />
-				</xsl:apply-templates>
-			</xsl:when>
-			<xsl:otherwise>
-				<xsl:copy>
-					<xsl:apply-templates select="node()">
-						<xsl:with-param name="symbolic-module" select="$symbolic-module" />
-						<xsl:with-param name="symbolic-context" select="$symbolic-context" />
-					</xsl:apply-templates>
-				</xsl:copy>
-			</xsl:otherwise>
-		</xsl:choose>
-	</xsl:template>
-
-	<xsl:template
-		match="FunctionCall[starts-with(terminal[@name='EQName'][1],'math:')]">
-		<xsl:param name="symbolic-module" select="false()" />
-		<xsl:param name="symbolic-context" select="false()" />
-
-		<xsl:choose>
-			<xsl:when test="$symbolic-context">
-				<xsl:value-of
-					select="concat('_op:', substring-after(terminal[@name='EQName'][1], 'math:'))" />
-				<xsl:apply-templates select="ArgumentList">
-					<xsl:with-param name="symbolic-module" select="$symbolic-module" />
-					<xsl:with-param name="symbolic-context" select="$symbolic-context" />
-				</xsl:apply-templates>
-			</xsl:when>
-			<xsl:otherwise>
-				<xsl:copy>
-					<xsl:apply-templates select="node()">
-						<xsl:with-param name="symbolic-module" select="$symbolic-module" />
-						<xsl:with-param name="symbolic-context" select="$symbolic-context" />
-					</xsl:apply-templates>
-				</xsl:copy>
-			</xsl:otherwise>
-		</xsl:choose>
-	</xsl:template>
-
-	<xsl:template match="FunctionCall">
-		<xsl:param name="symbolic-module" select="false()" />
-		<xsl:param name="symbolic-context" select="false()" />
-
-		<xsl:choose>
-			<xsl:when test="not($symbolic-context) and $symbolic-module">
-				<xsl:variable name="name" select="FunctionName[1]/terminal/text()" />
-				<xsl:choose>
-					<xsl:when test="starts-with($name, 'reflection:')">
-						<xsl:value-of select="$name" />
-					</xsl:when>
-					<xsl:when test="starts-with($name, 'fetch:')">
-						<xsl:value-of select="$name" />
-					</xsl:when>
-					<xsl:when test="starts-with($name, 'jn:')">
-						<xsl:value-of select="$name" />
-					</xsl:when>
-					<xsl:when test="starts-with($name, 'r:')">
-						<xsl:value-of select="$name" />
-					</xsl:when>
-					<xsl:when test="starts-with($name, 'functx:')">
-						<xsl:value-of select="$name" />
-					</xsl:when>
-					<xsl:when test="starts-with($name, 'sc:')">
-						<xsl:value-of select="$name" />
-					</xsl:when>
-					<xsl:when test="starts-with($name, 'dgal:')">
-						<xsl:value-of select="$name" />
-					</xsl:when>
-					<xsl:when test="starts-with($name, '_')">
-						<xsl:value-of select="$name" />
-					</xsl:when>
-					<xsl:otherwise>
-						<xsl:value-of select="concat($name, '-')" />
-					</xsl:otherwise>
-				</xsl:choose>
-				<xsl:apply-templates select="ArgumentList">
-					<xsl:with-param name="symbolic-module" select="$symbolic-module" />
-					<xsl:with-param name="symbolic-context" select="$symbolic-context" />
-				</xsl:apply-templates>
-			</xsl:when>
-			<xsl:otherwise>
-				<xsl:copy>
-					<xsl:apply-templates select="node()">
-						<xsl:with-param name="symbolic-module" select="$symbolic-module" />
-						<xsl:with-param name="symbolic-context" select="$symbolic-context" />
-					</xsl:apply-templates>
-				</xsl:copy>
-			</xsl:otherwise>
-		</xsl:choose>
-	</xsl:template>
-
-	<xsl:template match="terminal[@type='whitespace']">
-		<xsl:value-of select="text()" />
-	</xsl:template>
-
 	<xsl:template match="AnnotatedDecl[FunctionDecl]">
-		<xsl:param name="symbolic-module" select="false()" />
-		<xsl:param name="symbolic-context" select="false()" />
-
-		<xsl:choose>
-			<xsl:when test="$symbolic-module">
-				<xsl:copy>
-					<xsl:apply-templates select="node()">
-						<xsl:with-param name="symbolic-module" select="$symbolic-module" />
-						<xsl:with-param name="symbolic-context" select="true()" />
-					</xsl:apply-templates>
-				</xsl:copy>
-				<xsl:text>;</xsl:text>
-				<xsl:copy>
-					<xsl:apply-templates select="node()">
-						<xsl:with-param name="symbolic-module" select="$symbolic-module" />
-						<xsl:with-param name="symbolic-context" select="false()" />
-					</xsl:apply-templates>
-				</xsl:copy>
-			</xsl:when>
-			<xsl:otherwise>
-				<xsl:copy>
-					<xsl:apply-templates select="node()">
-						<xsl:with-param name="symbolic-module" select="$symbolic-module" />
-						<xsl:with-param name="symbolic-context" select="$symbolic-context" />
-					</xsl:apply-templates>
-				</xsl:copy>
-			</xsl:otherwise>
-		</xsl:choose>
-	</xsl:template>
-
-	<xsl:template match="FunctionDecl">
 		<xsl:param name="symbolic-module" select="false()" />
 		<xsl:param name="symbolic-context" select="false()" />
 
@@ -603,6 +471,69 @@
 				<xsl:with-param name="symbolic-context" select="$symbolic-context" />
 			</xsl:apply-templates>
 		</xsl:copy>
+		<!-- <xsl:choose> <xsl:when test="$symbolic-module"> <xsl:copy> <xsl:apply-templates 
+			select="node()"> <xsl:with-param name="symbolic-module" select="$symbolic-module" 
+			/> <xsl:with-param name="symbolic-context" select="false()" /> </xsl:apply-templates> 
+			</xsl:copy> <xsl:text>;</xsl:text> <xsl:copy> <xsl:apply-templates select="node()"> 
+			<xsl:with-param name="symbolic-module" select="$symbolic-module" /> <xsl:with-param 
+			name="symbolic-context" select="true()" /> </xsl:apply-templates> </xsl:copy> 
+			</xsl:when> <xsl:otherwise> <xsl:copy> <xsl:apply-templates select="node()"> 
+			<xsl:with-param name="symbolic-module" select="$symbolic-module" /> <xsl:with-param 
+			name="symbolic-context" select="$symbolic-context" /> </xsl:apply-templates> 
+			</xsl:copy> </xsl:otherwise> </xsl:choose> -->
+	</xsl:template>
+
+	<xsl:template match="ModuleImport[terminal/text()='at']">
+		<xsl:param name="symbolic-module" select="false()" />
+		<xsl:param name="symbolic-context" select="false()" />
+
+		<xsl:apply-templates
+			select="*[not(text()='at') and not(preceding-sibling::terminal[text()='at'])]">
+			<xsl:with-param name="symbolic-module" select="$symbolic-module" />
+			<xsl:with-param name="symbolic-context" select="$symbolic-context" />
+		</xsl:apply-templates>
+	</xsl:template>
+
+	<xsl:template match="VersionDecl">
+	</xsl:template>
+
+	<xsl:template match="ModuleDecl">
+		<xsl:param name="symbolic-module" select="false()" />
+		<xsl:param name="symbolic-context" select="false()" />
+
+		<xsl:copy>
+			<xsl:apply-templates select="node()">
+				<xsl:with-param name="symbolic-module" select="$symbolic-module" />
+				<xsl:with-param name="symbolic-context" select="$symbolic-context" />
+			</xsl:apply-templates>
+		</xsl:copy>
+		<xsl:if test="$symbolic-module">
+			<xsl:text>import module namespace _op = "http://dgms.io/unity/modules/symbolics/operators";</xsl:text>
+		</xsl:if>
+	</xsl:template>
+
+	<xsl:template match="/">
+
+		<xsl:text>xquery version "3.1";</xsl:text>
+		<xsl:choose>
+			<xsl:when
+				test="contains(normalize-space(//OptionDecl), 'symbolic-computation &quot;disabled&quot;')">
+				<xsl:apply-templates>
+					<xsl:with-param name="symbolic-module" select="false()" />
+					<xsl:with-param name="symbolic-context" select="false()" />
+				</xsl:apply-templates>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:if test="not(//Module/LibraryModule)">
+					<xsl:text>import module namespace _op = "http://dgms.io/unity/modules/symbolics/operators";</xsl:text>
+				</xsl:if>
+				<xsl:apply-templates>
+					<xsl:with-param name="symbolic-module" select="true()" />
+					<xsl:with-param name="symbolic-context" select="true()" />
+				</xsl:apply-templates>
+			</xsl:otherwise>
+		</xsl:choose>
+
 	</xsl:template>
 
 	<xsl:template match="FunctionName">
@@ -610,16 +541,183 @@
 		<xsl:param name="symbolic-context" select="false()" />
 
 		<xsl:choose>
-			<xsl:when test=".='parameter' or .='variable'">
-				<xsl:value-of select="concat('_:', .)" />
-			</xsl:when>
-			<xsl:when test="not($symbolic-context) and $symbolic-module">
-				<xsl:value-of select="concat(., '-')" />
+			<xsl:when test="$symbolic-context">
+				<xsl:choose>
+					<xsl:when test="ancestor::Annotation">
+						<xsl:value-of select="." />
+					</xsl:when>
+					<xsl:when test="ancestor::ReturnType">
+						<xsl:value-of select="." />
+					</xsl:when>
+					<xsl:when test="ancestor::VarRef">
+						<xsl:value-of select="." />
+					</xsl:when>
+					<xsl:when test="ancestor::VarDecl">
+						<xsl:value-of select="." />
+					</xsl:when>
+					<xsl:when test="not(contains(., ':'))">
+						<xsl:choose>
+							<xsl:when test=". = 'abs'">
+								<xsl:text>_op:symbolic-abs</xsl:text>
+							</xsl:when>
+							<xsl:when test=". = 'ceiling'">
+								<xsl:text>_op:symbolic-ceiling</xsl:text>
+							</xsl:when>
+							<xsl:when test=". = 'floor'">
+								<xsl:text>_op:symbolic-floor</xsl:text>
+							</xsl:when>
+							<xsl:when test=". = 'max'">
+								<xsl:text>_op:symbolic-max</xsl:text>
+							</xsl:when>
+							<xsl:when test=". = 'min'">
+								<xsl:text>_op:symbolic-min</xsl:text>
+							</xsl:when>
+							<xsl:when test=". = 'round'">
+								<xsl:text>_op:symbolic-round</xsl:text>
+							</xsl:when>
+							<xsl:when test=". = 'sum'">
+								<xsl:text>_op:symbolic-sum</xsl:text>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:value-of select="." />
+							</xsl:otherwise>
+						</xsl:choose>
+					</xsl:when>
+					<xsl:when test="starts-with(., 'jn:')">
+						<xsl:value-of select="." />
+					</xsl:when>
+					<xsl:when test="starts-with(., 'fn:')">
+						<xsl:choose>
+							<xsl:when test=". = 'fn:abs'">
+								<xsl:text>_op:symbolic-abs</xsl:text>
+							</xsl:when>
+							<xsl:when test=". = 'fn:ceiling'">
+								<xsl:text>_op:symbolic-ceiling</xsl:text>
+							</xsl:when>
+							<xsl:when test=". = 'fn:floor'">
+								<xsl:text>_op:symbolic-floor</xsl:text>
+							</xsl:when>
+							<xsl:when test=". = 'fn:max'">
+								<xsl:text>_op:symbolic-max</xsl:text>
+							</xsl:when>
+							<xsl:when test=". = 'fn:min'">
+								<xsl:text>_op:symbolic-min</xsl:text>
+							</xsl:when>
+							<xsl:when test=". = 'fn:round'">
+								<xsl:text>_op:symbolic-round</xsl:text>
+							</xsl:when>
+							<xsl:when test=". = 'fn:sum'">
+								<xsl:text>_op:symbolic-sum</xsl:text>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:value-of select="." />
+							</xsl:otherwise>
+						</xsl:choose>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:variable name="prefix" select="substring-before(., ':')" />
+						<xsl:variable name="name" select="substring-after(., ':')" />
+						<xsl:variable name="ns"
+							select="key('uri', $prefix)/terminal[@name='URILiteral']" />
+						<xsl:variable name="namespace"
+							select="substring($ns, 2, string-length($ns) - 2)"></xsl:variable>
+						<xsl:choose>
+							<xsl:when test="starts-with($namespace, 'http://zorba.io')">
+								<xsl:value-of select="." />
+							</xsl:when>
+							<xsl:when test="$namespace = 'http://jsoniq.org/functions'">
+								<xsl:value-of select="." />
+							</xsl:when>
+							<xsl:when test="$namespace = 'http://jsoniq.org/function-library'">
+								<xsl:value-of select="." />
+							</xsl:when>
+							<xsl:when test="$namespace = 'http://www.w3.org/2005/xpath-functions'">
+								<xsl:choose>
+									<xsl:when test="$name = 'abs'">
+										<xsl:text>_op:symbolic-abs</xsl:text>
+									</xsl:when>
+									<xsl:when test="$name = 'ceiling'">
+										<xsl:text>_op:symbolic-ceiling</xsl:text>
+									</xsl:when>
+									<xsl:when test="$name = 'floor'">
+										<xsl:text>_op:symbolic-floor</xsl:text>
+									</xsl:when>
+									<xsl:when test="$name = 'max'">
+										<xsl:text>_op:symbolic-max</xsl:text>
+									</xsl:when>
+									<xsl:when test="$name = 'min'">
+										<xsl:text>_op:symbolic-min</xsl:text>
+									</xsl:when>
+									<xsl:when test="$name = 'round'">
+										<xsl:text>_op:symbolic-round</xsl:text>
+									</xsl:when>
+									<xsl:when test="$name = 'sum'">
+										<xsl:text>_op:symbolic-sum</xsl:text>
+									</xsl:when>
+									<xsl:otherwise>
+										<xsl:value-of select="." />
+									</xsl:otherwise>
+								</xsl:choose>
+							</xsl:when>
+							<xsl:when
+								test="$namespace = 'http://www.w3.org/2005/xpath-functions/math'">
+								<xsl:choose>
+									<xsl:when test="$name = 'acos'">
+										<xsl:text>_op:symbolic-acos</xsl:text>
+									</xsl:when>
+									<xsl:when test="$name = 'asin'">
+										<xsl:text>_op:symbolic-asin</xsl:text>
+									</xsl:when>
+									<xsl:when test="$name = 'atan'">
+										<xsl:text>_op:symbolic-atan</xsl:text>
+									</xsl:when>
+									<xsl:when test="$name = 'atan2'">
+										<xsl:text>_op:symbolic-atan2</xsl:text>
+									</xsl:when>
+									<xsl:when test="$name = 'cos'">
+										<xsl:text>_op:symbolic-cos</xsl:text>
+									</xsl:when>
+									<xsl:when test="$name = 'exp'">
+										<xsl:text>_op:symbolic-exp</xsl:text>
+									</xsl:when>
+									<xsl:when test="$name = 'exp10'">
+										<xsl:text>_op:symbolic-exp10</xsl:text>
+									</xsl:when>
+									<xsl:when test="$name = 'log'">
+										<xsl:text>_op:symbolic-log</xsl:text>
+									</xsl:when>
+									<xsl:when test="$name = 'log10'">
+										<xsl:text>_op:symbolic-log10</xsl:text>
+									</xsl:when>
+									<xsl:when test="$name = 'pow'">
+										<xsl:text>_op:symbolic-pow</xsl:text>
+									</xsl:when>
+									<xsl:when test="$name = 'sin'">
+										<xsl:text>_op:symbolic-sin</xsl:text>
+									</xsl:when>
+									<xsl:when test="$name = 'sqrt'">
+										<xsl:text>_op:symbolic-sqrt</xsl:text>
+									</xsl:when>
+									<xsl:when test="$name = 'tan'">
+										<xsl:text>_op:symbolic-tan</xsl:text>
+									</xsl:when>
+									<xsl:otherwise>
+										<xsl:value-of select="." />
+									</xsl:otherwise>
+								</xsl:choose>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:value-of select="." />
+							</xsl:otherwise>
+						</xsl:choose>
+					</xsl:otherwise>
+				</xsl:choose>
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:value-of select="." />
 			</xsl:otherwise>
 		</xsl:choose>
+
 	</xsl:template>
 
 	<xsl:template match="ObjectConstructor">
@@ -670,7 +768,7 @@
 		<xsl:param name="symbolic-module" select="false()" />
 		<xsl:param name="symbolic-context" select="false()" />
 
-		<xsl:text>?</xsl:text>
+		<xsl:text>(</xsl:text>
 		<xsl:choose>
 			<xsl:when test="count(terminal) &gt; 1">
 				<xsl:value-of select="terminal[2]" />
@@ -685,7 +783,7 @@
 				</xsl:copy>
 			</xsl:otherwise>
 		</xsl:choose>
-		<xsl:text></xsl:text>
+		<xsl:text>)</xsl:text>
 	</xsl:template>
 
 	<xsl:template match="ArrayConstructor">
@@ -799,7 +897,9 @@
 		<xsl:text>xs:anyAtomicType</xsl:text>
 	</xsl:template>
 
-
+	<xsl:template match="FunctionName[terminal='null']">
+		<xsl:text>empty-sequence()</xsl:text>
+	</xsl:template>
 
 	<xsl:template match="Literal">
 		<xsl:value-of select="t:escape(t:new(),.)" />
@@ -812,65 +912,17 @@
 	<xsl:template match="BooleanLiteral">
 		<xsl:value-of select="concat(., '()')" />
 	</xsl:template>
-
-
+	
+	<xsl:template match="NullLiteral">
+		<xsl:text>()</xsl:text>
+	</xsl:template>
+	
 	<xsl:template match="JSONObjectTest">
 		<xsl:text>map(*)</xsl:text>
 	</xsl:template>
 
 	<xsl:template match="JSONArrayTest">
 		<xsl:text>array(*)</xsl:text>
-	</xsl:template>
-
-	<xsl:template match="ModuleImport[terminal/text()='at']">
-		<xsl:param name="symbolic-module" select="false()" />
-		<xsl:param name="symbolic-context" select="false()" />
-
-		<xsl:apply-templates
-			select="*[not(text()='at') and not(preceding-sibling::terminal[text()='at'])]">
-			<xsl:with-param name="symbolic-module" select="$symbolic-module" />
-			<xsl:with-param name="symbolic-context" select="$symbolic-context" />
-		</xsl:apply-templates>
-	</xsl:template>
-
-	<xsl:template match="VersionDecl">
-	</xsl:template>
-
-	<xsl:template match="ModuleDecl">
-		<xsl:param name="symbolic-module" select="false()" />
-		<xsl:param name="symbolic-context" select="false()" />
-
-		<xsl:copy>
-			<xsl:apply-templates select="node()">
-				<xsl:with-param name="symbolic-module" select="$symbolic-module" />
-				<xsl:with-param name="symbolic-context" select="$symbolic-context" />
-			</xsl:apply-templates>
-		</xsl:copy>
-		<xsl:if test="$symbolic-module">
-			<xsl:text>import module namespace _op = "http://dgms.io/unity/modules/symbolics/jsoniq/operators";</xsl:text>
-		</xsl:if>
-	</xsl:template>
-
-	<xsl:template match="/">
-		<xsl:text>xquery version "3.1";</xsl:text>
-		<xsl:choose>
-			<xsl:when
-				test="contains(normalize-space(//OptionDecl), 'symbolic-computation &quot;disabled&quot;')">
-				<xsl:apply-templates>
-					<xsl:with-param name="symbolic-module" select="false()" />
-					<xsl:with-param name="symbolic-context" select="false()" />
-				</xsl:apply-templates>
-			</xsl:when>
-			<xsl:otherwise>
-				<xsl:if test="not(//Module/LibraryModule)">
-					<xsl:text>import module namespace _op = "http://dgms.io/unity/modules/symbolics/jsoniq/operators";</xsl:text>
-				</xsl:if>
-				<xsl:apply-templates>
-					<xsl:with-param name="symbolic-module" select="true()" />
-					<xsl:with-param name="symbolic-context" select="true()" />
-				</xsl:apply-templates>
-			</xsl:otherwise>
-		</xsl:choose>
 	</xsl:template>
 
 	<xsl:template match="node()">
