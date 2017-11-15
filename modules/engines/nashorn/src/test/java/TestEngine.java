@@ -18,6 +18,7 @@ import de.undercouch.vertx.lang.typescript.compiler.NodeCompiler;
 import io.dgms.unity.modules.symbolics.symengine.Basic;
 import io.dgms.unity.modules.symbolics.symengine.Expr;
 import jdk.nashorn.internal.ir.AccessNode;
+import jdk.nashorn.api.scripting.ScriptObjectMirror;
 import jdk.nashorn.internal.ir.BinaryNode;
 import jdk.nashorn.internal.ir.Block;
 import jdk.nashorn.internal.ir.BlockStatement;
@@ -60,6 +61,7 @@ import jdk.nashorn.internal.ir.visitor.NodeVisitor;
 import jdk.nashorn.internal.parser.Parser;
 import jdk.nashorn.internal.runtime.Context;
 import jdk.nashorn.internal.runtime.ErrorManager;
+import jdk.nashorn.internal.runtime.ScriptRuntime;
 import jdk.nashorn.internal.runtime.Source;
 import jdk.nashorn.internal.runtime.options.Options;
 
@@ -84,6 +86,7 @@ public class TestEngine
         final Source source = sourceFor(file.getAbsolutePath(), script);
         final Parser parser = new Parser(context.getEnv(), source, errors);
         final StringBuilder sb = new StringBuilder();
+        sb.append("load('classpath:symbolics.js');");
 
         final Node node = parser.parse().accept(new NodeVisitor<LexicalContext>(new LexicalContext())
         {
@@ -102,6 +105,8 @@ public class TestEngine
             {
                 switch (binaryNode.tokenType()) {
                 case ASSIGN:
+                case EQ_STRICT:
+                case COMMARIGHT:
                     binaryNode.lhs().accept(this);
                     sb.append(binaryNode.tokenType());
                     binaryNode.rhs().accept(this);
@@ -119,6 +124,14 @@ public class TestEngine
                 case LT:
                     sb.append("lt");
                     break;
+                case AND:
+                    sb.append("and");
+                    break;
+                case OR:
+                    sb.append("or");
+                    break;
+                default:
+                    System.err.println(binaryNode);
                 }
                 sb.append("(");
                 binaryNode.lhs().accept(this);
@@ -211,17 +224,29 @@ public class TestEngine
             @Override
             public boolean enterForNode(final ForNode forNode)
             {
-                sb.append("for(");
-                if (forNode.getInit() != null)
-                    forNode.getInit().accept(this);
-                sb.append(";");
-                if (forNode.getTest() != null)
-                    forNode.getTest().accept(this);
-                sb.append(";");
-                if (forNode.getModify() != null)
-                    forNode.getModify().accept(this);
-                sb.append(")");
-                forNode.getBody().accept(this);
+                if (forNode.isForIn()) {
+                    sb.append("for(");
+                    if (forNode.getInit() != null)
+                        forNode.getInit().accept(this);
+                    sb.append(" in ");
+                    if (forNode.getModify() != null)
+                        forNode.getModify().accept(this);
+                    sb.append(")");
+                    forNode.getBody().accept(this);
+                } else {
+                    sb.append("for(");
+                    if (forNode.getInit() != null)
+                        forNode.getInit().accept(this);
+                    sb.append(";");
+                    if (forNode.getTest() != null)
+                        forNode.getTest().accept(this);
+                    sb.append(";");
+                    if (forNode.getModify() != null)
+                        forNode.getModify().accept(this);
+                    sb.append(")");
+                    forNode.getBody().accept(this);
+                }
+
                 return false;
             }
 
@@ -282,14 +307,16 @@ public class TestEngine
             @Override
             public boolean enterJoinPredecessorExpression(final JoinPredecessorExpression expr)
             {
+                sb.append("(");
                 expr.getExpression().accept(this);
+                sb.append(")");
                 return false;
             }
 
             @Override
             public boolean enterJumpToInlinedFinally(final JumpToInlinedFinally jumpToInlinedFinally)
             {
-                return false;
+                return true;
             }
 
             @Override
@@ -435,9 +462,11 @@ public class TestEngine
                 // varNode.getAssignmentDest().accept(this);
                 sb.append("var ");
                 varNode.getName().accept(this);
-                sb.append("=");
                 // varNode.getAssignmentSource().accept(this);
-                varNode.getInit().accept(this);
+                if (varNode.getInit() != null) {
+                    sb.append("=");
+                    varNode.getInit().accept(this);
+                }
                 sb.append(";");
                 return false;
             }
@@ -467,7 +496,7 @@ public class TestEngine
         System.out.println(sb.toString());
 
         final ScriptEngine engine = new ScriptEngineManager().getEngineByName("nashorn");
-        engine.getBindings(ScriptContext.ENGINE_SCOPE).put("_", new SymbolicOperators());
+        engine.getBindings(ScriptContext.ENGINE_SCOPE).put("__", new SymbolicOperators());
         engine.getBindings(ScriptContext.ENGINE_SCOPE).put("variable", new Variable());
         System.out.println(engine.eval(sb.toString()));
     }
@@ -479,14 +508,14 @@ public class TestEngine
             return a.add(b);
         }
 
-        public Expr _add(Expr a, long b)
+        public Expr _add(Expr a, Number b)
         {
             return a.add(Basic.of(b));
         }
 
-        public long _add(long a, long b)
+        public Expr _add(Number a, Expr b)
         {
-            return a + b;
+            return Basic.of(a).add(b);
         }
 
         public Expr _lt(Expr a, Expr b)
@@ -494,14 +523,14 @@ public class TestEngine
             return a.lt(b);
         }
 
-        public Expr _lt(Expr a, long b)
+        public Expr _lt(Expr a, Number b)
         {
             return a.lt(Basic.of(b));
         }
 
-        public boolean _lt(long a, long b)
+        public Expr _lt(Number a, Expr b)
         {
-            return a < b;
+            return Basic.of(a).lt(b);
         }
     }
 

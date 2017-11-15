@@ -48,10 +48,14 @@ public class Basic extends Expr
 
     private static final SymEngine sym = SymEngine.INSTANCE;
 
-    public static Basic of(long value)
+    public static Basic of(Number value)
     {
         final Basic b = new Basic();
-        sym.integer_set_si(b.s, value);
+        if (value instanceof Double)
+            sym.real_double_set_d(b.s, (double) value);
+        else
+            sym.integer_set_si(b.s, (long) value);
         return b;
     }
+
 }

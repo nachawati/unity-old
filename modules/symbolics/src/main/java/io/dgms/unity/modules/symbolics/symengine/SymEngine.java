@@ -43,6 +43,8 @@ public interface SymEngine extends Library
 
     int integer_set_si(Pointer s, long i);
 
+    int real_double_set_d(Pointer s, double d);
+
     int symbol_set(Pointer s, String c);
 
     void vecbasic_free(Pointer self);

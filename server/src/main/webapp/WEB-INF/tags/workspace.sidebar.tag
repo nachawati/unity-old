@@ -25,25 +25,25 @@
 <ul class="sidebar-menu" data-widget="tree">
 	<li class="header">WORKSPACE NAVIGATION</li>
 	<t:li.sidebar active="${fn:startsWith(attrs.active, 'home/')}"
-		href="${contextPath}/${it.workspace.pathWithNamespace}" title="Home"
+		href="${pageContext.request.contextPath}/${it.workspace.pathWithNamespace}" title="Home"
 		icon="octicon octicon-home"></t:li.sidebar>
 	<t:li.sidebar active="${fn:startsWith(attrs.active, 'console/')}"
-		href="${contextPath}/${it.workspace.pathWithNamespace}/console" title="Console"
+		href="${pageContext.request.contextPath}/${it.workspace.pathWithNamespace}/console" title="Console"
 		icon="octicon octicon-terminal"></t:li.sidebar>
 	<t:li.sidebar active="${fn:startsWith(attrs.active, 'tree/')}"
-		href="${contextPath}/${it.workspace.pathWithNamespace}/tree"
+		href="${pageContext.request.contextPath}/${it.workspace.pathWithNamespace}/tree"
 		title="Repository" icon="octicon octicon-repo">
 	</t:li.sidebar>
 	<t:li.sidebar active="${fn:startsWith(attrs.active, 'kernel/')}"
-		href="${contextPath}/${it.workspace.pathWithNamespace}/kernel"
+		href="${pageContext.request.contextPath}/${it.workspace.pathWithNamespace}/kernel"
 		title="Kernel" icon="octicon octicon-gear">
 	</t:li.sidebar>
 	<t:li.sidebar active="${fn:startsWith(attrs.active, 'members/')}"
-		href="${contextPath}/${it.workspace.pathWithNamespace}/members"
+		href="${pageContext.request.contextPath}/${it.workspace.pathWithNamespace}/members"
 		title="Members" icon="octicon octicon-organization">
 	</t:li.sidebar>
 	<t:li.sidebar active="${fn:startsWith(attrs.active, 'settings/')}"
-		href="${contextPath}/${it.workspace.pathWithNamespace}/settings"
+		href="${pageContext.request.contextPath}/${it.workspace.pathWithNamespace}/settings"
 		title="Settings" icon="octicon octicon-settings">
 	</t:li.sidebar>
 </ul>

@@ -21,19 +21,19 @@
 	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
 	name="viewport">
 <link rel="icon" type="image/png"
-	href="${contextPath}/assets/favicon.png">
+	href="${pageContext.request.contextPath}/assets/favicon.png">
 <link rel="stylesheet"
-	href="${contextPath}/assets/bower_components/bootstrap/dist/css/bootstrap.min.css">
+	href="${pageContext.request.contextPath}/assets/bower_components/bootstrap/dist/css/bootstrap.min.css">
 <link rel="stylesheet"
-	href="${contextPath}/assets/bower_components/jstree/dist/themes/default/style.min.css">
+	href="${pageContext.request.contextPath}/assets/bower_components/jstree/dist/themes/default/style.min.css">
 <link rel="stylesheet"
-	href="${contextPath}/assets/bower_components/font-awesome/css/font-awesome.min.css">
+	href="${pageContext.request.contextPath}/assets/bower_components/font-awesome/css/font-awesome.min.css">
 <link rel="stylesheet"
-	href="${contextPath}/assets/bower_components/Ionicons/css/ionicons.min.css">
+	href="${pageContext.request.contextPath}/assets/bower_components/Ionicons/css/ionicons.min.css">
 <link rel="stylesheet"
-	href="${contextPath}/assets/bower_components/admin-lte/dist/css/AdminLTE.min.css">
+	href="${pageContext.request.contextPath}/assets/bower_components/admin-lte/dist/css/AdminLTE.min.css">
 <link rel="stylesheet"
-	href="${contextPath}/assets/bower_components/admin-lte/dist/css/skins/skin-purple.min.css">
+	href="${pageContext.request.contextPath}/assets/bower_components/admin-lte/dist/css/skins/skin-purple.min.css">
 <link rel="stylesheet"
 	href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 <link rel="stylesheet"
@@ -42,8 +42,8 @@
   <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
   <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
-<link rel="stylesheet" href="${contextPath}/assets/css/spacing.css">
-<link rel="stylesheet" href="${contextPath}/assets/css/style.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/spacing.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/style.css">
 <jsp:invoke fragment="head" />
 </head>
 <body
@@ -52,8 +52,8 @@
 		<header class="main-header">
 
 			<c:if test="${not empty sidebarText}">
-			<a href="${contextPath}" class="logo"><span class="logo-mini"><img
-					src="${contextPath}/assets/img/logo.png" class="img-square" alt=""></span><span
+			<a href="${pageContext.request.contextPath}" class="logo"><span class="logo-mini"><img
+					src="${pageContext.request.contextPath}/assets/img/logo.png" class="img-square" alt=""></span><span
 				class="logo-lg"><b>Unity</b> DGMS</span></a>
 			</c:if>
 			<nav class="navbar navbar-static-top">
@@ -83,7 +83,7 @@
 									</p></li>
 								<li class="user-footer">
 									<div class="pull-right">
-										<a href="${contextPath}/users/sign-out"
+										<a href="${pageContext.request.contextPath}/users/sign-out"
 											class="btn btn-default btn-flat">Sign out</a>
 									</div>
 								</li>
@@ -93,7 +93,7 @@
 				<div class="collapse navbar-collapse pull-right"
 					id="navbar-collapse">
 					<form class="navbar-form pull-left-not-xs hidden-md hidden-sm"
-						role="search" action="${contextPath}/search" method="get">
+						role="search" action="${pageContext.request.contextPath}/search" method="get">
 						<div class="form-group input-group">
 
 							<span class="input-group-addon"
@@ -180,18 +180,18 @@
 		<div class="modal-dialog modal-lg"></div>
 	</div>
 	<script
-		src="${contextPath}/assets/bower_components/jquery/dist/jquery.min.js"></script>
+		src="${pageContext.request.contextPath}/assets/bower_components/jquery/dist/jquery.min.js"></script>
 	<script
-		src="${contextPath}/assets/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+		src="${pageContext.request.contextPath}/assets/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 	<script
-		src="${contextPath}/assets/bower_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+		src="${pageContext.request.contextPath}/assets/bower_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
 	<script
-		src="${contextPath}/assets/bower_components/jstree/dist/jstree.min.js"></script>
+		src="${pageContext.request.contextPath}/assets/bower_components/jstree/dist/jstree.min.js"></script>
 	<script
-		src="${contextPath}/assets/bower_components/fastclick/lib/fastclick.js"></script>
+		src="${pageContext.request.contextPath}/assets/bower_components/fastclick/lib/fastclick.js"></script>
 	<script
-		src="${contextPath}/assets/bower_components/admin-lte/dist/js/adminlte.min.js"></script>
-	<script src="${contextPath}/assets/js/script.js"></script>
+		src="${pageContext.request.contextPath}/assets/bower_components/admin-lte/dist/js/adminlte.min.js"></script>
+	<script src="${pageContext.request.contextPath}/assets/js/script.js"></script>
 	<jsp:invoke fragment="scripts" />
 </body>
 </html>

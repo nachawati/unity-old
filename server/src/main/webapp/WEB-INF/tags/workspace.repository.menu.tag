@@ -4,29 +4,29 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <t:li.menu modal="?action=upload" icon="octicon octicon-cloud-upload"></t:li.menu>
-<t:li.menu cls="divider" modal="${contextPath}/${it.path}/tree?action=new" icon="octicon octicon-plus" title="New">
+<t:li.menu cls="divider" modal="${pageContext.request.contextPath}/${it.path}/tree?action=new" icon="octicon octicon-plus" title="New">
 </t:li.menu>
-<t:li.menu modal="${contextPath}/${it.path}/tree?action=new.artifact" icon="octicon octicon-file-code"
+<t:li.menu modal="${pageContext.request.contextPath}/${it.path}/tree?action=new.artifact" icon="octicon octicon-file-code"
 	title="Artifact"></t:li.menu>
 <t:li.menu icon="octicon octicon-pulse" title="Analytics">
-	<t:li.menu modal="${contextPath}/${it.path}/tree?action=new.analytics.compute" icon=""
+	<t:li.menu modal="${pageContext.request.contextPath}/${it.path}/tree?action=new.analytics.compute" icon=""
 		title="Compute"></t:li.menu>
-	<t:li.menu modal="${contextPath}/${it.path}/tree?action=new.analytics.predict" icon=""
+	<t:li.menu modal="${pageContext.request.contextPath}/${it.path}/tree?action=new.analytics.predict" icon=""
 		title="Predict"></t:li.menu>
 	<h6 class="dropdown-header m-0" style="color: #999;">Advanced
 		Analytics</h6>
-	<t:li.menu modal="${contextPath}/${it.path}/tree?action=new.analytics.learn" icon="" title="Learn"></t:li.menu>
-	<t:li.menu modal="${contextPath}/${it.path}/tree?action=new.analytics.optimize.deterministic" icon=""
+	<t:li.menu modal="${pageContext.request.contextPath}/${it.path}/tree?action=new.analytics.learn" icon="" title="Learn"></t:li.menu>
+	<t:li.menu modal="${pageContext.request.contextPath}/${it.path}/tree?action=new.analytics.optimize.deterministic" icon=""
 		title="Optimize (Deterministic)"></t:li.menu>
-	<t:li.menu modal="${contextPath}/${it.path}/tree?action=new.analytics.optimize.stochastic.1stage"
+	<t:li.menu modal="${pageContext.request.contextPath}/${it.path}/tree?action=new.analytics.optimize.stochastic.1stage"
 		icon="" title="Optimize (1-Stage Stochastic)"></t:li.menu>
 	<h6 class="dropdown-header m-0" style="color: #999;">Extended
 		Analytics</h6>
-	<t:li.menu modal="${contextPath}/${it.path}/tree?action=new.analytics.pareto" icon=""
+	<t:li.menu modal="${pageContext.request.contextPath}/${it.path}/tree?action=new.analytics.pareto" icon=""
 		title="Compute Pareto Frontier"></t:li.menu>
 </t:li.menu>
 <t:li.menu cls="divider" icon="octicon octicon-browser" title="Open">
-	<t:li.menu modal="${contextPath}/${it.path}/tree?action=open.autocad" icon="octicon octicon-browser"
+	<t:li.menu modal="${pageContext.request.contextPath}/${it.path}/tree?action=open.autocad" icon="octicon octicon-browser"
 		title="AutoCAD">
 	</t:li.menu>
 </t:li.menu>
@@ -43,5 +43,5 @@
 	<li class="divider"></li>
 	<t:li.menu modal="?action=delete" title="Delete"></t:li.menu>
 </t:li.menu>
-<t:li.menu cls="divider" modal="${contextPath}/${it.path}/tree?action=run"
+<t:li.menu cls="divider" modal="${pageContext.request.contextPath}/${it.path}/tree?action=run"
 	icon="octicon octicon-zap" title="Run"></t:li.menu>

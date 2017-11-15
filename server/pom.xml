@@ -28,23 +28,28 @@
 	</build>
 
 	<dependencies>
-	
+
 		<dependency>
 			<groupId>io.dgms.unity</groupId>
 			<artifactId>unity-api</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>io.dgms.unity</groupId>
 			<artifactId>unity-core</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>io.dgms.unity</groupId>
 			<artifactId>unity-client</artifactId>
 			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
 		</dependency>
 
 		<dependency>
@@ -67,10 +72,6 @@
 			<artifactId>jersey-container-servlet</artifactId>
 		</dependency>
 
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
-		</dependency>
 
 		<dependency>
 			<groupId>javax.servlet.jsp</groupId>

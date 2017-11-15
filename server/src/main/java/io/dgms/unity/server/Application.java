@@ -14,7 +14,7 @@ import org.glassfish.jersey.server.ServerProperties;
 import org.glassfish.jersey.server.TracingConfig;
 import org.glassfish.jersey.server.mvc.jsp.JspMvcFeature;
 
-import io.dgms.unity.server.api.ServerDGSystem;
+import io.dgms.unity.server.system.ServerDGSystem;
 
 /**
  * @author Mohamad Omar Nachawati
