@@ -37,7 +37,7 @@ public interface DGUser extends DGSessionObject
     /**
      * @return Instant
      */
-    Instant getDateConstructed();
+    Instant getDateInstantiated();
 
     /**
      * @return String

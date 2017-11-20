@@ -85,7 +85,7 @@ public class ClientDGUser extends ClientDGSessionObject implements DGUser
      * @see io.dgms.unity.api.DGUser#getDateConstructed()
      */
     @Override
-    public Instant getDateConstructed()
+    public Instant getDateInstantiated()
     {
         if (object.getCreatedAt() != null)
             return object.getCreatedAt().toInstant();

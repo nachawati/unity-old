@@ -10,13 +10,17 @@
 <%@attribute name="scripts" fragment="true" required="false"%>
 <%@attribute name="sidenav" fragment="true" required="false"%>
 <%@attribute name="title" fragment="false" required="true"%>
+<%@attribute name="search_action" fragment="false" required="false"%>
+<%@attribute name="search_label" fragment="false" required="false"%>
+<c:set var="search_action"
+	value="${(empty search_action) ? '/search' : search_action}" />
 <jsp:invoke fragment="sidebar" var="sidebarText"></jsp:invoke>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>${title}&#32;·&#32;Unity&#32;DGMS</title>
+<title>${title}&#32;·&#32;Unity&#32;Server</title>
 <meta
 	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
 	name="viewport">
@@ -42,8 +46,10 @@
   <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
   <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
-<link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/spacing.css">
-<link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/style.css">
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/assets/css/spacing.css">
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/assets/css/style.css">
 <jsp:invoke fragment="head" />
 </head>
 <body
@@ -52,9 +58,11 @@
 		<header class="main-header">
 
 			<c:if test="${not empty sidebarText}">
-			<a href="${pageContext.request.contextPath}" class="logo"><span class="logo-mini"><img
-					src="${pageContext.request.contextPath}/assets/img/logo.png" class="img-square" alt=""></span><span
-				class="logo-lg"><b>Unity</b> DGMS</span></a>
+				<a href="${pageContext.request.contextPath}" class="logo"><span
+					class="logo-mini"><img
+						src="${pageContext.request.contextPath}/assets/img/logo.png"
+						class="img-square" alt=""></span><span class="logo-lg"><b>Unity</b>
+						Server</span></a>
 			</c:if>
 			<nav class="navbar navbar-static-top">
 				<c:if test="${not empty sidebarText}">
@@ -93,13 +101,14 @@
 				<div class="collapse navbar-collapse pull-right"
 					id="navbar-collapse">
 					<form class="navbar-form pull-left-not-xs hidden-md hidden-sm"
-						role="search" action="${pageContext.request.contextPath}/search" method="get">
+						role="search" action="${pageContext.request.contextPath}${search_action}" method="get">
 						<div class="form-group input-group">
-
-							<span class="input-group-addon"
-								style="background-color: rgba(255, 255, 255, 0.0); color: #fff; font-size: small; border-color: rgba(255, 255, 255, 0.2); border-bottom-left-radius: 3px; border-top-left-radius: 3px;">This
-								workspace </span> <input type="text" class="form-control"
-								id="navbar-search-input" name="q" placeholder="Search" style=""><span
+							<c:if test="${not empty search_label}">
+								<span class="input-group-addon"
+									style="background-color: rgba(255, 255, 255, 0.0); color: #fff; font-size: small; border-color: rgba(255, 255, 255, 0.2); border-bottom-left-radius: 3px; border-top-left-radius: 3px;">${search_label}</span>
+							</c:if>
+							<input type="text" class="form-control" id="navbar-search-input"
+								name="q" placeholder="Search" style=""><span
 								class="input-group-btn">
 								<button type="submit" class="btn bg-purple">
 									<i class="fa fa-search"></i>

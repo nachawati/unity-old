@@ -16,7 +16,7 @@ import com.google.gson.JsonObject;
  * @author Mohamad Omar Nachawati
  *
  */
-public interface DGOntology
+public interface DGOntology extends AutoCloseable
 {
     /**
      * @return DGBranch

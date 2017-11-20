@@ -87,7 +87,7 @@ public class Init extends Command
             directory = directory.getCanonicalFile();
             if (!directory.isDirectory())
                 throw new DGException("cannot init '" + directory + "'");
-            final DGProject project = session.getSystem().newProject(directory.getName());
+            final DGProject project = session.getSystem().instantiateProject(directory.getName());
 
             final InitCommand init = Git.init();
             init.setGitDir(Main.getSystemPath().resolve("git").resolve(project.getPathWithNamespace()).toFile());

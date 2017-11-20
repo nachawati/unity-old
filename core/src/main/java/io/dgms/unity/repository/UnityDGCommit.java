@@ -27,6 +27,7 @@ import io.dgms.unity.UnityDGSession;
 import io.dgms.unity.UnityDGSessionObject;
 import io.dgms.unity.api.DGCommit;
 import io.dgms.unity.api.DGException;
+import io.dgms.unity.api.DGFile;
 import io.dgms.unity.api.DGSystem;
 import io.dgms.unity.registry.UnityDGPackageReference;
 import io.dgms.unity.system.UnityDGProject;
@@ -142,7 +143,7 @@ public class UnityDGCommit extends UnityDGSessionObject implements DGCommit
      * @see io.dgms.unity.api.DGCommit#getDateConstructed()
      */
     @Override
-    public Instant getDateConstructed()
+    public Instant getDateInstantiated()
     {
         return object.getCreatedAt().toInstant();
     }
@@ -187,18 +188,20 @@ public class UnityDGCommit extends UnityDGSessionObject implements DGCommit
         }
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see io.dgms.unity.api.DGCommit#getFiles(java.lang.String)
-     */
     @Override
-    public Stream<UnityDGFile> getFiles(String path) throws DGException
+    public Stream<? extends DGFile> getFiles(boolean recursive) throws DGException
+    {
+        return getFiles(null, recursive);
+    }
+
+    @Override
+    public Stream<? extends DGFile> getFiles(String path, boolean recursive) throws DGException
     {
         try {
             while (path != null && path.startsWith("/"))
                 path = path.substring(1);
-            return api().getRepositoryApi().getTree(repository.getProject().getId(), path, object.getId()).stream()
+            return api().getRepositoryApi().getTree(repository.getProject().getId(), path, object.getId(), recursive)
+                    .stream()
                     .filter(f -> f.getName().endsWith(".metadata") || f.getName().endsWith(".metadata.json")
                             || f.getName().equals(".gitkeep") ? false : true)
                     .map(t -> new UnityDGFile(getSession(), this, t));
@@ -267,7 +270,10 @@ public class UnityDGCommit extends UnityDGSessionObject implements DGCommit
         }
         for (final UnityDGPackageReference dependency : getDependencies().collect(Collectors.toList()))
             try {
-                final UnityDGProject project = getSession().getSystem().getProject(dependency.getName());
+                String name = dependency.getName();
+                while (name.startsWith("@"))
+                    name = name.substring(1);
+                final UnityDGProject project = getSession().getSystem().getProject(name);
                 final RepositoryFile file = api().getRepositoryFileApi().getFile(path, project.getId(),
                         dependency.getVersion());
                 return new ByteArrayInputStream(Base64.getDecoder().decode(file.getContent()));

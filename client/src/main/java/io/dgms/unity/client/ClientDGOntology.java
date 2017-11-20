@@ -36,6 +36,13 @@ public class ClientDGOntology extends ClientDGSessionObject implements DGOntolog
         this.branch = branch;
     }
 
+    @Override
+    public void close() throws Exception
+    {
+        // TODO Auto-generated method stub
+
+    }
+
     /*
      * (non-Javadoc)
      *

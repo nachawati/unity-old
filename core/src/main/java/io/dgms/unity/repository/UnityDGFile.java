@@ -10,6 +10,7 @@ package io.dgms.unity.repository;
 
 import java.io.InputStream;
 
+import org.gitlab4j.api.GitLabApi;
 import org.gitlab4j.api.models.RepositoryFile;
 import org.gitlab4j.api.models.TreeItem;
 
@@ -17,7 +18,6 @@ import io.dgms.unity.UnityDGSession;
 import io.dgms.unity.UnityDGSessionObject;
 import io.dgms.unity.api.DGException;
 import io.dgms.unity.api.DGFile;
-import io.dgms.unity.api.DGResource;
 import io.dgms.unity.system.UnityDGProject;
 
 /**
@@ -163,7 +163,7 @@ public class UnityDGFile extends UnityDGSessionObject implements DGFile
      * @see io.dgms.unity.api.DGFile#getType()
      */
     @Override
-    public DGResource getType()
+    public String getType()
     {
         // TODO Auto-generated method stub
         return null;
@@ -188,9 +188,8 @@ public class UnityDGFile extends UnityDGSessionObject implements DGFile
      * @see io.dgms.unity.api.DGFile#newInputStream()
      */
     @Override
-    public InputStream newInputStream() throws DGException
+    public UnityDGFileInputStream newInputStream() throws DGException
     {
-        // TODO Auto-generated method stub
-        return null;
+        return new UnityDGFileInputStream(this);
     }
 }

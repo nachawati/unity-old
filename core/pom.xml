@@ -116,11 +116,26 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.apache.jena</groupId>
+			<artifactId>jena-core</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.jena</groupId>
+			<artifactId>jena-tdb</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>net.sourceforge.owlapi</groupId>
+			<artifactId>owlapi-distribution</artifactId>
+		</dependency>
+
+		<dependency>
 			<groupId>de.erichseifert.gral</groupId>
 			<artifactId>gral-core</artifactId>
 			<version>0.11</version>
 		</dependency>
-		
+
 	</dependencies>
 
 </project>

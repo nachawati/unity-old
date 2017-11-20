@@ -12,7 +12,7 @@ import org.gitlab4j.api.models.Branch;
 
 import io.dgms.unity.UnityDGSession;
 import io.dgms.unity.api.DGBranch;
-import io.dgms.unity.api.DGOntology;
+import io.dgms.unity.ontology.UnityDGOntology;
 
 /**
  * @author Mohamad Omar Nachawati
@@ -23,7 +23,8 @@ public class UnityDGBranch extends UnityDGCommit implements DGBranch
     /**
      *
      */
-    private final Branch object;
+    private final Branch    object;
+    private UnityDGOntology ontology;
 
     /**
      * @param session
@@ -53,8 +54,10 @@ public class UnityDGBranch extends UnityDGCommit implements DGBranch
      * @see io.dgms.unity.api.DGBranch#getOntology()
      */
     @Override
-    public DGOntology getOntology()
+    public synchronized UnityDGOntology getOntology()
     {
-        return null;
+        if (ontology != null)
+            return null;
+        return ontology = new UnityDGOntology(getSession(), this);
     }
 }

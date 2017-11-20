@@ -39,7 +39,6 @@ public class AuthenticationFilter implements Filter
         request.setAttribute("session", session);
         if (session != null)
             request.setAttribute("user", session.getUser());
-        request.setAttribute("contextPath", request.getContextPath());
         if (staticContentRegex.matcher(request.getRequestURI()).matches())
             filterChain.doFilter(request, response);
         else if (request.getSession(false) != null) {

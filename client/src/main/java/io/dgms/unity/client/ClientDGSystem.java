@@ -153,13 +153,13 @@ public class ClientDGSystem extends ClientDGSessionObject implements DGSystem
      * @see io.dgms.unity.api.DGSystem#getProject(java.lang.Integer)
      */
     @Override
-    public ClientDGProject getProject(Integer projectId) throws DGException
+    public ClientDGProject getProject(Integer projectId)
     {
         try {
             final Project object = api().getProjectApi().getProject(projectId);
             return new ClientDGProject(getSession(), object);
         } catch (final GitLabApiException e) {
-            throw new DGException(e);
+            return null;
         }
     }
 
@@ -169,7 +169,7 @@ public class ClientDGSystem extends ClientDGSessionObject implements DGSystem
      * @see io.dgms.unity.api.DGSystem#getProject(java.lang.String)
      */
     @Override
-    public ClientDGProject getProject(String path) throws DGException
+    public ClientDGProject getProject(String path)
     {
         try {
             final int off = path.lastIndexOf("/");
@@ -178,7 +178,7 @@ public class ClientDGSystem extends ClientDGSessionObject implements DGSystem
             final Project object = api().getProjectApi().getProject(namespace, project);
             return new ClientDGProject(getSession(), object);
         } catch (final GitLabApiException e) {
-            throw new DGException(e);
+            return null;
         }
     }
 
@@ -188,12 +188,12 @@ public class ClientDGSystem extends ClientDGSessionObject implements DGSystem
      * @see io.dgms.unity.api.DGSystem#getProjects()
      */
     @Override
-    public Stream<ClientDGProject> getProjects() throws DGException
+    public Stream<ClientDGProject> getProjects()
     {
         try {
             return api().getProjectApi().getProjects().stream().map(p -> new ClientDGProject(getSession(), p));
         } catch (final GitLabApiException e) {
-            throw new DGException(e);
+            return Stream.empty();
         }
     }
 
@@ -203,7 +203,7 @@ public class ClientDGSystem extends ClientDGSessionObject implements DGSystem
      * @see io.dgms.unity.api.DGSystem#getTaskExecution(java.lang.Long)
      */
     @Override
-    public DGTaskExecution getTaskExecution(Long taskExecutionId) throws DGException
+    public DGTaskExecution getTaskExecution(Long taskExecutionId)
     {
         try {
             final WebTarget target = getTarget("/api/v1/system/executions/" + taskExecutionId);
@@ -212,7 +212,7 @@ public class ClientDGSystem extends ClientDGSessionObject implements DGSystem
             taskExecution.session = getSession();
             return taskExecution;
         } catch (final IOException e) {
-            throw new DGException(e);
+            return null;
         }
     }
 
@@ -222,13 +222,13 @@ public class ClientDGSystem extends ClientDGSessionObject implements DGSystem
      * @see io.dgms.unity.api.DGSystem#getTaskExecutionError(java.lang.Long)
      */
     @Override
-    public String getTaskExecutionError(Long taskExecutionId) throws DGException
+    public String getTaskExecutionError(Long taskExecutionId)
     {
         try {
             final WebTarget target = getTarget("/api/v1/system/executions/" + taskExecutionId + "/error");
             return target.request(MediaType.APPLICATION_JSON).get(String.class);
         } catch (final IOException e) {
-            throw new DGException(e);
+            return null;
         }
     }
 
@@ -238,13 +238,13 @@ public class ClientDGSystem extends ClientDGSessionObject implements DGSystem
      * @see io.dgms.unity.api.DGSystem#getTaskExecutionInput(java.lang.Long)
      */
     @Override
-    public String getTaskExecutionInput(Long taskExecutionId) throws DGException
+    public String getTaskExecutionInput(Long taskExecutionId)
     {
         try {
             final WebTarget target = getTarget("/api/v1/system/executions/" + taskExecutionId + "/input");
             return target.request(MediaType.APPLICATION_JSON).get(String.class);
         } catch (final IOException e) {
-            throw new DGException(e);
+            return null;
         }
     }
 
@@ -254,13 +254,13 @@ public class ClientDGSystem extends ClientDGSessionObject implements DGSystem
      * @see io.dgms.unity.api.DGSystem#getTaskExecutionOutput(java.lang.Long)
      */
     @Override
-    public String getTaskExecutionOutput(Long taskExecutionId) throws DGException
+    public String getTaskExecutionOutput(Long taskExecutionId)
     {
         try {
             final WebTarget target = getTarget("/api/v1/system/executions/" + taskExecutionId + "/output");
             return target.request(MediaType.APPLICATION_JSON).get(String.class);
         } catch (final IOException e) {
-            throw new DGException(e);
+            return null;
         }
     }
 
@@ -270,13 +270,13 @@ public class ClientDGSystem extends ClientDGSessionObject implements DGSystem
      * @see io.dgms.unity.api.DGSystem#getTaskExecutionResult(java.lang.Long)
      */
     @Override
-    public String getTaskExecutionResult(Long taskExecutionId) throws DGException
+    public String getTaskExecutionResult(Long taskExecutionId)
     {
         try {
             final WebTarget target = getTarget("/api/v1/system/executions/" + taskExecutionId + "/result");
             return target.request(MediaType.APPLICATION_JSON).get(String.class);
         } catch (final IOException e) {
-            throw new DGException(e);
+            return null;
         }
     }
 
@@ -286,7 +286,7 @@ public class ClientDGSystem extends ClientDGSessionObject implements DGSystem
      * @see io.dgms.unity.api.DGSystem#getTaskExecutions()
      */
     @Override
-    public Stream<ClientDGTaskExecution> getTaskExecutions() throws DGException
+    public Stream<ClientDGTaskExecution> getTaskExecutions()
     {
         try {
             final WebTarget target = getTarget("/api/v1/system/executions");
@@ -297,7 +297,7 @@ public class ClientDGSystem extends ClientDGSessionObject implements DGSystem
                 return t;
             });
         } catch (final IOException e) {
-            throw new DGException(e);
+            return Stream.empty();
         }
     }
 
@@ -307,13 +307,13 @@ public class ClientDGSystem extends ClientDGSessionObject implements DGSystem
      * @see io.dgms.unity.api.DGSystem#getTaskExecutionScript(java.lang.Long)
      */
     @Override
-    public String getTaskExecutionScript(Long taskExecutionId) throws DGException
+    public String getTaskExecutionScript(Long taskExecutionId)
     {
         try {
             final WebTarget target = getTarget("/api/v1/system/executions/" + taskExecutionId + "/script");
             return target.request(MediaType.APPLICATION_JSON).get(String.class);
         } catch (final IOException e) {
-            throw new DGException(e);
+            return null;
         }
     }
 
@@ -323,13 +323,13 @@ public class ClientDGSystem extends ClientDGSessionObject implements DGSystem
      * @see io.dgms.unity.api.DGSystem#getTaskExecutionStatus(java.lang.Long)
      */
     @Override
-    public DGTaskExecutionStatus getTaskExecutionStatus(Long taskExecutionId) throws DGException
+    public DGTaskExecutionStatus getTaskExecutionStatus(Long taskExecutionId)
     {
         try {
             final WebTarget target = getTarget("/api/v1/system/executions/" + taskExecutionId + "/status");
             return target.request(MediaType.APPLICATION_JSON).get(DGTaskExecutionStatus.class);
         } catch (final IOException e) {
-            throw new DGException(e);
+            return null;
         }
     }
 
@@ -339,12 +339,12 @@ public class ClientDGSystem extends ClientDGSessionObject implements DGSystem
      * @see io.dgms.unity.api.DGSystem#getUser(java.lang.Integer)
      */
     @Override
-    public ClientDGUser getUser(Integer userId) throws DGException
+    public ClientDGUser getUser(Integer userId)
     {
         try {
             return new ClientDGUser(getSession(), api().getUserApi().getUser(userId));
         } catch (final GitLabApiException e) {
-            throw new DGException(e);
+            return null;
         }
     }
 
@@ -354,12 +354,12 @@ public class ClientDGSystem extends ClientDGSessionObject implements DGSystem
      * @see io.dgms.unity.api.DGSystem#getUser(java.lang.String)
      */
     @Override
-    public ClientDGUser getUser(String username) throws DGException
+    public ClientDGUser getUser(String username)
     {
         try {
             return new ClientDGUser(getSession(), api().getUserApi().getUser(username));
         } catch (final GitLabApiException e) {
-            throw new DGException(e);
+            return null;
         }
     }
 
@@ -369,12 +369,12 @@ public class ClientDGSystem extends ClientDGSessionObject implements DGSystem
      * @see io.dgms.unity.api.DGSystem#getUsers()
      */
     @Override
-    public Stream<ClientDGUser> getUsers() throws DGException
+    public Stream<ClientDGUser> getUsers()
     {
         try {
             return api().getUserApi().getUsers().stream().map(u -> new ClientDGUser(getSession(), u));
         } catch (final GitLabApiException e) {
-            throw new DGException(e);
+            return Stream.empty();
         }
     }
 
@@ -384,12 +384,12 @@ public class ClientDGSystem extends ClientDGSessionObject implements DGSystem
      * @see io.dgms.unity.api.DGSystem#getWorkspace(java.lang.Integer)
      */
     @Override
-    public ClientDGWorkspace getWorkspace(Integer workspaceId) throws DGException
+    public ClientDGWorkspace getWorkspace(Integer workspaceId)
     {
         try {
             return new ClientDGWorkspace(getSession(), api().getGroupApi().getGroup(workspaceId));
         } catch (final GitLabApiException e) {
-            throw new DGException(e);
+            return null;
         }
     }
 
@@ -399,12 +399,12 @@ public class ClientDGSystem extends ClientDGSessionObject implements DGSystem
      * @see io.dgms.unity.api.DGSystem#getWorkspace(java.lang.String)
      */
     @Override
-    public ClientDGWorkspace getWorkspace(String path) throws DGException
+    public ClientDGWorkspace getWorkspace(String path)
     {
         try {
             return new ClientDGWorkspace(getSession(), api().getGroupApi().getGroup(path));
         } catch (final GitLabApiException e) {
-            throw new DGException(e);
+            return null;
         }
     }
 
@@ -414,10 +414,25 @@ public class ClientDGSystem extends ClientDGSessionObject implements DGSystem
      * @see io.dgms.unity.api.DGSystem#getWorkspaces()
      */
     @Override
-    public Stream<ClientDGWorkspace> getWorkspaces() throws DGException
+    public Stream<ClientDGWorkspace> getWorkspaces()
     {
         try {
             return api().getGroupApi().getGroups().stream().map(g -> new ClientDGWorkspace(getSession(), g));
+        } catch (final GitLabApiException e) {
+            return Stream.empty();
+        }
+    }
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see io.dgms.unity.api.DGSystem#newProject(java.lang.String)
+     */
+    @Override
+    public ClientDGProject instantiateProject(String projectName) throws DGException
+    {
+        try {
+            return new ClientDGProject(getSession(), api().getProjectApi().createProject(projectName));
         } catch (final GitLabApiException e) {
             throw new DGException(e);
         }
@@ -433,21 +448,6 @@ public class ClientDGSystem extends ClientDGSessionObject implements DGSystem
     {
         // TODO Auto-generated method stub
 
-    }
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see io.dgms.unity.api.DGSystem#newProject(java.lang.String)
-     */
-    @Override
-    public ClientDGProject newProject(String projectName) throws DGException
-    {
-        try {
-            return new ClientDGProject(getSession(), api().getProjectApi().createProject(projectName));
-        } catch (final GitLabApiException e) {
-            throw new DGException(e);
-        }
     }
 
     /*

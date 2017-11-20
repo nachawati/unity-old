@@ -25,6 +25,7 @@ import com.google.gson.JsonObject;
 
 import io.dgms.unity.api.DGCommit;
 import io.dgms.unity.api.DGException;
+import io.dgms.unity.api.DGFile;
 import io.dgms.unity.api.DGSystem;
 
 /**
@@ -138,7 +139,7 @@ public class ClientDGCommit extends ClientDGSessionObject implements DGCommit
      * @see io.dgms.unity.api.DGCommit#getDateConstructed()
      */
     @Override
-    public Instant getDateConstructed()
+    public Instant getDateInstantiated()
     {
         return object.getCreatedAt().toInstant();
     }
@@ -183,13 +184,20 @@ public class ClientDGCommit extends ClientDGSessionObject implements DGCommit
         }
     }
 
+    @Override
+    public Stream<? extends DGFile> getFiles(boolean recursive) throws DGException
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
     /*
      * (non-Javadoc)
      *
      * @see io.dgms.unity.api.DGCommit#getFiles(java.lang.String)
      */
     @Override
-    public Stream<ClientDGFile> getFiles(String path) throws DGException
+    public Stream<ClientDGFile> getFiles(String path, boolean recursive) throws DGException
     {
         try {
             while (path != null && path.startsWith("/"))

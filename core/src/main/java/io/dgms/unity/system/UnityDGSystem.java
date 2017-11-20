@@ -152,13 +152,13 @@ public class UnityDGSystem extends UnityDGSessionObject implements DGSystem
      * @see io.dgms.unity.api.DGSystem#getProject(java.lang.Integer)
      */
     @Override
-    public UnityDGProject getProject(Integer projectId) throws DGException
+    public UnityDGProject getProject(Integer projectId)
     {
         try {
             final Project object = api().getProjectApi().getProject(projectId);
             return new UnityDGProject(getSession(), object);
         } catch (final GitLabApiException e) {
-            throw new DGException(e);
+            return null;
         }
     }
 
@@ -168,7 +168,7 @@ public class UnityDGSystem extends UnityDGSessionObject implements DGSystem
      * @see io.dgms.unity.api.DGSystem#getProject(java.lang.String)
      */
     @Override
-    public UnityDGProject getProject(String path) throws DGException
+    public UnityDGProject getProject(String path)
     {
         try {
             final int off = path.lastIndexOf("/");
@@ -177,7 +177,7 @@ public class UnityDGSystem extends UnityDGSessionObject implements DGSystem
             final Project object = api().getProjectApi().getProject(namespace, project);
             return new UnityDGProject(getSession(), object);
         } catch (final GitLabApiException e) {
-            throw new DGException(e);
+            return null;
         }
     }
 
@@ -187,12 +187,12 @@ public class UnityDGSystem extends UnityDGSessionObject implements DGSystem
      * @see io.dgms.unity.api.DGSystem#getProjects()
      */
     @Override
-    public Stream<UnityDGProject> getProjects() throws DGException
+    public Stream<UnityDGProject> getProjects()
     {
         try {
             return api().getProjectApi().getProjects().stream().map(p -> new UnityDGProject(getSession(), p));
         } catch (final GitLabApiException e) {
-            throw new DGException(e);
+            return Stream.empty();
         }
     }
 
@@ -202,14 +202,14 @@ public class UnityDGSystem extends UnityDGSessionObject implements DGSystem
      * @see io.dgms.unity.api.DGSystem#getTaskExecution(java.lang.Long)
      */
     @Override
-    public UnityDGTaskExecution getTaskExecution(Long taskExecutionId) throws DGException
+    public UnityDGTaskExecution getTaskExecution(Long taskExecutionId)
     {
         try (UnityDGEntityManager em = newEntityManager()) {
             final Query query = em.createQuery("SELECT e FROM UnityDGTaskExecution e WHERE e.id = :taskExecutionId");
             query.setParameter("taskExecutionId", taskExecutionId);
             return (UnityDGTaskExecution) query.getSingleResult();
         } catch (final Exception e) {
-            throw new DGException(e);
+            return null;
         }
     }
 
@@ -219,14 +219,14 @@ public class UnityDGSystem extends UnityDGSessionObject implements DGSystem
      * @see io.dgms.unity.api.DGSystem#getTaskExecutionError(java.lang.Long)
      */
     @Override
-    public String getTaskExecutionError(Long taskExecutionId) throws DGException
+    public String getTaskExecutionError(Long taskExecutionId)
     {
         try (UnityDGEntityManager em = newEntityManager()) {
             final Query query = em.createQuery("SELECT e FROM UnityDGTaskExecution e WHERE e.id = :taskExecutionId");
             query.setParameter("taskExecutionId", taskExecutionId);
             return ((UnityDGTaskExecution) query.getSingleResult()).getStandardError();
         } catch (final Exception e) {
-            throw new DGException(e.getMessage());
+            return null;
         }
     }
 
@@ -236,14 +236,14 @@ public class UnityDGSystem extends UnityDGSessionObject implements DGSystem
      * @see io.dgms.unity.api.DGSystem#getTaskExecutionInput(java.lang.Long)
      */
     @Override
-    public String getTaskExecutionInput(Long taskExecutionId) throws DGException
+    public String getTaskExecutionInput(Long taskExecutionId)
     {
         try (UnityDGEntityManager em = newEntityManager()) {
             final Query query = em.createQuery("SELECT e FROM UnityDGTaskExecution e WHERE e.id = :taskExecutionId");
             query.setParameter("taskExecutionId", taskExecutionId);
             return ((UnityDGTask) query.getSingleResult()).getStandardInput();
         } catch (final Exception e) {
-            throw new DGException(e);
+            return null;
         }
     }
 
@@ -253,14 +253,14 @@ public class UnityDGSystem extends UnityDGSessionObject implements DGSystem
      * @see io.dgms.unity.api.DGSystem#getTaskExecutionOutput(java.lang.Long)
      */
     @Override
-    public String getTaskExecutionOutput(Long taskExecutionId) throws DGException
+    public String getTaskExecutionOutput(Long taskExecutionId)
     {
         try (UnityDGEntityManager em = newEntityManager()) {
             final Query query = em.createQuery("SELECT e FROM UnityDGTaskExecution e WHERE e.id = :taskExecutionId");
             query.setParameter("taskExecutionId", taskExecutionId);
             return ((UnityDGTaskExecution) query.getSingleResult()).getStandardOutput();
         } catch (final Exception e) {
-            throw new DGException(e);
+            return null;
         }
     }
 
@@ -270,14 +270,14 @@ public class UnityDGSystem extends UnityDGSessionObject implements DGSystem
      * @see io.dgms.unity.api.DGSystem#getTaskExecutionResult(java.lang.Long)
      */
     @Override
-    public String getTaskExecutionResult(Long taskExecutionId) throws DGException
+    public String getTaskExecutionResult(Long taskExecutionId)
     {
         try (UnityDGEntityManager em = newEntityManager()) {
             final Query query = em.createQuery("SELECT e FROM UnityDGTaskExecution e WHERE e.id = :taskExecutionId");
             query.setParameter("taskExecutionId", taskExecutionId);
             return ((UnityDGTaskExecution) query.getSingleResult()).getResult();
         } catch (final Exception e) {
-            throw new DGException(e.getMessage());
+            return null;
         }
     }
 
@@ -288,13 +288,13 @@ public class UnityDGSystem extends UnityDGSessionObject implements DGSystem
      */
     @Override
     @SuppressWarnings("unchecked")
-    public Stream<UnityDGTaskExecution> getTaskExecutions() throws DGException
+    public Stream<UnityDGTaskExecution> getTaskExecutions()
     {
         try (UnityDGEntityManager em = newEntityManager()) {
             final Query query = em.createQuery("SELECT e FROM UnityDGTaskExecution e");
             return query.getResultStream();
         } catch (final Exception e) {
-            throw new DGException(e.getMessage());
+            return Stream.empty();
         }
     }
 
@@ -304,14 +304,14 @@ public class UnityDGSystem extends UnityDGSessionObject implements DGSystem
      * @see io.dgms.unity.api.DGSystem#getTaskExecutionScript(java.lang.Long)
      */
     @Override
-    public String getTaskExecutionScript(Long taskExecutionId) throws DGException
+    public String getTaskExecutionScript(Long taskExecutionId)
     {
         try (UnityDGEntityManager em = newEntityManager()) {
             final Query query = em.createQuery("SELECT e FROM UnityDGTaskExecution e WHERE e.id = :taskExecutionId");
             query.setParameter("taskExecutionId", taskExecutionId);
             return ((UnityDGTask) query.getSingleResult()).getScript();
         } catch (final Exception e) {
-            throw new DGException(e.getMessage());
+            return null;
         }
     }
 
@@ -321,14 +321,14 @@ public class UnityDGSystem extends UnityDGSessionObject implements DGSystem
      * @see io.dgms.unity.api.DGSystem#getTaskExecutionStatus(java.lang.Long)
      */
     @Override
-    public DGTaskExecutionStatus getTaskExecutionStatus(Long taskExecutionId) throws DGException
+    public DGTaskExecutionStatus getTaskExecutionStatus(Long taskExecutionId)
     {
         try (UnityDGEntityManager em = newEntityManager()) {
             final Query query = em.createQuery("SELECT e FROM UnityDGTaskExecution e WHERE e.id = :taskExecutionId");
             query.setParameter("taskExecutionId", taskExecutionId);
             return ((UnityDGTaskExecution) query.getSingleResult()).getStatus();
         } catch (final Exception e) {
-            throw new DGException(e);
+            return null;
         }
     }
 
@@ -338,12 +338,12 @@ public class UnityDGSystem extends UnityDGSessionObject implements DGSystem
      * @see io.dgms.unity.api.DGSystem#getUser(java.lang.Integer)
      */
     @Override
-    public UnityDGUser getUser(Integer userId) throws DGException
+    public UnityDGUser getUser(Integer userId)
     {
         try {
             return new UnityDGUser(getSession(), api().getUserApi().getUser(userId));
         } catch (final GitLabApiException e) {
-            throw new DGException(e);
+            return null;
         }
     }
 
@@ -353,12 +353,12 @@ public class UnityDGSystem extends UnityDGSessionObject implements DGSystem
      * @see io.dgms.unity.api.DGSystem#getUser(java.lang.String)
      */
     @Override
-    public UnityDGUser getUser(String username) throws DGException
+    public UnityDGUser getUser(String username)
     {
         try {
             return new UnityDGUser(getSession(), api().getUserApi().getUser(username));
         } catch (final GitLabApiException e) {
-            throw new DGException(e);
+            return null;
         }
     }
 
@@ -368,12 +368,12 @@ public class UnityDGSystem extends UnityDGSessionObject implements DGSystem
      * @see io.dgms.unity.api.DGSystem#getUsers()
      */
     @Override
-    public Stream<UnityDGUser> getUsers() throws DGException
+    public Stream<UnityDGUser> getUsers()
     {
         try {
             return api().getUserApi().getUsers().stream().map(u -> new UnityDGUser(getSession(), u));
         } catch (final GitLabApiException e) {
-            throw new DGException(e);
+            return Stream.empty();
         }
     }
 
@@ -383,12 +383,12 @@ public class UnityDGSystem extends UnityDGSessionObject implements DGSystem
      * @see io.dgms.unity.api.DGSystem#getWorkspace(java.lang.Integer)
      */
     @Override
-    public UnityDGWorkspace getWorkspace(Integer workspaceId) throws DGException
+    public UnityDGWorkspace getWorkspace(Integer workspaceId)
     {
         try {
             return new UnityDGWorkspace(getSession(), api().getGroupApi().getGroup(workspaceId));
         } catch (final GitLabApiException e) {
-            throw new DGException(e);
+            return null;
         }
     }
 
@@ -398,12 +398,12 @@ public class UnityDGSystem extends UnityDGSessionObject implements DGSystem
      * @see io.dgms.unity.api.DGSystem#getWorkspace(java.lang.String)
      */
     @Override
-    public UnityDGWorkspace getWorkspace(String path) throws DGException
+    public UnityDGWorkspace getWorkspace(String path)
     {
         try {
             return new UnityDGWorkspace(getSession(), api().getGroupApi().getGroup(path));
         } catch (final GitLabApiException e) {
-            throw new DGException(e);
+            return null;
         }
     }
 
@@ -413,10 +413,25 @@ public class UnityDGSystem extends UnityDGSessionObject implements DGSystem
      * @see io.dgms.unity.api.DGSystem#getWorkspaces()
      */
     @Override
-    public Stream<UnityDGWorkspace> getWorkspaces() throws DGException
+    public Stream<UnityDGWorkspace> getWorkspaces()
     {
         try {
             return api().getGroupApi().getGroups().stream().map(g -> new UnityDGWorkspace(getSession(), g));
+        } catch (final GitLabApiException e) {
+            return Stream.empty();
+        }
+    }
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see io.dgms.unity.api.DGSystem#newProject(java.lang.String)
+     */
+    @Override
+    public UnityDGProject instantiateProject(String projectName) throws DGException
+    {
+        try {
+            return new UnityDGProject(getSession(), api().getProjectApi().createProject(projectName));
         } catch (final GitLabApiException e) {
             throw new DGException(e);
         }
@@ -432,21 +447,6 @@ public class UnityDGSystem extends UnityDGSessionObject implements DGSystem
     {
         // TODO Auto-generated method stub
 
-    }
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see io.dgms.unity.api.DGSystem#newProject(java.lang.String)
-     */
-    @Override
-    public UnityDGProject newProject(String projectName) throws DGException
-    {
-        try {
-            return new UnityDGProject(getSession(), api().getProjectApi().createProject(projectName));
-        } catch (final GitLabApiException e) {
-            throw new DGException(e);
-        }
     }
 
     /*

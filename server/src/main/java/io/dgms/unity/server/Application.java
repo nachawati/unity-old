@@ -14,7 +14,7 @@ import org.glassfish.jersey.server.ServerProperties;
 import org.glassfish.jersey.server.TracingConfig;
 import org.glassfish.jersey.server.mvc.jsp.JspMvcFeature;
 
-import io.dgms.unity.server.system.ServerDGSystem;
+import io.dgms.unity.server.controllers.SystemController;
 
 /**
  * @author Mohamad Omar Nachawati
@@ -27,7 +27,7 @@ public class Application extends ResourceConfig
      */
     public Application()
     {
-        packages(ServerDGSystem.class.getPackage().getName());
+        packages(SystemController.class.getPackage().getName());
         this.register(JspMvcFeature.class);
         register(LoggingFeature.class);
         property(ServerProperties.TRACING, TracingConfig.ON_DEMAND.name());

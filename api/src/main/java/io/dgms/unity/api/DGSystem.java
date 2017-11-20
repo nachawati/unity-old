@@ -53,128 +53,128 @@ public interface DGSystem extends DGSessionObject
      * @return DGProject
      * @throws DGException
      */
-    DGProject getProject(Integer projectId) throws DGException;
+    DGProject getProject(Integer projectId);
 
     /**
      * @param path
      * @return DGProject
      * @throws DGException
      */
-    DGProject getProject(String path) throws DGException;
+    DGProject getProject(String path);
 
     /**
      * @return Stream<? extends DGProject>
      * @throws DGException
      */
-    Stream<? extends DGProject> getProjects() throws DGException;
+    Stream<? extends DGProject> getProjects();
 
     /**
      * @param taskExecutionId
      * @return DGTaskExecution
      * @throws DGException
      */
-    DGTaskExecution getTaskExecution(Long taskExecutionId) throws DGException;
+    DGTaskExecution getTaskExecution(Long taskExecutionId);
 
     /**
      * @param taskExecutionId
      * @return String
      * @throws DGException
      */
-    String getTaskExecutionError(Long taskExecutionId) throws DGException;
+    String getTaskExecutionError(Long taskExecutionId);
 
     /**
      * @param taskExecutionId
      * @return String
      * @throws DGException
      */
-    String getTaskExecutionInput(Long taskExecutionId) throws DGException;
+    String getTaskExecutionInput(Long taskExecutionId);
 
     /**
      * @param taskExecutionId
      * @return String
      * @throws DGException
      */
-    String getTaskExecutionOutput(Long taskExecutionId) throws DGException;
+    String getTaskExecutionOutput(Long taskExecutionId);
 
     /**
      * @param taskExecutionId
      * @return String
      * @throws DGException
      */
-    String getTaskExecutionResult(Long taskExecutionId) throws DGException;
+    String getTaskExecutionResult(Long taskExecutionId);
 
     /**
      * @return Stream<? extends DGTaskExecution>
      * @throws DGException
      */
-    Stream<? extends DGTaskExecution> getTaskExecutions() throws DGException;
+    Stream<? extends DGTaskExecution> getTaskExecutions();
 
     /**
      * @param taskExecutionId
      * @return String
      * @throws DGException
      */
-    String getTaskExecutionScript(Long taskExecutionId) throws DGException;
+    String getTaskExecutionScript(Long taskExecutionId);
 
     /**
      * @param taskExecutionId
      * @return DGTaskExecutionStatus
      * @throws DGException
      */
-    DGTaskExecutionStatus getTaskExecutionStatus(Long taskExecutionId) throws DGException;
+    DGTaskExecutionStatus getTaskExecutionStatus(Long taskExecutionId);
 
     /**
      * @param userId
      * @return DGUser
      * @throws DGException
      */
-    DGUser getUser(Integer userId) throws DGException;
+    DGUser getUser(Integer userId);
 
     /**
      * @param username
      * @return DGUser
      * @throws DGException
      */
-    DGUser getUser(String username) throws DGException;
+    DGUser getUser(String username);
 
     /**
      * @return Stream<? extends DGUser>
      * @throws DGException
      */
-    Stream<? extends DGUser> getUsers() throws DGException;
+    Stream<? extends DGUser> getUsers();
 
     /**
      * @param workspaceId
      * @return DGWorkspace
      * @throws DGException
      */
-    DGWorkspace getWorkspace(Integer workspaceId) throws DGException;
+    DGWorkspace getWorkspace(Integer workspaceId);
 
     /**
      * @param path
      * @return DGWorkspace
      * @throws DGException
      */
-    DGWorkspace getWorkspace(String path) throws DGException;
+    DGWorkspace getWorkspace(String path);
 
     /**
      * @return Stream<? extends DGWorkspace>
      * @throws DGException
      */
-    Stream<? extends DGWorkspace> getWorkspaces() throws DGException;
-
-    /**
-     * @param taskId
-     * @throws DGException
-     */
-    void killTask(Long taskId) throws DGException;
+    Stream<? extends DGWorkspace> getWorkspaces();
 
     /**
      * @param projectName
      * @return DGProject
      * @throws DGException
      */
-    DGProject newProject(String projectName) throws DGException;
+    DGProject instantiateProject(String projectName) throws DGException;
+
+    /**
+     * @param taskId
+     * @throws DGException
+     */
+    void killTask(Long taskId) throws DGException;
 
     /**
      * @param name

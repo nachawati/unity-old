@@ -26,7 +26,7 @@ public interface DGProject extends DGSessionObject
     /**
      * @return Instant
      */
-    Instant getDateConstructed();
+    Instant getDateInstantiated();
 
     /**
      * @return String
@@ -103,7 +103,7 @@ public interface DGProject extends DGSessionObject
      * @return Stream<? extends DGTask>
      * @throws DGException
      */
-    Stream<? extends DGTask> getTasks(DGTaskStatus status) throws DGException;
+    Stream<? extends DGTaskExecution> getTaskExecutions() throws DGException;
 
     /**
      * @return DGVisibility

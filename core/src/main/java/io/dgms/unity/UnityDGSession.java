@@ -13,6 +13,7 @@ import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.DriverManager;
 
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -227,6 +228,10 @@ public class UnityDGSession implements DGSession
         } catch (final IOException e) {
         } finally {
             EntityManagerFactory emf = null;
+            try {
+                DriverManager.getConnection("jdbc:derby:unity;shutdown=true");
+            } catch (final Exception e) {
+            }
             try {
                 emf = Persistence.createEntityManagerFactory("unity");
             } catch (final Exception e) {

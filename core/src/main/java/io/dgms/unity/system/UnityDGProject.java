@@ -18,8 +18,7 @@ import io.dgms.unity.UnityDGSession;
 import io.dgms.unity.UnityDGSessionObject;
 import io.dgms.unity.api.DGException;
 import io.dgms.unity.api.DGProject;
-import io.dgms.unity.api.DGTask;
-import io.dgms.unity.api.DGTaskStatus;
+import io.dgms.unity.api.DGTaskExecution;
 import io.dgms.unity.api.DGVisibility;
 import io.dgms.unity.repository.UnityDGRepository;
 
@@ -61,7 +60,7 @@ public class UnityDGProject extends UnityDGSessionObject implements DGProject
      * @see io.dgms.unity.api.DGProject#getDateConstructed()
      */
     @Override
-    public Instant getDateConstructed()
+    public Instant getDateInstantiated()
     {
         if (object.getCreatedAt() != null)
             return object.getCreatedAt().toInstant();
@@ -230,10 +229,9 @@ public class UnityDGProject extends UnityDGSessionObject implements DGProject
      * @see io.dgms.unity.api.DGProject#getTasks(io.dgms.unity.api.DGTaskStatus)
      */
     @Override
-    public Stream<? extends DGTask> getTasks(DGTaskStatus status) throws DGException
+    public Stream<? extends DGTaskExecution> getTaskExecutions() throws DGException
     {
-        // TODO Auto-generated method stub
-        return null;
+        return getSession().getSystem().getTaskExecutions();
     }
 
     /*

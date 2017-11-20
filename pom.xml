@@ -84,7 +84,7 @@
 			<url>https://raw.github.com/aliceinnets/maven-repository/master/</url>
 			<layout>default</layout>
 		</repository>
-		
+
 		<repository>
 			<id>javacpp-snapshots</id>
 			<name>JavaCPP Snapshots</name>
@@ -379,19 +379,19 @@
 												<include>zorba_api_java.dll</include>
 											</includes>
 										</resource>
-										
+
 										<resource>
 											<directory>${project.basedir}/vendor/prebuilt/windows-msvc-x86_64/symengine/bin</directory>
 											<targetPath>${project.build.directory}/windows-msvc-x86_64/bin</targetPath>
 											<filtering>false</filtering>
 										</resource>
-										
+
 										<resource>
 											<directory>${project.basedir}/vendor/prebuilt/windows-msvc-x86_64/symengine/include</directory>
 											<targetPath>${project.build.directory}/windows-msvc-x86_64/include</targetPath>
 											<filtering>false</filtering>
 										</resource>
-										
+
 										<resource>
 											<directory>${project.basedir}/vendor/prebuilt/windows-msvc-x86_64/symengine/lib</directory>
 											<targetPath>${project.build.directory}/windows-msvc-x86_64/lib</targetPath>
@@ -663,6 +663,12 @@
 			</dependency>
 
 			<dependency>
+				<groupId>org.glassfish.jersey.media</groupId>
+				<artifactId>jersey-media-json-jackson</artifactId>
+				<version>2.25.1</version>
+			</dependency>
+
+			<dependency>
 				<groupId>org.glassfish.jersey.core</groupId>
 				<artifactId>jersey-client</artifactId>
 				<version>2.25.1</version>
@@ -727,6 +733,14 @@
 				<artifactId>commons-math3</artifactId>
 				<version>3.6.1</version>
 			</dependency>
+
+
+			<dependency>
+				<groupId>org.apache.jena</groupId>
+				<artifactId>jena-tdb</artifactId>
+				<version>3.4.0</version>
+			</dependency>
+
 
 		</dependencies>
 

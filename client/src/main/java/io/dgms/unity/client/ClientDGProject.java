@@ -16,6 +16,7 @@ import org.gitlab4j.api.models.Project;
 
 import io.dgms.unity.api.DGException;
 import io.dgms.unity.api.DGProject;
+import io.dgms.unity.api.DGTaskExecution;
 import io.dgms.unity.api.DGTaskStatus;
 import io.dgms.unity.api.DGVisibility;
 
@@ -57,7 +58,7 @@ public class ClientDGProject extends ClientDGSessionObject implements DGProject
      * @see io.dgms.unity.api.DGProject#getDateConstructed()
      */
     @Override
-    public Instant getDateConstructed()
+    public Instant getDateInstantiated()
     {
         if (object.getCreatedAt() != null)
             return object.getCreatedAt().toInstant();
@@ -220,17 +221,18 @@ public class ClientDGProject extends ClientDGSessionObject implements DGProject
         return object.getTagList();
     }
 
+    @Override
+    public Stream<? extends DGTaskExecution> getTaskExecutions() throws DGException
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
     /*
      * (non-Javadoc)
      *
      * @see io.dgms.unity.api.DGProject#getTasks(io.dgms.unity.api.DGTaskStatus)
      */
-    @Override
-    public Stream<ClientDGTask> getTasks(DGTaskStatus status) throws DGException
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
 
     /*
      * (non-Javadoc)

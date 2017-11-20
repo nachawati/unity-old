@@ -8,6 +8,8 @@
 
 package io.dgms.unity.cli;
 
+import java.net.URI;
+
 import com.beust.jcommander.Parameters;
 
 import io.dgms.unity.api.DGSession;
@@ -29,7 +31,7 @@ public class Server extends Command
     {
         // final URI path =
         // Server.class.getProtectionDomain().getCodeSource().getLocation().toURI().resolve("..");
-        // org.eclipse.jetty.runner.Runner
+        // final org.eclipse.jetty.runner.Runner a;
         // .main(new String[] { "--lib", path.resolve("lib").toString(),
         // path.resolve("server").toString() });
         // "--classes", path.resolve("server/WEB-INF/classess")

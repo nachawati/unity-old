@@ -45,7 +45,7 @@ public abstract class UnityDGSessionObject implements DGSessionObject
     /**
      * @return
      */
-    protected GitLabApi api()
+    public GitLabApi api()
     {
         return session.api;
     }

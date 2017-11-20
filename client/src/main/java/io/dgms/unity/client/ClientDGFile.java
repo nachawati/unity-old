@@ -160,7 +160,7 @@ public class ClientDGFile extends ClientDGSessionObject implements DGFile
      * @see io.dgms.unity.api.DGFile#getType()
      */
     @Override
-    public DGResource getType()
+    public String getType()
     {
         // TODO Auto-generated method stub
         return null;

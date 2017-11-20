@@ -59,7 +59,7 @@ public interface DGFile extends DGSessionObject
     /**
      * @return DGResource
      */
-    DGResource getType();
+    String getType();
 
     /**
      * @return boolean
