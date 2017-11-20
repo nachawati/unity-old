@@ -9,6 +9,7 @@
 package io.dgms.unity.api;
 
 import java.io.InputStream;
+import java.util.stream.Stream;
 
 /**
  * @author Mohamad Omar Nachawati
@@ -20,6 +21,8 @@ public interface DGFile extends DGSessionObject
      * @return DGCommit
      */
     DGCommit getCommit();
+
+    Stream<? extends DGFile> getFiles(boolean recursive);
 
     /**
      * @return String

@@ -77,9 +77,9 @@ public interface DGCommit extends DGSessionObject
      * @return Stream<? extends DGFile>
      * @throws DGException
      */
-    Stream<? extends DGFile> getFiles(boolean recursive) throws DGException;
+    Stream<? extends DGFile> getFiles(boolean recursive);
 
-    Stream<? extends DGFile> getFiles(String path, boolean recursive) throws DGException;
+    Stream<? extends DGFile> getFiles(String path, boolean recursive);
 
     /**
      * @return String

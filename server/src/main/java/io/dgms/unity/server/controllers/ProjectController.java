@@ -93,20 +93,20 @@ public class ProjectController extends Controller
     @Path("file")
     public String doGetFile(@QueryParam("path") String path) throws DGException, IOException
     {
+        if (path == null || path.trim().isEmpty())
+            return "";
         if (path.startsWith(project.getPathWithNamespace()))
             return IOUtils.toString(commit.getResourceAsStream(path.substring(project.getPathWithNamespace().length())),
                     StandardCharsets.UTF_8);
-        else {
-            while (path.startsWith("@"))
-                path = path.substring(1);
-            final String workspacePath = path.substring(0, path.indexOf("@"));
-            path = path.substring(workspacePath.length() + 1);
-            final String reference = path.substring(0, path.indexOf("@"));
-            path = path.substring(reference.length() + 1);
-            final DGProject project = getSystem().getProject(workspacePath);
-            return IOUtils.toString(project.getRepository().getCommit(reference).getResourceAsStream(path),
-                    StandardCharsets.UTF_8);
-        }
+        while (path.startsWith("@"))
+            path = path.substring(1);
+        final String workspacePath = path.substring(0, path.indexOf("@"));
+        path = path.substring(workspacePath.length() + 1);
+        final String reference = path.substring(0, path.indexOf("@"));
+        path = path.substring(reference.length() + 1);
+        final DGProject project = getSystem().getProject(workspacePath);
+        return IOUtils.toString(project.getRepository().getCommit(reference).getResourceAsStream(path),
+                StandardCharsets.UTF_8);
     }
 
     @GET
@@ -180,6 +180,23 @@ public class ProjectController extends Controller
         if (action != null)
             return new Viewable("actions/" + action, this);
         return new Viewable("console", this);
+    }
+
+    public DGFile getFile(String path) throws DGException
+    {
+        if (path.startsWith(commit.getProject().getPathWithNamespace())) {
+            path = path.substring(commit.getProject().getPathWithNamespace().length());
+            return commit.getFile(path);
+        }
+        if (path.startsWith("@")) {
+            final String[] parts = path.split("@");
+            final String project = parts[1];
+            final String version = parts[2];
+            path = parts[3];
+            System.out.println(project + "--" + version + "--" + path);
+            return getSession().getSystem().getProject(project).getRepository().getCommit(version).getFile(path);
+        }
+        throw new DGException("file not found");
     }
 
     @GET
@@ -302,10 +319,16 @@ public class ProjectController extends Controller
         }
 
         try {
-
-            getRequest().setAttribute("content", doGetFile(path));
+            final DGFile file = getFile(path);
+            getRequest().setAttribute("file", file);
+            try (InputStream input = file.newInputStream()) {
+                getRequest().setAttribute("content", IOUtils.toString(input, StandardCharsets.UTF_8));
+            } catch (final Exception e) {
+            }
         } catch (final Exception e) {
+            e.printStackTrace();
         }
+
         sb1.append("]");
         getRequest().setAttribute("navComponents", sb1.toString());
         return new Viewable("tree", this);

@@ -25,7 +25,7 @@
 </div>
 <script>
 		$("#import-button").click(function() {
-			$.get("${pageContext.request.contextPath}/${it.workspace.pathWithNamespace}/file?path=" + $('#import-tree').jstree("get_selected"), function(data){
+			$.get("${pageContext.request.contextPath}/${it.project.pathWithNamespace}/file?path=" + $('#import-tree').jstree("get_selected"), function(data){
 				try {
 					var f = form.getEditor("${it.request.getParameter("path")}");
 				f.setValue(JSON.parse(data));
@@ -42,7 +42,7 @@
 								"multiple" : false,
 								"data" : {
 									"url" : function(node) {
-										return '${pageContext.request.contextPath}/${it.workspace.pathWithNamespace}/tree.json?path='
+										return '${pageContext.request.contextPath}/${it.project.pathWithNamespace}/tree.json?path='
 												+ escape(node.id);
 									},
 									"data" : function(node) {

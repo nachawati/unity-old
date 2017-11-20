@@ -11,6 +11,7 @@ package io.dgms.unity.repository;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.net.URI;
+import java.nio.file.Paths;
 import java.time.Instant;
 import java.util.Base64;
 import java.util.stream.Collectors;
@@ -19,6 +20,7 @@ import java.util.stream.Stream;
 import org.gitlab4j.api.GitLabApiException;
 import org.gitlab4j.api.models.Commit;
 import org.gitlab4j.api.models.RepositoryFile;
+import org.gitlab4j.api.models.TreeItem;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -180,22 +182,20 @@ public class UnityDGCommit extends UnityDGSessionObject implements DGCommit
         try {
             final RepositoryFile file = api().getRepositoryFileApi().getFile(path, repository.getProject().getId(),
                     getId());
-            if (file == null)
-                throw new DGException();
             return new UnityDGFile(getSession(), this, file);
-        } catch (final GitLabApiException e) {
+        } catch (final Exception e) {
             throw new DGException(e);
         }
     }
 
     @Override
-    public Stream<? extends DGFile> getFiles(boolean recursive) throws DGException
+    public Stream<? extends DGFile> getFiles(boolean recursive)
     {
         return getFiles(null, recursive);
     }
 
     @Override
-    public Stream<? extends DGFile> getFiles(String path, boolean recursive) throws DGException
+    public Stream<? extends DGFile> getFiles(String path, boolean recursive)
     {
         try {
             while (path != null && path.startsWith("/"))
@@ -206,7 +206,7 @@ public class UnityDGCommit extends UnityDGSessionObject implements DGCommit
                             || f.getName().equals(".gitkeep") ? false : true)
                     .map(t -> new UnityDGFile(getSession(), this, t));
         } catch (final GitLabApiException e) {
-            throw new DGException(e);
+            return Stream.empty();
         }
     }
 

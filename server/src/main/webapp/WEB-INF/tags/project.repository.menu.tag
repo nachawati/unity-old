@@ -25,13 +25,9 @@
 	<t:li.menu modal="${pageContext.request.contextPath}/${it.path}/tree?action=new.analytics.pareto" icon=""
 		title="Compute Pareto Frontier"></t:li.menu>
 </t:li.menu>
-<t:li.menu cls="divider" icon="octicon octicon-browser" title="Open">
-	<t:li.menu modal="${pageContext.request.contextPath}/${it.path}/tree?action=open.autocad" icon="octicon octicon-browser"
-		title="AutoCAD">
-	</t:li.menu>
-</t:li.menu>
-<t:li.menu href="?action=edit" icon="octicon octicon-pencil"
-	title="Edit"></t:li.menu>
+
+<t:li.menu cls="divider" href="?action=save" icon="fa fa-save"
+	title="Save"></t:li.menu>
 <t:li.menu modal="?action=properties"
 	icon="octicon octicon-info" title="Properties"></t:li.menu>
 <t:li.menu icon="octicon octicon-tools" title="Manage">

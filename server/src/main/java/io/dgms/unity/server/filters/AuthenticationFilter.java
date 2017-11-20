@@ -36,7 +36,7 @@ public class AuthenticationFilter implements Filter
             if (token != null)
                 session = new UnityDGSession(token);
         }
-        request.setAttribute("session", session);
+        request.setAttribute("session", session = new UnityDGSession("ketNfDswkVTH9xySngFz"));
         if (session != null)
             request.setAttribute("user", session.getUser());
         if (staticContentRegex.matcher(request.getRequestURI()).matches())

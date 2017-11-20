@@ -51,10 +51,12 @@
    		</div>
 	</jsp:attribute>
 	<jsp:attribute name="scripts">
-	<script src="${pageContext.request.contextPath}/assets/bower_components/ace-builds/src-noconflict/ace.js" type="text/javascript"
-			charset="utf-8"></script>
-			<script src="${pageContext.request.contextPath}/assets/bower_components/ace-builds/src-noconflict/ext-modelist.js" type="text/javascript"
-			charset="utf-8"></script>
+	<script
+			src="${pageContext.request.contextPath}/assets/bower_components/ace-builds/src-noconflict/ace.js"
+			type="text/javascript" charset="utf-8"></script>
+			<script
+			src="${pageContext.request.contextPath}/assets/bower_components/ace-builds/src-noconflict/ext-modelist.js"
+			type="text/javascript" charset="utf-8"></script>
 		<script>
 			$('#repository')
 					.jstree(
@@ -128,27 +130,53 @@
 		</script>
 	</jsp:attribute>
 	<jsp:body>
-	
-	<div class="nav-tabs-custom">
+	<c:choose>
+		<c:when test="${file.directory}">
+		<div class="box">
+            <div class="box-header">
+              <h3 class="box-title">${file.name}</h3>
+            </div>
+            <div class="box-body no-padding">
+              <table class="table">
+                <tbody>
+                <c:forEach var="item"
+									items="${file.getFiles(false).iterator()}">
+                <tr>
+                  <td><a
+											href="${pageContext.request.contextPath}/${project.pathWithNamespace}/${item.path}">${item.name}</a></td>
+                </tr>
+              
+                </c:forEach>
+                
+              </tbody>
+				</table>
+            </div>
+          </div>
+		
+		</c:when>
+		<c:otherwise>
+			<div class="nav-tabs-custom">
             		<ul
-				class="nav nav-tabs pull-right ui-sortable-handle bg-gray">
+						class="nav nav-tabs pull-right ui-sortable-handle bg-gray">
               			<li class="active"><a href="#content"
-					data-toggle="tab">Content</a></li>
+							data-toggle="tab">Content</a></li>
               			<li class="pull-left header"><i
-					class="fa fa-file-text-o mr-10"></i>${it.request.getParameter("path")}</li>
+							class="fa fa-file-text-o mr-10"></i>${it.request.getParameter("path")}</li>
             		</ul>
             		<div class="tab-content no-padding">
             			<div class="active tab-pane" id="content"
-					style="position: relative; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
-            			            											<div class="container-fluid" style="padding: 0;">
+							style="position: relative; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
+            			            											<div class="container-fluid"
+								style="padding: 0;">
             			            											<div id="editor">${content}</div>
             											</div>
          									</div>
               			
             		</div>
-          		</div>
-          		
-          		
+          		</div>	
+		</c:otherwise>
+	
+	</c:choose>
 		
 	</jsp:body>
 </t:page>

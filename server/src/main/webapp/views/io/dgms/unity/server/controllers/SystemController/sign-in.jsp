@@ -46,7 +46,7 @@
 			</form>
 		</div>
 		<div style="margin-top: 1em; text-align: right; font-size: small" class="text-muted">
-			<b>Version</b> ${system.version}
+			<b>Version</b> 0.1.0-SNAPSHOT
 		</div>
 	</div>
 	<script src="${pageContext.request.contextPath}/assets/bower_components/jquery/dist/jquery.min.js"></script>

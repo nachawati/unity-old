@@ -9,8 +9,10 @@
 package io.dgms.unity.repository;
 
 import java.io.InputStream;
+import java.util.stream.Stream;
 
 import org.gitlab4j.api.GitLabApi;
+import org.gitlab4j.api.GitLabApiException;
 import org.gitlab4j.api.models.RepositoryFile;
 import org.gitlab4j.api.models.TreeItem;
 
@@ -69,6 +71,23 @@ public class UnityDGFile extends UnityDGSessionObject implements DGFile
     public UnityDGCommit getCommit()
     {
         return commit;
+    }
+
+    @Override
+    public Stream<? extends DGFile> getFiles(boolean recursive)
+    {
+        try {
+            String path = getPath();
+            while (path != null && path.startsWith("/"))
+                path = path.substring(1);
+            return api().getRepositoryApi().getTree(getCommit().getProject().getId(), path, commit.getId(), recursive)
+                    .stream()
+                    .filter(f -> f.getName().endsWith(".metadata") || f.getName().endsWith(".metadata.json")
+                            || f.getName().equals(".gitkeep") ? false : true)
+                    .map(t -> new UnityDGFile(getSession(), commit, t));
+        } catch (final GitLabApiException e) {
+            return Stream.empty();
+        }
     }
 
     /*
@@ -154,6 +173,7 @@ public class UnityDGFile extends UnityDGSessionObject implements DGFile
     public String getSchema()
     {
         // TODO Auto-generated method stub
+
         return null;
     }
 
