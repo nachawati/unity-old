@@ -157,8 +157,34 @@ public class ProjectController extends Controller
         sb.append("dgal:argmin(" + in.get("model").getAsString() + ", " + in.get("input").getAsJsonObject().toString()
                 + ",\"" + in.get("objective").getAsString() + "\", " + in.get("options").getAsJsonObject().toString()
                 + ")");
-        java.lang.System.out.println(sb.toString());
-        return "TEST";
+
+        final String expression = sb.toString();
+        final DGPackageReference packageReference = commit.getAsPackageReference();
+        final DGTaskExecution execution = getSystem().submitTask(
+                expression.substring(0, expression.length() > 16 ? 16 : expression.length()), expression,
+                packageReference);
+        DGTaskExecutionStatus status = null;
+        while (true) {
+            status = getSystem().getTaskExecutionStatus(execution.getId());
+            if (!(status == DGTaskExecutionStatus.ACTIVE || status == DGTaskExecutionStatus.QUEUED))
+                break;
+            try {
+                Thread.sleep(100);
+            } catch (final InterruptedException e) {
+            }
+        }
+        switch (status) {
+        case FAILED:
+            return getSystem().getTaskExecutionError(execution.getId());
+        case FINISHED:
+            return getSystem().getTaskExecutionResult(execution.getId());
+        case INTERRUPTED:
+            return "INTERRUPTED";
+        case KILLED:
+            return "KILLED";
+        default:
+            throw new DGException("invalid task execution status returned: " + status);
+        }
     }
 
     public UnityDGBranch getBranch()

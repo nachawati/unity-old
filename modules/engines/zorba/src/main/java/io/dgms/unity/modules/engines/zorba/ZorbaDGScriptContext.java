@@ -248,10 +248,10 @@ public class ZorbaDGScriptContext extends SimpleScriptContext implements DGScrip
             if (Files.isRegularFile(fullPath))
                 return Files.newInputStream(fullPath);
             if (Files.isDirectory(fullPath)) {
-                if (Files.exists(fullPath.resolve("index.jq.zorba")))
-                    return Files.newInputStream(fullPath.resolve("index.jq.zorba"));
-                if (Files.exists(fullPath.resolve("index.jq")))
-                    return Files.newInputStream(fullPath.resolve("index.jq"));
+                if (Files.exists(fullPath.resolve("index.jqm.zorba")))
+                    return Files.newInputStream(fullPath.resolve("index.jqm.zorba"));
+                if (Files.exists(fullPath.resolve("index.jqm")))
+                    return Files.newInputStream(fullPath.resolve("index.jqm"));
                 if (Files.exists(fullPath.resolve("index.xq.zorba")))
                     return Files.newInputStream(fullPath.resolve("index.xq.zorba"));
                 if (Files.exists(fullPath.resolve("index.xq")))
@@ -262,10 +262,10 @@ public class ZorbaDGScriptContext extends SimpleScriptContext implements DGScrip
                     return Files.newInputStream(fullPath.resolve("index.module"));
                 continue;
             }
-            if (Files.isRegularFile(fullPath.getParent().resolve(fullPath.getFileName() + ".jq.zorba")))
-                return Files.newInputStream(fullPath.getParent().resolve(fullPath.getFileName() + ".jq.zorba"));
-            if (Files.isRegularFile(fullPath.getParent().resolve(fullPath.getFileName() + ".jq")))
-                return Files.newInputStream(fullPath.getParent().resolve(fullPath.getFileName() + ".jq"));
+            if (Files.isRegularFile(fullPath.getParent().resolve(fullPath.getFileName() + ".jqm.zorba")))
+                return Files.newInputStream(fullPath.getParent().resolve(fullPath.getFileName() + ".jqm.zorba"));
+            if (Files.isRegularFile(fullPath.getParent().resolve(fullPath.getFileName() + ".jqm")))
+                return Files.newInputStream(fullPath.getParent().resolve(fullPath.getFileName() + ".jqm"));
             if (Files.isRegularFile(fullPath.getParent().resolve(fullPath.getFileName() + ".xq.zorba")))
                 return Files.newInputStream(fullPath.getParent().resolve(fullPath.getFileName() + ".xq.zorba"));
             if (Files.isRegularFile(fullPath.getParent().resolve(fullPath.getFileName() + ".xq")))
@@ -282,11 +282,11 @@ public class ZorbaDGScriptContext extends SimpleScriptContext implements DGScrip
             } catch (final DGException e) {
             }
             try {
-                return pkg.getResourceAsStream(path + ".jq.zorba");
+                return pkg.getResourceAsStream(path + ".jqm.zorba");
             } catch (final DGException e) {
             }
             try {
-                return pkg.getResourceAsStream(path + ".jq");
+                return pkg.getResourceAsStream(path + ".jqm");
             } catch (final DGException e) {
             }
             try {
@@ -306,11 +306,11 @@ public class ZorbaDGScriptContext extends SimpleScriptContext implements DGScrip
             } catch (final DGException e) {
             }
             try {
-                return pkg.getResourceAsStream(path + "/index.jq.zorba");
+                return pkg.getResourceAsStream(path + "/index.jqm.zorba");
             } catch (final DGException e) {
             }
             try {
-                return pkg.getResourceAsStream(path + "/index.jq");
+                return pkg.getResourceAsStream(path + "/index.jqm");
             } catch (final DGException e) {
             }
             try {

@@ -6,7 +6,7 @@ jsoniq version "1.0";
    
     This software is authored by Mohamad Omar Nachawati, 1436-1439 AH
 :)
-module namespace op = "http://dgms.io/unity/modules/symbolics/jsoniq/operators";
+module namespace op = "http://dgms.io/unity/modules/symbolics/operators";
 
 import module namespace math = "http://www.w3.org/2005/xpath-functions/math";
 

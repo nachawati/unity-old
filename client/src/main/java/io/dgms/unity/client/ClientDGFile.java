@@ -9,6 +9,7 @@
 package io.dgms.unity.client;
 
 import java.io.InputStream;
+import java.util.stream.Stream;
 
 import org.gitlab4j.api.models.RepositoryFile;
 import org.gitlab4j.api.models.TreeItem;
@@ -66,6 +67,13 @@ public class ClientDGFile extends ClientDGSessionObject implements DGFile
     public ClientDGCommit getCommit()
     {
         return commit;
+    }
+
+    @Override
+    public Stream<? extends DGFile> getFiles(boolean recursive)
+    {
+        // TODO Auto-generated method stub
+        return null;
     }
 
     /*

@@ -185,7 +185,7 @@ public class ClientDGCommit extends ClientDGSessionObject implements DGCommit
     }
 
     @Override
-    public Stream<? extends DGFile> getFiles(boolean recursive) throws DGException
+    public Stream<? extends DGFile> getFiles(boolean recursive)
     {
         // TODO Auto-generated method stub
         return null;
@@ -197,7 +197,7 @@ public class ClientDGCommit extends ClientDGSessionObject implements DGCommit
      * @see io.dgms.unity.api.DGCommit#getFiles(java.lang.String)
      */
     @Override
-    public Stream<ClientDGFile> getFiles(String path, boolean recursive) throws DGException
+    public Stream<ClientDGFile> getFiles(String path, boolean recursive)
     {
         try {
             while (path != null && path.startsWith("/"))
@@ -207,7 +207,7 @@ public class ClientDGCommit extends ClientDGSessionObject implements DGCommit
                             || f.getName().equals(".gitkeep") ? false : true)
                     .map(t -> new ClientDGFile(getSession(), this, t));
         } catch (final GitLabApiException e) {
-            throw new DGException(e);
+            return Stream.empty();
         }
     }
 
