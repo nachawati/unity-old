@@ -30,12 +30,16 @@
 	<t:li.sidebar active="${fn:startsWith(attrs.active, 'console/')}"
 		href="${pageContext.request.contextPath}/${it.project.pathWithNamespace}/console" title="Console"
 		icon="octicon octicon-terminal"></t:li.sidebar>
+	<t:li.sidebar active="${fn:startsWith(attrs.active, 'studies/')}"
+		href="${pageContext.request.contextPath}/${it.project.pathWithNamespace}/studies"
+		title="Studies" icon="octicon octicon-beaker">
+	</t:li.sidebar>
 	<t:li.sidebar active="${fn:startsWith(attrs.active, 'tree/')}"
 		href="${pageContext.request.contextPath}/${it.project.pathWithNamespace}/tree"
 		title="Repository" icon="octicon octicon-repo">
 	</t:li.sidebar>
-	<t:li.sidebar active="${fn:startsWith(attrs.active, 'kernel/')}"
-		href="${pageContext.request.contextPath}/${it.project.pathWithNamespace}/kernel"
-		title="Kernel" icon="octicon octicon-gear">
+	<t:li.sidebar active="${fn:startsWith(attrs.active, 'settings/')}"
+		href="${pageContext.request.contextPath}/${it.project.pathWithNamespace}/settings"
+		title="Settings" icon="octicon octicon-settings">
 	</t:li.sidebar>
 </ul>

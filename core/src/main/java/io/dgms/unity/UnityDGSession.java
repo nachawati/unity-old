@@ -229,7 +229,7 @@ public class UnityDGSession implements DGSession
         } finally {
             EntityManagerFactory emf = null;
             try {
-                DriverManager.getConnection("jdbc:derby:unity;shutdown=true");
+                DriverManager.getConnection("jdbc:derby;shutdown=true;deregister=false");
             } catch (final Exception e) {
             }
             try {

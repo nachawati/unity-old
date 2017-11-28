@@ -29,10 +29,13 @@ public class Server extends Command
     @Override
     public void action() throws Exception
     {
-        // final URI path =
-        // Server.class.getProtectionDomain().getCodeSource().getLocation().toURI().resolve("..");
-        // final org.eclipse.jetty.runner.Runner a;
-        // .main(new String[] { "--lib", path.resolve("lib").toString(),
+        final URI path = Server.class.getProtectionDomain().getCodeSource().getLocation().toURI();
+        if (path.toString().endsWith("/classes/")) {
+
+        } else
+            System.out.println(path);
+        // final org.eclipse.jetty.runner.Runner.main(new String[] { "--lib",
+        // path.resolve("lib").toString(),
         // path.resolve("server").toString() });
         // "--classes", path.resolve("server/WEB-INF/classess")
     }

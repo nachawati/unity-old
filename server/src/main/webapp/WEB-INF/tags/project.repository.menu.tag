@@ -26,7 +26,7 @@
 		title="Compute Pareto Frontier"></t:li.menu>
 </t:li.menu>
 
-<t:li.menu cls="divider" href="?action=save" icon="fa fa-save"
+<t:li.menu cls="divider" modal="${pageContext.request.contextPath}/${it.path}/tree?action=save&path=${pageContext.request.getParameter('path')}" icon="fa fa-save"
 	title="Save"></t:li.menu>
 <t:li.menu modal="?action=properties"
 	icon="octicon octicon-info" title="Properties"></t:li.menu>

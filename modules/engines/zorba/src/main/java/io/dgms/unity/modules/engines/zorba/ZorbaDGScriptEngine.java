@@ -379,6 +379,22 @@ public class ZorbaDGScriptEngine implements DGScriptEngine
                         loadNativeLibraries(new File(location, "target/linux-gcc-x86_64"));
                         break;
                     }
+            } else if (path.contains("WEB-INF")) {
+                final File location = new File("C:\\Users\\Omar\\Documents\\GitHub\\unity");
+                if (SystemUtils.IS_OS_WINDOWS)
+                    switch (SystemUtils.OS_ARCH) {
+                    case "amd64":
+                    case "x86_64":
+                        loadNativeLibraries(new File(location, "target/windows-msvc-x86_64"));
+                        break;
+                    }
+                else if (SystemUtils.IS_OS_LINUX)
+                    switch (SystemUtils.OS_ARCH) {
+                    case "amd64":
+                    case "x86_64":
+                        loadNativeLibraries(new File(location, "target/linux-gcc-x86_64"));
+                        break;
+                    }
             } else {
                 final File location = new File(path).getParentFile().getParentFile();
                 loadNativeLibraries(location);

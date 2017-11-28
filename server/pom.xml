@@ -25,6 +25,36 @@
 
 	<build>
 		<finalName>unity-server</finalName>
+		<plugins>
+
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>3.0.2</version>
+				<inherited>false</inherited>
+				<executions>
+
+					<execution>
+						<phase>install</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.basedir}/../target/${target}/server</outputDirectory>
+							<overwrite>true</overwrite>
+							<resources>
+
+								<resource>
+									<directory>${project.basedir}/target/unity-server</directory>
+									<filtering>false</filtering>
+								</resource>
+
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+		</plugins>
 	</build>
 
 	<dependencies>
@@ -46,6 +76,7 @@
 			<artifactId>unity-client</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		
 
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -87,6 +118,84 @@
 			<groupId>org.glassfish.jersey.media</groupId>
 			<artifactId>jersey-media-json-jackson</artifactId>
 		</dependency>
+
+
+<dependency>
+			<groupId>io.dgms.unity</groupId>
+			<artifactId>module-analysis</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.dgms.unity</groupId>
+			<artifactId>module-analytics</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.dgms.unity</groupId>
+			<artifactId>module-engine-basex</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.dgms.unity</groupId>
+			<artifactId>module-engine-zorba</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.dgms.unity</groupId>
+			<artifactId>module-language-ampl</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.dgms.unity</groupId>
+			<artifactId>module-language-jsoniq</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.dgms.unity</groupId>
+			<artifactId>module-language-xquery</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.dgms.unity</groupId>
+			<artifactId>module-learning</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.dgms.unity</groupId>
+			<artifactId>module-numerics</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.dgms.unity</groupId>
+			<artifactId>module-optimization</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.dgms.unity</groupId>
+			<artifactId>module-random</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.dgms.unity</groupId>
+			<artifactId>module-search</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.dgms.unity</groupId>
+			<artifactId>module-statistics</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.dgms.unity</groupId>
+			<artifactId>module-symbolics</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.dgms.unity</groupId>
+			<artifactId>module-visualization</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
 
 	</dependencies>
 

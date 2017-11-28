@@ -183,6 +183,7 @@
 			</script>
 	</jsp:attribute>
 	<jsp:body>
+	<h2 class="mt-0" style="padding: 5px 0; text-transform: uppercase; color: #444;">${it.project.name} Dashboard</h2>
 	<div class="row">
         <div class="col-lg-3 col-xs-6">
           <!-- small box -->

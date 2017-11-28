@@ -17,6 +17,7 @@ import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
@@ -32,6 +33,7 @@ import org.glassfish.jersey.server.mvc.Viewable;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
+import io.dgms.unity.api.DGBranch;
 import io.dgms.unity.api.DGCommit;
 import io.dgms.unity.api.DGException;
 import io.dgms.unity.api.DGFile;
@@ -145,6 +147,7 @@ public class ProjectController extends Controller
     public String doPostRun() throws DGException, IOException
     {
         final String input = IOUtils.toString(getRequest().getInputStream());
+        System.out.println(input);
         final StringBuilder sb = new StringBuilder();
         sb.append("jsoniq version \"1.0\";");
         sb.append("import module namespace dgal = \"http://dgms.io/unity/modules/analytics/core\";");
@@ -185,6 +188,40 @@ public class ProjectController extends Controller
         default:
             throw new DGException("invalid task execution status returned: " + status);
         }
+    }
+
+    @POST
+    @Path("save")
+    public void doPostSave(@QueryParam("path") String path, String content) throws DGException
+    {
+        /*
+         * if (path == null || path.trim().isEmpty() || commit instanceof DGBranch)
+         * return; if (path.startsWith(project.getPathWithNamespace()))
+         * //((DGBranch)commit). return
+         * IOUtils.toString(commit.getResourceAsStream(path.substring(project.
+         * getPathWithNamespace().length())), StandardCharsets.UTF_8); while
+         * (path.startsWith("@")) path = path.substring(1); final String workspacePath =
+         * path.substring(0, path.indexOf("@")); path =
+         * path.substring(workspacePath.length() + 1); final String reference =
+         * path.substring(0, path.indexOf("@")); path =
+         * path.substring(reference.length() + 1); final DGProject project =
+         * getSystem().getProject(workspacePath); return
+         * IOUtils.toString(project.getRepository().getCommit(reference).
+         * getResourceAsStream(path), StandardCharsets.UTF_8);
+         * 
+         */
+        System.out.println(path + "--" + content);
+        /*
+         *
+         * try { final RepositoryFile file = new RepositoryFile();
+         * file.setContent(content);
+         * file.setFilePath(location.substring(project.getPathWithNamespace().length())
+         * + "/" + name); getBranch().api().getRepositoryFileApi().createFile(file,
+         * project.getId(), getBranch().getName(), "New"); final URI uri =
+         * URI.create(getRequest().getContextPath() + "/" + getPath() + "/tree");
+         * getResponse().sendRedirect(uri.toString()); } catch (final Exception e) {
+         * throw new DGException(e); }
+         */
     }
 
     public UnityDGBranch getBranch()
@@ -352,7 +389,6 @@ public class ProjectController extends Controller
             } catch (final Exception e) {
             }
         } catch (final Exception e) {
-            e.printStackTrace();
         }
 
         sb1.append("]");
@@ -416,6 +452,20 @@ public class ProjectController extends Controller
             }
         }
         return artifacts;
+    }
+
+    @GET
+    @Path("studies")
+    public Viewable getStudies(@QueryParam("action") final String action)
+    {
+        return new Viewable("studies", this);
+    }
+
+    @GET
+    @Path("studies/{id}")
+    public Viewable getStudy(@PathParam("id") final String id, @QueryParam("action") final String action)
+    {
+        return new Viewable("study", this);
     }
 
     @GET

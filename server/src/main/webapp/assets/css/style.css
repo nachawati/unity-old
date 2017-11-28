@@ -1,6 +1,12 @@
 .box.box-purple {
   border-top-color: #605ca8;
 }
+.sidebar-menu .header {
+	color: #b4c2cb!important;
+}
+.sidebar-menu li.active a {
+	background-color: #34444b!important;
+}
 .main-sidebar {
 	z-index: 9999 !important;
 	padding: 0;

@@ -200,6 +200,7 @@ public final class Main
             commands.put("notebook", new Notebook());
             commands.put("projects", new Projects());
             commands.put("run", new Run());
+            commands.put("server", new Server());
             commands.put("submit", new Submit());
             commands.put("sync", new Sync());
             commands.put("tasks", new Tasks());
