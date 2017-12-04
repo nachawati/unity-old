@@ -78,6 +78,7 @@
 						<i class="fa fa-bars"></i>
 					</button>
 				</div>
+				
 				<div class="navbar-custom-menu pull-right">
 					<ul class="nav navbar-nav">
 						<li class="dropdown user user-menu"><a href="#"
@@ -96,6 +97,11 @@
 									</div>
 								</li>
 							</ul></li>
+					</ul>
+				</div>
+				<div class="navbar-custom-menu pull-right">
+					<ul class="nav navbar-nav">
+						<li><a><b>Unity</b> Server (v0.1.0-SNAPSHOT)</a></li>
 					</ul>
 				</div>
 				<div class="collapse navbar-collapse pull-right"
@@ -129,6 +135,7 @@
 					</ul>
 					 -->
 				</div>
+				
 			</nav>
 			<jsp:invoke fragment="menu" var="menuText"></jsp:invoke>
 			<c:if test="${not empty menuText}">
@@ -163,7 +170,7 @@
 						</ol>
 					</div>
 				</c:if>
-				<div class="container-fluid">
+				<div class="container-fluid" >
 					<div class="row">
 						<jsp:invoke fragment="sidenav" var="sidenavText"></jsp:invoke>
 						<c:choose>

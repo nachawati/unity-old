@@ -21,8 +21,8 @@ import org.junit.Test;
 
 import aliceinnets.python.jyplot.JyPlot;
 import aliceinnets.util.OneLiners;
-import io.dgms.unity.api.DGScriptEngine;
-import io.dgms.unity.modules.engines.basex.BaseXDGScriptEngineFactory;
+import unity.api.DXScriptEngine;
+import unity.modules.engines.basex.BaseXDXScriptEngineFactory;
 
 public class TestModule
 {
@@ -31,11 +31,10 @@ public class TestModule
 
     {
         final Context context = new Context();
-        try (final DGScriptEngine processor = new BaseXDGScriptEngineFactory().getScriptEngine()) {
+        try (final DXScriptEngine processor = new BaseXDXScriptEngineFactory().getScriptEngine()) {
 
             final Object o = processor.eval(
-                    "import module namespace java = \"java:io.dgms.unity.modules.visualization.plotting.BaseXModule\";\n"
-                            +
+                    "import module namespace java = \"java:unity.modules.visualization.plotting.BaseXModule\";\n" +
 
                             "java:plot2d( {\n" + "    \n" + "    \"plots\": [\n" + "        {\n" + "\n"
                             + "            \"data\":\n" + "            [\n" + "                {\n"

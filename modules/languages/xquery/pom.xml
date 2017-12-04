@@ -13,7 +13,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>io.dgms.unity</groupId>
+		<groupId>unity</groupId>
 		<artifactId>unity-modules-languages</artifactId>
 		<version>0.1.0-SNAPSHOT</version>
 	</parent>

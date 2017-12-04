@@ -9,7 +9,7 @@
 <xsl:stylesheet version="1.0"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:java="http://xml.apache.org/xslt/java"
 	exclude-result-prefixes="t"
-	xmlns:t="io.dgms.unity.modules.languages.jsoniq.compiler.util.StringEscape">
+	xmlns:t="unity.modules.languages.jsoniq.compiler.util.StringEscape">
 	<xsl:output method="text" />
 
 	<xsl:key name="uri"

@@ -8,7 +8,7 @@ jsoniq version "1.0";
 :)
 module namespace op = "http://dgms.io/unity/modules/symbolics/jsoniq/operators";
 
-import module namespace java = "java:io.dgms.unity.modules.symbolics.jsoniq.operators.BaseXModule";
+import module namespace java = "java:unity.modules.symbolics.jsoniq.operators.BaseXModule";
 
 declare namespace u = "http://dgms.io/unity";
 declare option u:symbolic-computation "disabled";

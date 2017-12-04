@@ -1,5 +1,5 @@
 {
-	"argv": [ ${dgms.command}, "kernel", "-e", "basex", "{connection_file}" ],
+	"argv": [ ${unity.command}, "kernel", "-e", "basex", "{connection_file}" ],
 	"display_name": "JSONiq (BaseX)",
 	"language": "jsoniq"
 }

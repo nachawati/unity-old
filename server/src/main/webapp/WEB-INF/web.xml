@@ -14,7 +14,7 @@
 
 	<filter>
 		<filter-name>authentication</filter-name>
-		<filter-class>io.dgms.unity.server.filters.AuthenticationFilter</filter-class>
+		<filter-class>unity.server.filters.AuthenticationFilter</filter-class>
 	</filter>
 
 	<filter>
@@ -22,7 +22,7 @@
 		<filter-class>org.glassfish.jersey.servlet.ServletContainer</filter-class>
 		<init-param>
 			<param-name>javax.ws.rs.Application</param-name>
-			<param-value>io.dgms.unity.server.Application</param-value>
+			<param-value>unity.server.Application</param-value>
 		</init-param>
 		<init-param>
 			<param-name>jersey.config.servlet.filter.forwardOn404</param-name>

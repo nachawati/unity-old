@@ -15,8 +15,6 @@ import org.junit.Test;
 import de.undercouch.vertx.lang.typescript.TypeScriptClassLoader;
 import de.undercouch.vertx.lang.typescript.cache.InMemoryCache;
 import de.undercouch.vertx.lang.typescript.compiler.NodeCompiler;
-import io.dgms.unity.modules.symbolics.symengine.Basic;
-import io.dgms.unity.modules.symbolics.symengine.Expr;
 import jdk.nashorn.internal.ir.AccessNode;
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
 import jdk.nashorn.internal.ir.BinaryNode;
@@ -64,6 +62,8 @@ import jdk.nashorn.internal.runtime.ErrorManager;
 import jdk.nashorn.internal.runtime.ScriptRuntime;
 import jdk.nashorn.internal.runtime.Source;
 import jdk.nashorn.internal.runtime.options.Options;
+import unity.modules.symbolics.symengine.Basic;
+import unity.modules.symbolics.symengine.Expr;
 
 public class TestEngine
 {

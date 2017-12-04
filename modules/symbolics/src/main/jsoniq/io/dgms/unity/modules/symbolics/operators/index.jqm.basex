@@ -10,7 +10,7 @@ module namespace op = "http://dgms.io/unity/modules/symbolics/operators";
 
 import module namespace math = "http://www.w3.org/2005/xpath-functions/math";
 
-import module namespace java = "java:io.dgms.unity.modules.symbolics.operators.basex.IndexModule";
+import module namespace java = "java:unity.modules.symbolics.operators.basex.IndexModule";
 
 declare namespace u = "http://dgms.io/unity";
 declare option u:symbolic-computation "disabled";

@@ -1,20 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- بسم الله الرحمن الرحيم In the name of Allah, the Most Compassionate, 
-	the Most Merciful This software is authored by Mohamad Omar Nachawati, 1436-1439 
-	AH -->
+<!--
+	بسم الله الرحمن الرحيم
+	
+	In the name of Allah, the Most Compassionate, the Most Merciful
+	
+	This software is authored by Mohamad Omar Nachawati, 1436-1439 AH
+-->
+
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>io.dgms.unity</groupId>
+	<groupId>unity</groupId>
 	<artifactId>unity</artifactId>
 	<version>0.1.0-SNAPSHOT</version>
 
 	<packaging>pom</packaging>
 
 	<name>Unity</name>
-	<description>Unity is a research prototype of a decision guidance management system (DGMS) for rapid decision guidance system development.</description>
+	<description>Unity is an integrated decision analytics platform that aims to simplify the development of intelligent decision-making systems.</description>
 
 	<url>https://github.com/nachawati/unity</url>
 
@@ -66,18 +71,6 @@
 	</issueManagement>
 
 	<repositories>
-
-		<repository>
-			<id>jzy3d-snapshots</id>
-			<name>Jzy3d Snapshots</name>
-			<url>http://maven.jzy3d.org/snapshots</url>
-		</repository>
-
-		<repository>
-			<id>jzy3d-releases</id>
-			<name>Jzy3d Releases</name>
-			<url>http://maven.jzy3d.org/releases</url>
-		</repository>
 
 		<repository>
 			<id>aliceinnets-central</id>
@@ -525,7 +518,6 @@
 			<dependency>
 				<groupId>com.beust</groupId>
 				<artifactId>jcommander</artifactId>
-				<!-- <version>1.29</version> -->
 				<version>1.72</version>
 			</dependency>
 

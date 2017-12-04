@@ -13,7 +13,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>io.dgms.unity</groupId>
+		<groupId>unity</groupId>
 		<artifactId>unity</artifactId>
 		<version>0.1.0-SNAPSHOT</version>
 	</parent>
@@ -40,7 +40,7 @@
 							<addClasspath>true</addClasspath>
 							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
 							<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
-							<mainClass>io.dgms.unity.cli.Main</mainClass>
+							<mainClass>unity.cli.Main</mainClass>
 						</manifest>
 					</archive>
 				</configuration>
@@ -53,7 +53,7 @@
 				<executions>
 
 					<execution>
-						<id>copy-dgms.js</id>
+						<id>copy-unity.js</id>
 						<phase>process-resources</phase>
 						<goals>
 							<goal>copy-resources</goal>
@@ -65,7 +65,7 @@
 								<resource>
 									<directory>${project.basedir}/src/main/javascript</directory>
 									<includes>
-										<include>dgms.js</include>
+										<include>unity.js</include>
 									</includes>
 									<filtering>true</filtering>
 								</resource>
@@ -113,7 +113,7 @@
 			</activation>
 
 			<properties>
-				<dgms.command>"cmd", "/C", "dgms"</dgms.command>
+				<unity.command>"cmd", "/C", "unity"</unity.command>
 			</properties>
 
 		</profile>
@@ -132,7 +132,7 @@
 			</activation>
 
 			<properties>
-				<dgms.command>"dgms"</dgms.command>
+				<unity.command>"unity"</unity.command>
 			</properties>
 
 		</profile>
@@ -147,25 +147,25 @@
 		</dependency>
 
 		<dependency>
-			<groupId>io.dgms.unity</groupId>
+			<groupId>unity</groupId>
 			<artifactId>unity-api</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
-			<groupId>io.dgms.unity</groupId>
+			<groupId>unity</groupId>
 			<artifactId>unity-client</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
-			<groupId>io.dgms.unity</groupId>
+			<groupId>unity</groupId>
 			<artifactId>unity-core</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
-			<groupId>io.dgms.unity</groupId>
+			<groupId>unity</groupId>
 			<artifactId>unity-server</artifactId>
 			<version>${project.version}</version>
 			<type>war</type>
@@ -191,87 +191,90 @@
 			<artifactId>jetty-all</artifactId>
 			<type>pom</type>
 		</dependency>
+		
 		<dependency>
 			<groupId>org.eclipse.jetty</groupId>
 			<artifactId>apache-jsp</artifactId>
 		</dependency>
+		
 		<dependency>
 			<groupId>org.eclipse.jetty</groupId>
 			<artifactId>apache-jstl</artifactId>
 			<type>pom</type>
 		</dependency>
+		
 		<dependency>
-			<groupId>io.dgms.unity</groupId>
+			<groupId>unity</groupId>
 			<artifactId>module-analysis</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>io.dgms.unity</groupId>
+			<groupId>unity</groupId>
 			<artifactId>module-analytics</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>io.dgms.unity</groupId>
+			<groupId>unity</groupId>
 			<artifactId>module-engine-basex</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>io.dgms.unity</groupId>
+			<groupId>unity</groupId>
 			<artifactId>module-engine-zorba</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>io.dgms.unity</groupId>
+			<groupId>unity</groupId>
 			<artifactId>module-language-ampl</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>io.dgms.unity</groupId>
+			<groupId>unity</groupId>
 			<artifactId>module-language-jsoniq</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>io.dgms.unity</groupId>
+			<groupId>unity</groupId>
 			<artifactId>module-language-xquery</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>io.dgms.unity</groupId>
+			<groupId>unity</groupId>
 			<artifactId>module-learning</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>io.dgms.unity</groupId>
+			<groupId>unity</groupId>
 			<artifactId>module-numerics</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>io.dgms.unity</groupId>
+			<groupId>unity</groupId>
 			<artifactId>module-optimization</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>io.dgms.unity</groupId>
+			<groupId>unity</groupId>
 			<artifactId>module-random</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>io.dgms.unity</groupId>
+			<groupId>unity</groupId>
 			<artifactId>module-search</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>io.dgms.unity</groupId>
+			<groupId>unity</groupId>
 			<artifactId>module-statistics</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>io.dgms.unity</groupId>
+			<groupId>unity</groupId>
 			<artifactId>module-symbolics</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>io.dgms.unity</groupId>
+			<groupId>unity</groupId>
 			<artifactId>module-visualization</artifactId>
 			<version>${project.version}</version>
 		</dependency>

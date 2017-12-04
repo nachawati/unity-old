@@ -1,7 +1,7 @@
 {
 	"name": "statistics",
 	"version": "${project.version}",
-	"description": "Statistical computation for Unity",
+	"description": "Statistics for Unity",
 	"homepage": "https://github.com/nachawati/unity#readme",
 	"bugs": {
 		"url": "https://github.com/nachawati/unity/issues"

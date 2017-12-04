@@ -1,7 +1,7 @@
 {
 	"name": "visualization",
 	"version": "${project.version}",
-	"description": "Data visualization tools for Unity",
+	"description": "Data visualizations for Unity",
 	"homepage": "https://github.com/nachawati/unity#readme",
 	"bugs": {
 		"url": "https://github.com/nachawati/unity/issues"

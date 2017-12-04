@@ -1,7 +1,7 @@
 {
 	"name": "analytics",
 	"version": "${project.version}",
-	"description": "Decision guidance analytics for Unity",
+	"description": "Analytics for Unity",
 	"homepage": "https://github.com/nachawati/unity#readme",
 	"bugs": {
 		"url": "https://github.com/nachawati/unity/issues"

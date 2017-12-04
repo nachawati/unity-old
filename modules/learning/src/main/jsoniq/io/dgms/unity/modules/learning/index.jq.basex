@@ -10,7 +10,7 @@ jsoniq version "1.0";
 
 module namespace learning = "http://dgms.io/unity/modules/learning";
 
-import module namespace java = "java:io.dgms.unity.modules.learning.BaseXIndexModule"
+import module namespace java = "java:unity.modules.learning.BaseXIndexModule"
 
 declare namespace u = "http://dgms.io/unity";
 declare option u:symbolic-computation "disabled";
