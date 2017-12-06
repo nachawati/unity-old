@@ -59,7 +59,7 @@ public class JSONiq10Handler implements JSONiq10Parser.EventHandler
     /*
      * (non-Javadoc)
      *
-     * @see io.dgms.unity.modules.languages.jsoniq.compiler.parser.JSONiq10Parser.
+     * @see unity.modules.languages.jsoniq.compiler.parser.JSONiq10Parser.
      * EventHandler#endNonterminal(java.lang.String, int)
      */
     @Override
@@ -92,7 +92,7 @@ public class JSONiq10Handler implements JSONiq10Parser.EventHandler
     /*
      * (non-Javadoc)
      *
-     * @see io.dgms.unity.modules.languages.jsoniq.compiler.parser.JSONiq10Parser.
+     * @see unity.modules.languages.jsoniq.compiler.parser.JSONiq10Parser.
      * EventHandler#reset(java.lang.CharSequence)
      */
     @Override
@@ -104,7 +104,7 @@ public class JSONiq10Handler implements JSONiq10Parser.EventHandler
     /*
      * (non-Javadoc)
      *
-     * @see io.dgms.unity.modules.languages.jsoniq.compiler.parser.JSONiq10Parser.
+     * @see unity.modules.languages.jsoniq.compiler.parser.JSONiq10Parser.
      * EventHandler#startNonterminal(java.lang.String, int)
      */
     @Override
@@ -119,7 +119,7 @@ public class JSONiq10Handler implements JSONiq10Parser.EventHandler
     /*
      * (non-Javadoc)
      *
-     * @see io.dgms.unity.modules.languages.jsoniq.compiler.parser.JSONiq10Parser.
+     * @see unity.modules.languages.jsoniq.compiler.parser.JSONiq10Parser.
      * EventHandler#terminal(java.lang.String, int, int)
      */
     @Override
@@ -177,7 +177,7 @@ public class JSONiq10Handler implements JSONiq10Parser.EventHandler
     /*
      * (non-Javadoc)
      *
-     * @see io.dgms.unity.modules.languages.jsoniq.compiler.parser.JSONiq10Parser.
+     * @see unity.modules.languages.jsoniq.compiler.parser.JSONiq10Parser.
      * EventHandler#whitespace(int, int)
      */
     @Override

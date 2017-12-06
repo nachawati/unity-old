@@ -57,6 +57,9 @@
 			<script
 			src="${pageContext.request.contextPath}/assets/bower_components/ace-builds/src-noconflict/ext-modelist.js"
 			type="text/javascript" charset="utf-8"></script>
+			<script
+			src="${pageContext.request.contextPath}/assets/bower_components/json-editor/dist/jsoneditor.min.js"></script>
+			
 		<script>
 			$('#repository')
 					.jstree(
@@ -121,16 +124,51 @@
 								}
 							});
 			
-			var editor = ace.edit("editor");
-			editor.setOptions({
-				maxLines : Infinity,
-				showPrintMargin : false
-			});
-
-			editor.setTheme("ace/theme/eclipse");
-			var modelist = ace.require("ace/ext/modelist");
-			var mode = modelist.getModeForPath("${file.name}").mode;
-			editor.session.setMode(mode);
+			try {
+				var editor = ace.edit("editor");
+				editor.setOptions({
+					maxLines : Infinity,
+					showPrintMargin : false
+				});
+	
+				editor.setTheme("ace/theme/eclipse");
+				var modelist = ace.require("ace/ext/modelist");
+				var mode = modelist.getModeForPath("${file.name}").mode;
+				editor.session.setMode(mode);
+			} catch (e) {}
+			
+			try {
+				JSONEditor.defaults.theme = 'bootstrap3';
+				JSONEditor.defaults.iconlib = 'fontawesome4';
+				
+				JSONEditor.defaults.editors.object = JSONEditor.defaults.editors.object.extend({
+					  build: function() {
+					  	this._super();
+					  	
+					  	 this.importjson_controls = this.theme.getHeaderButtonHolder();
+					     this.title.appendChild(this.importjson_controls);
+					  	
+					  	this.importjson_button = this.getButton('Import','import','Import');
+					  	$(this.importjson_button).attr("data-toggle","modal");
+					  	$(this.importjson_button).attr("data-target","#modal");
+					  	$(this.importjson_button).attr("href","${pageContext.request.contextPath}/${it.project.pathWithNamespace}/tree?action=import&path=" + encodeURI(this.path));
+					      this.importjson_controls.appendChild(this.importjson_button);
+					  	
+					  }
+					});
+				
+				var form = new JSONEditor(document.getElementById("form-view"),
+						{
+							ajax: true,
+							schema: JSON.parse("${schema}")
+						});
+				form.setValue(${content});
+				form.on('change',function() {
+					$("#new-content").val(JSON.stringify(form.getValue(), null, 4));
+				});
+			} catch (e) {
+			}
+			
 		</script>
 	</jsp:attribute>
 	<jsp:body>
@@ -138,13 +176,14 @@
 		<c:when test="${file.directory}">
 		<div class="box">
             <div class="box-header">
-              <h3 class="box-title"><i
-							class="fa fa-folder mr-15"></i>${file.name}</h3>
+              <h3 class="box-title">
+							<i class="fa fa-folder mr-15"></i>${file.name}</h3>
             </div>
             <div class="box-body no-padding">
             	<table class="table">
                 	<tbody>
-                		<c:forEach var="item" items="${file.getFiles(false).iterator()}">
+                		<c:forEach var="item"
+									items="${file.getFiles(false).iterator()}">
 	                		<tr>
 	                			<td>
 		                			<c:choose>
@@ -157,10 +196,12 @@
 	            			        </c:choose>
 	            			        <c:choose>
 	            			        	<c:when test="${not empty prefix}">
-	            			        		<a href="${pageContext.request.contextPath}/${it.project.pathWithNamespace}/tree/${prefix}/${item.path}">${item.name}</a>
+	            			        		<a
+														href="${pageContext.request.contextPath}/${it.project.pathWithNamespace}/tree/${prefix}/${item.path}">${item.name}</a>
 	            			        	</c:when>
 	            			        	<c:otherwise>
-	            			        		<a href="${pageContext.request.contextPath}/${it.project.pathWithNamespace}/tree/${it.project.pathWithNamespace}/${item.path}">${item.name}</a>
+	            			        		<a
+														href="${pageContext.request.contextPath}/${it.project.pathWithNamespace}/tree/${it.project.pathWithNamespace}/${item.path}">${item.name}</a>
 	            			        	</c:otherwise>
 	            			        </c:choose>
             			        </td>
@@ -184,9 +225,21 @@
             		<div class="tab-content no-padding">
             			<div class="active tab-pane" id="content"
 							style="position: relative; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
-        			    	<div class="container-fluid" style="padding: 0;">
-        			    		<div id="editor">${content}</div>
-       			    		</div>
+        			    		<c:choose>
+        			    			<c:when test="${not empty schema}">
+        			    				<div class="container-fluid">
+        			    				<input type="hidden" id="new-content" name="content"
+											value="">
+        			    					<div id="form-view"></div>
+        			    				</div>
+        			    			</c:when>
+        			    			<c:otherwise>
+        			    			        			    	<div class="container-fluid" style="padding: 0;">
+        			    				<div id="editor">${content}</div>
+        			    					</div>
+        			    			</c:otherwise>
+        			    		</c:choose>
+       			    	
        			    	</div>
             		</div>
           		</div>	

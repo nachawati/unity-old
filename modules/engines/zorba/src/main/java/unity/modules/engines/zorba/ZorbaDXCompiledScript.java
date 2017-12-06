@@ -43,7 +43,7 @@ public class ZorbaDXCompiledScript extends DXCompiledScript
     /*
      * (non-Javadoc)
      *
-     * @see io.dgms.unity.api.DXCompiledScript#close()
+     * @see unity.api.DXCompiledScript#close()
      */
     @Override
     public void close()
@@ -66,7 +66,7 @@ public class ZorbaDXCompiledScript extends DXCompiledScript
     /*
      * (non-Javadoc)
      *
-     * @see io.dgms.unity.api.DXCompiledScript#getEngine()
+     * @see unity.api.DXCompiledScript#getEngine()
      */
     @Override
     public ZorbaDXScriptEngine getEngine()

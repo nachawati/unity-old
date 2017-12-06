@@ -26,9 +26,9 @@
 </div>
 <script>
 	$.ajax({
-		url : "${pageContext.request.contextPath}/${it.path}/run",
+		url : "${pageContext.request.contextPath}/${it.path}/run?path=${pageContext.request.getParameter('path')}",
 		method : "POST",
-		data : editor.getValue(),
+		data : editor != null ? JSON.stringify(editor.getValue()) : JSON.stringify(form.getValue()),
 		success : function(data) {
 			$("#results").text(data);
 			var editor123 = ace.edit("results");

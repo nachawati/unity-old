@@ -91,6 +91,10 @@ public interface DXCommit extends DXSessionObject
      */
     String getMessage();
 
+    Stream<? extends DXFile> getMetaDataFiles(boolean recursive);
+
+    Stream<? extends DXFile> getMetaDataFiles(String path, boolean recursive);
+
     /**
      * @return DXProject
      */

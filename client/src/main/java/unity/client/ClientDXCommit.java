@@ -203,7 +203,7 @@ public class ClientDXCommit extends ClientDXSessionObject implements DXCommit
             while (path != null && path.startsWith("/"))
                 path = path.substring(1);
             return api().getRepositoryApi().getTree(repository.getProject().getId(), path, object.getId()).stream()
-                    .filter(f -> f.getName().endsWith(".metadata") || f.getName().endsWith(".metadata.json")
+                    .filter(f -> f.getName().endsWith(".metadata") || f.getName().endsWith(".metadata.jsonld")
                             || f.getName().equals(".gitkeep") ? false : true)
                     .map(t -> new ClientDXFile(getSession(), this, t));
         } catch (final GitLabApiException e) {

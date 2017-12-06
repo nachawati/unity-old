@@ -129,8 +129,7 @@ public class ZorbaDXScriptContext extends SimpleScriptContext implements DXScrip
     /*
      * (non-Javadoc)
      *
-     * @see io.dgms.unity.api.DXScriptContext#addPackage(io.dgms.unity.api.
-     * DXPackageReference)
+     * @see unity.api.DXScriptContext#addPackage(unity.api. DXPackageReference)
      */
     @Override
     public void addPackage(DXPackageReference packageReference) throws DXException
@@ -142,7 +141,7 @@ public class ZorbaDXScriptContext extends SimpleScriptContext implements DXScrip
     /*
      * (non-Javadoc)
      *
-     * @see io.dgms.unity.api.DXScriptContext#addPackage(java.nio.file.Path)
+     * @see unity.api.DXScriptContext#addPackage(java.nio.file.Path)
      */
     @Override
     public void addPackage(Path path) throws DXException
@@ -157,7 +156,7 @@ public class ZorbaDXScriptContext extends SimpleScriptContext implements DXScrip
     /*
      * (non-Javadoc)
      *
-     * @see io.dgms.unity.api.DXScriptContext#close()
+     * @see unity.api.DXScriptContext#close()
      */
     @Override
     public void close()
@@ -238,7 +237,7 @@ public class ZorbaDXScriptContext extends SimpleScriptContext implements DXScrip
     /*
      * (non-Javadoc)
      *
-     * @see io.dgms.unity.api.DXScriptContext#getResourceAsStream(java.lang.String)
+     * @see unity.api.DXScriptContext#getResourceAsStream(java.lang.String)
      */
     @Override
     public InputStream getResourceAsStream(final String path) throws IOException

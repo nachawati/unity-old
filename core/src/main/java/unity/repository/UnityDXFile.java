@@ -9,8 +9,10 @@
 package unity.repository;
 
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.stream.Stream;
 
+import org.apache.commons.io.IOUtils;
 import org.gitlab4j.api.GitLabApi;
 import org.gitlab4j.api.GitLabApiException;
 import org.gitlab4j.api.models.RepositoryFile;
@@ -82,7 +84,7 @@ public class UnityDXFile extends UnityDXSessionObject implements DXFile
                 path = path.substring(1);
             return api().getRepositoryApi().getTree(getCommit().getProject().getId(), path, commit.getId(), recursive)
                     .stream()
-                    .filter(f -> f.getName().endsWith(".metadata") || f.getName().endsWith(".metadata.json")
+                    .filter(f -> f.getName().endsWith(".metadata") || f.getName().endsWith(".metadata.jsonld")
                             || f.getName().equals(".gitkeep") ? false : true)
                     .map(t -> new UnityDXFile(getSession(), commit, t));
         } catch (final GitLabApiException e) {
@@ -172,9 +174,13 @@ public class UnityDXFile extends UnityDXSessionObject implements DXFile
     @Override
     public String getSchema()
     {
-        // TODO Auto-generated method stub
-
-        return null;
+        try (InputStream input = commit
+                .getResourceAsStream(((UnityDXBranch) commit).getOntology().getSchema(getType()))) {
+            return IOUtils.toString(input, StandardCharsets.UTF_8);
+        } catch (final Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     /*
@@ -185,8 +191,7 @@ public class UnityDXFile extends UnityDXSessionObject implements DXFile
     @Override
     public String getType()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return ((UnityDXBranch) commit).getOntology().getType(getPath());
     }
 
     /*

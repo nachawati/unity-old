@@ -183,11 +183,27 @@ public class UnityDXOntology extends UnityDXSessionObject implements DXOntology
     {
         try {
             dataset.begin(ReadWrite.READ);
-            final URI ontologyUri = getSession().getGitLabHost().resolve(getProject().getPathWithNamespace());
+            // final URI ontologyUri =
+            // getSession().getGitLabHost().resolve(getProject().getPathWithNamespace());
             final Individual individual = ontModel.getIndividual(type);
-            System.out.println(individual + "individual");
             return individual.getPropertyValue(ontModel.getProperty("http://dgms.io/ontologies/example#hasSchema"))
                     .asLiteral().getString();
+        } catch (final Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            dataset.end();
+        }
+    }
+
+    public String getType(String identifier)
+    {
+
+        try {
+            dataset.begin(ReadWrite.READ);
+            final URI ontologyUri = getSession().getGitLabHost().resolve(getProject().getPathWithNamespace());
+            final Individual individual = ontModel.getIndividual(ontologyUri + "/" + identifier);
+            return individual.getOntClass().toString();
         } catch (final Exception e) {
             e.printStackTrace();
             return null;
@@ -202,7 +218,8 @@ public class UnityDXOntology extends UnityDXSessionObject implements DXOntology
             dataset.begin(ReadWrite.WRITE);
             model = dataset.getNamedModel(branch.getName());
             ontModel = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, model);
-            final String ontologyUri = branch.getProject().getPathWithNamespace();
+            final String ontologyUri = getSession().getGitLabHost().resolve(branch.getProject().getPathWithNamespace())
+                    .toString();
             ontology = ontModel.getOntology(ontologyUri);
             if (ontology == null)
                 ontology = ontModel.createOntology(ontologyUri);
@@ -210,6 +227,7 @@ public class UnityDXOntology extends UnityDXSessionObject implements DXOntology
                 ontModel.removeAll();
                 sync(ontologyUri);
             }
+
             dataset.commit();
         } catch (final Exception e) {
             dataset.abort();
@@ -239,13 +257,12 @@ public class UnityDXOntology extends UnityDXSessionObject implements DXOntology
             final ByteArrayOutputStream output = new ByteArrayOutputStream();
             ontology.saveOntology(new TurtleDocumentFormat(), output);
             ontModel.read(new ByteArrayInputStream(output.toByteArray()), ontologyUri, "TTL");
-            branch.getFiles(true).forEach(file -> {
+            branch.getMetaDataFiles(true).forEach(file -> {
                 final String path = file.getPath();
-                if (!file.isDirectory() && path.endsWith(".metadata.json"))
-                    try (InputStream stream = file.newInputStream()) {
-                        model.read(stream, ontologyUri + "/" + path.substring(0, path.length() - 14), "JSON-LD");
-                    } catch (final Exception e) {
-                    }
+                try (InputStream stream = file.newInputStream()) {
+                    model.read(stream, ontologyUri + "/" + path.substring(0, path.length() - 16), "JSON-LD");
+                } catch (final Exception e) {
+                }
             });
         } catch (final Exception e) {
             throw new DXException(e);

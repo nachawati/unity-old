@@ -179,7 +179,6 @@ public class UnityDXCommit extends UnityDXSessionObject implements DXCommit
     @Override
     public UnityDXFile getFile(String path) throws DXException
     {
-        System.out.println(path);
         if (path == null || path.trim().length() == 0) {
             final TreeItem item = new TreeItem();
             item.setName(repository.getProject().getName());
@@ -217,7 +216,7 @@ public class UnityDXCommit extends UnityDXSessionObject implements DXCommit
                 path = path.substring(1);
             return api().getRepositoryApi().getTree(repository.getProject().getId(), path, object.getId(), recursive)
                     .stream()
-                    .filter(f -> f.getName().endsWith(".metadata") || f.getName().endsWith(".metadata.json")
+                    .filter(f -> f.getName().endsWith(".metadata") || f.getName().endsWith(".metadata.jsonld")
                             || f.getName().equals(".gitkeep") ? false : true)
                     .map(t -> new UnityDXFile(getSession(), this, t));
         } catch (final GitLabApiException e) {
@@ -245,6 +244,26 @@ public class UnityDXCommit extends UnityDXSessionObject implements DXCommit
     public String getMessage()
     {
         return object.getMessage();
+    }
+
+    @Override
+    public Stream<? extends DXFile> getMetaDataFiles(boolean recursive)
+    {
+        return getMetaDataFiles(null, recursive);
+    }
+
+    @Override
+    public Stream<? extends DXFile> getMetaDataFiles(String path, boolean recursive)
+    {
+        try {
+            while (path != null && path.startsWith("/"))
+                path = path.substring(1);
+            return api().getRepositoryApi().getTree(repository.getProject().getId(), path, object.getId(), recursive)
+                    .stream().filter(f -> f.getType() == TreeItem.Type.BLOB && f.getName().endsWith(".metadata.jsonld"))
+                    .map(t -> new UnityDXFile(getSession(), this, t));
+        } catch (final GitLabApiException e) {
+            return Stream.empty();
+        }
     }
 
     /*

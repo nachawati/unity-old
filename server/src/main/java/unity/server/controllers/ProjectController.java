@@ -132,6 +132,22 @@ public class ProjectController extends Controller
             file.setContent(content);
             file.setFilePath(location.substring(project.getPathWithNamespace().length()) + "/" + name);
             getBranch().api().getRepositoryFileApi().createFile(file, project.getId(), getBranch().getName(), "New");
+
+            final RepositoryFile metafile = new RepositoryFile();
+            final JsonObject metadata = new JsonObject();
+
+            final JsonObject context = new JsonObject();
+            context.addProperty("@vocab", "http://dgms.io/ontologies/example#");
+            metadata.add("@context", context);
+            metadata.addProperty("@id", "");
+            metadata.addProperty("@type", type);
+            metadata.addProperty("name", name);
+            metafile.setContent(metadata.toString());
+            metafile.setFilePath(
+                    location.substring(project.getPathWithNamespace().length()) + "/" + name + ".metadata.jsonld");
+            getBranch().api().getRepositoryFileApi().createFile(metafile, project.getId(), getBranch().getName(),
+                    "New");
+
             final URI uri = URI.create(getRequest().getContextPath() + "/" + getPath() + "/tree");
             getResponse().sendRedirect(uri.toString());
         } catch (final Exception e) {
@@ -142,16 +158,15 @@ public class ProjectController extends Controller
     @SuppressWarnings("deprecation")
     @POST
     @Path("run")
-    public String doPostRun() throws DXException, IOException
+    public String doPostRun(@QueryParam("path") String path) throws DXException, IOException
     {
         final String input = IOUtils.toString(getRequest().getInputStream());
-        System.out.println(input);
         final StringBuilder sb = new StringBuilder();
         sb.append("jsoniq version \"1.0\";");
         sb.append("import module namespace dgal = \"http://dgms.io/unity/modules/analytics/core\";");
-
         final JsonObject in = new Gson().fromJson(input, JsonObject.class);
         String model = in.get("model").getAsString().trim();
+
         model = model.substring(2, model.indexOf("}"));
         sb.append("import module namespace ns = \"" + model + "\";");
 
@@ -160,13 +175,14 @@ public class ProjectController extends Controller
                 + ")");
 
         final String expression = sb.toString();
+        System.out.println(expression);
         final DXPackageReference packageReference = commit.getAsPackageReference();
-        final DXTaskExecution execution = getSystem().submitTask(
-                expression.substring(0, expression.length() > 16 ? 16 : expression.length()), expression,
-                packageReference);
+        final DXTaskExecution execution = getSystem().submitTask(path, expression, packageReference);
+
         DXTaskExecutionStatus status = null;
         while (true) {
-            status = getSystem().getTaskExecutionStatus(execution.getId());
+            status = getSystem().get
+                    TaskExecutionStatus(execution.getId());
             if (!(status == DXTaskExecutionStatus.ACTIVE || status == DXTaskExecutionStatus.QUEUED))
                 break;
             try {
@@ -335,7 +351,6 @@ public class ProjectController extends Controller
             if (!path.startsWith("@")) {
                 pathSegments = path.split("/");
                 final StringBuilder sb = new StringBuilder();
-                sb.append("tree");
                 for (final String pathSegment : pathSegments) {
                     sb.append("/" + pathSegment);
                     pathComponents.put(pathSegment, sb.toString());
@@ -363,7 +378,6 @@ public class ProjectController extends Controller
                 }
 
                 final StringBuilder sb = new StringBuilder();
-                sb.append("tree");
                 for (int i = 0; i < pathSegments.length; i++) {
                     if (i > 1)
                         sb.append("/" + pathSegments[i]);
@@ -388,11 +402,15 @@ public class ProjectController extends Controller
         try {
             final DXFile file = getFile(path);
             getRequest().setAttribute("file", file);
+            final String schema = file.getSchema();
+            if (schema != null)
+                getRequest().setAttribute("schema", StringEscapeUtils.escapeEcmaScript(schema));
             try (InputStream input = file.newInputStream()) {
                 getRequest().setAttribute("content", IOUtils.toString(input, StandardCharsets.UTF_8));
             } catch (final Exception e) {
             }
         } catch (final Exception e) {
+            e.printStackTrace();
         }
 
         sb1.append("]");
@@ -453,9 +471,11 @@ public class ProjectController extends Controller
                 artifact.put("icon", file.isDirectory() ? "fa fa-folder" : "fa fa-file-o");
                 artifacts.add(artifact);
             }
+
             if (artifacts.size() == 0)
                 for (final DXTaskExecution taskExecution : getSystem().getTaskExecutions(fullPath)
                         .collect(Collectors.toList())) {
+
                     final Map<String, Object> artifact = new HashMap<>();
                     artifact.put("id", fullPath + "/" + taskExecution.getId());
                     artifact.put("text", taskExecution.getDateInitiated().toString());

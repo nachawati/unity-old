@@ -39,5 +39,5 @@
 	<li class="divider"></li>
 	<t:li.menu modal="?action=delete" title="Delete"></t:li.menu>
 </t:li.menu>
-<t:li.menu cls="divider" modal="${pageContext.request.contextPath}/${it.path}/tree?action=run"
+<t:li.menu cls="divider" modal="${pageContext.request.contextPath}/${it.path}/tree?action=run&path=${it.path}/${file.path}"
 	icon="octicon octicon-zap" title="Run"></t:li.menu>

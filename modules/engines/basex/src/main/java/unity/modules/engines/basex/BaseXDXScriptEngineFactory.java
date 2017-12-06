@@ -155,7 +155,7 @@ public class BaseXDXScriptEngineFactory implements DXScriptEngineFactory
     /*
      * (non-Javadoc)
      *
-     * @see io.dgms.unity.api.DXScriptEngineFactory#getScriptEngine()
+     * @see unity.api.DXScriptEngineFactory#getScriptEngine()
      */
     @Override
     public BaseXDXScriptEngine getScriptEngine()
@@ -166,9 +166,7 @@ public class BaseXDXScriptEngineFactory implements DXScriptEngineFactory
     /*
      * (non-Javadoc)
      *
-     * @see
-     * io.dgms.unity.api.DXScriptEngineFactory#getScriptEngine(io.dgms.unity.api.
-     * DXSession)
+     * @see unity.api.DXScriptEngineFactory#getScriptEngine(unity.api. DXSession)
      */
     @Override
     public DXScriptEngine getScriptEngine(DXSession session)

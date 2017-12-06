@@ -248,7 +248,7 @@ public class UnityDXSession implements DXSession
      */
     public static Path getLocalSystemPath() throws IOException
     {
-        final Path settings = Paths.get(System.getProperty("user.home")).resolve(".dgms").toAbsolutePath();
+        final Path settings = Paths.get(System.getProperty("user.home")).resolve(".unity").toAbsolutePath();
         if (!Files.exists(settings))
             Files.createDirectories(settings);
         return settings;

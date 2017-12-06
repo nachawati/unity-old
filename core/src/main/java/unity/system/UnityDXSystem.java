@@ -303,7 +303,7 @@ public class UnityDXSystem extends UnityDXSessionObject implements DXSystem
     public Stream<UnityDXTaskExecution> getTaskExecutions(String path)
     {
         try (UnityDXEntityManager em = newEntityManager()) {
-            final Query query = em.createQuery("SELECT e FROM UnityDGTaskExecution e WHERE e.task.taskName = :path");
+            final Query query = em.createQuery("SELECT e FROM UnityDXTaskExecution e WHERE e.task.taskName = :path");
             query.setParameter("path", path);
             return query.getResultStream();
         } catch (final Exception e) {

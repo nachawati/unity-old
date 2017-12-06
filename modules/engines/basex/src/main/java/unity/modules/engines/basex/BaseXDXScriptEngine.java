@@ -86,8 +86,7 @@ public class BaseXDXScriptEngine implements DXScriptEngine
     /*
      * (non-Javadoc)
      *
-     * @see io.dgms.unity.api.DXScriptEngine#addPackage(io.dgms.unity.api.
-     * DXPackageReference)
+     * @see unity.api.DXScriptEngine#addPackage(unity.api. DXPackageReference)
      */
     @Override
     public void addPackage(DXPackageReference packageReference) throws DXException
@@ -98,7 +97,7 @@ public class BaseXDXScriptEngine implements DXScriptEngine
     /*
      * (non-Javadoc)
      *
-     * @see io.dgms.unity.api.DXScriptEngine#addPackage(java.nio.file.Path)
+     * @see unity.api.DXScriptEngine#addPackage(java.nio.file.Path)
      */
     @Override
     public void addPackage(Path path) throws DXException
@@ -109,7 +108,7 @@ public class BaseXDXScriptEngine implements DXScriptEngine
     /*
      * (non-Javadoc)
      *
-     * @see io.dgms.unity.api.DXScriptEngine#close()
+     * @see unity.api.DXScriptEngine#close()
      */
     @Override
     public void close()
@@ -120,7 +119,7 @@ public class BaseXDXScriptEngine implements DXScriptEngine
     /*
      * (non-Javadoc)
      *
-     * @see io.dgms.unity.api.DXScriptEngine#compile(java.io.Reader)
+     * @see unity.api.DXScriptEngine#compile(java.io.Reader)
      */
     @Override
     public BaseXDXCompiledScript compile(Reader script) throws ScriptException
@@ -135,7 +134,7 @@ public class BaseXDXScriptEngine implements DXScriptEngine
     /*
      * (non-Javadoc)
      *
-     * @see io.dgms.unity.api.DXScriptEngine#compile(java.lang.String)
+     * @see unity.api.DXScriptEngine#compile(java.lang.String)
      */
     @Override
     public BaseXDXCompiledScript compile(String script) throws ScriptException
@@ -285,7 +284,7 @@ public class BaseXDXScriptEngine implements DXScriptEngine
     /*
      * (non-Javadoc)
      *
-     * @see io.dgms.unity.api.DXScriptEngine#getResourceAsStream(java.lang.String)
+     * @see unity.api.DXScriptEngine#getResourceAsStream(java.lang.String)
      */
     @Override
     public InputStream getResourceAsStream(String path) throws IOException
@@ -296,7 +295,7 @@ public class BaseXDXScriptEngine implements DXScriptEngine
     /*
      * (non-Javadoc)
      *
-     * @see io.dgms.unity.api.DXScriptEngine#getSession()
+     * @see unity.api.DXScriptEngine#getSession()
      */
     @Override
     public DXSession getSession()

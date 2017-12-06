@@ -57,7 +57,7 @@ public class UnityDXBranch extends UnityDXCommit implements DXBranch
     public synchronized UnityDXOntology getOntology()
     {
         if (ontology != null)
-            return null;
+            return ontology;
         return ontology = new UnityDXOntology(getSession(), this);
     }
 }

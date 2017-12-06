@@ -152,7 +152,7 @@ public class ZorbaDXScriptEngineFactory implements DXScriptEngineFactory
     /*
      * (non-Javadoc)
      *
-     * @see io.dgms.unity.api.DXScriptEngineFactory#getScriptEngine()
+     * @see unity.api.DXScriptEngineFactory#getScriptEngine()
      */
     @Override
     public ZorbaDXScriptEngine getScriptEngine()
@@ -163,9 +163,7 @@ public class ZorbaDXScriptEngineFactory implements DXScriptEngineFactory
     /*
      * (non-Javadoc)
      *
-     * @see
-     * io.dgms.unity.api.DXScriptEngineFactory#getScriptEngine(io.dgms.unity.api.
-     * DXSession)
+     * @see unity.api.DXScriptEngineFactory#getScriptEngine(unity.api.DXSession)
      */
     @Override
     public ZorbaDXScriptEngine getScriptEngine(DXSession session)
