@@ -233,6 +233,20 @@ public class ClientDXCommit extends ClientDXSessionObject implements DXCommit
         return object.getMessage();
     }
 
+    @Override
+    public Stream<? extends DXFile> getMetaDataFiles(boolean recursive)
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Stream<? extends DXFile> getMetaDataFiles(String path, boolean recursive)
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
     /*
      * (non-Javadoc)
      *

@@ -181,8 +181,7 @@ public class ProjectController extends Controller
 
         DXTaskExecutionStatus status = null;
         while (true) {
-            status = getSystem().get
-                    TaskExecutionStatus(execution.getId());
+            status = getSystem().getTaskExecutionStatus(execution.getId());
             if (!(status == DXTaskExecutionStatus.ACTIVE || status == DXTaskExecutionStatus.QUEUED))
                 break;
             try {

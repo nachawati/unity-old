@@ -301,6 +301,13 @@ public class ClientDXSystem extends ClientDXSessionObject implements DXSystem
         }
     }
 
+    @Override
+    public Stream<? extends DXTaskExecution> getTaskExecutions(String path)
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
     /*
      * (non-Javadoc)
      *

@@ -35,6 +35,7 @@ import symjava.symbolic.Pow;
  */
 public class IndexModule
 {
+
     /**
      * @param arg1
      * @param arg2

@@ -13,8 +13,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 
+import javax.xml.transform.ErrorListener;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.dom.DOMSource;
@@ -23,6 +25,8 @@ import javax.xml.transform.stream.StreamSource;
 
 import org.apache.commons.io.IOUtils;
 import org.w3c.dom.Document;
+import org.xml.sax.SAXNotRecognizedException;
+import org.xml.sax.SAXNotSupportedException;
 
 import unity.api.DXException;
 import unity.modules.languages.jsoniq.compiler.parser.JSONiq10Handler;
@@ -104,6 +108,7 @@ public class JSONiqTranslator
      *
      */
     private final static Transformer JSONIQ10;
+
     /**
      *
      */
@@ -124,12 +129,36 @@ public class JSONiqTranslator
      * @throws IOException
      * @throws TransformerFactoryConfigurationError
      * @throws TransformerConfigurationException
+     * @throws SAXNotSupportedException
+     * @throws SAXNotRecognizedException
      */
-    private static Transformer loadTransformer(String path)
-            throws IOException, TransformerFactoryConfigurationError, TransformerConfigurationException
+    private static Transformer loadTransformer(String path) throws IOException, TransformerFactoryConfigurationError,
+            TransformerConfigurationException, SAXNotRecognizedException, SAXNotSupportedException
     {
         try (InputStream stream = JSONiqTranslator.class.getResourceAsStream(path)) {
-            return TransformerFactory.newInstance().newTransformer(new StreamSource(stream));
+            final TransformerFactory factory = TransformerFactory.newInstance();
+            factory.setErrorListener(new NullErrorListener());
+            final Transformer transformer = factory.newTransformer(new StreamSource(stream));
+            transformer.setErrorListener(new NullErrorListener());
+            return transformer;
+        }
+    }
+
+    private static class NullErrorListener implements ErrorListener
+    {
+        @Override
+        public void error(TransformerException exception) throws TransformerException
+        {
+        }
+
+        @Override
+        public void fatalError(TransformerException exception) throws TransformerException
+        {
+        }
+
+        @Override
+        public void warning(TransformerException exception) throws TransformerException
+        {
         }
     }
 
