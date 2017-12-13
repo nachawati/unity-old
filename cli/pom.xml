@@ -220,6 +220,11 @@
 		</dependency>
 		<dependency>
 			<groupId>unity</groupId>
+			<artifactId>module-engine-nashorn</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>unity</groupId>
 			<artifactId>module-engine-zorba</artifactId>
 			<version>${project.version}</version>
 		</dependency>

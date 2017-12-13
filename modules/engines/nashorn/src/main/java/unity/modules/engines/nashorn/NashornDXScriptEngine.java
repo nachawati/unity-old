@@ -6,81 +6,128 @@
  * This software is authored by Mohamad Omar Nachawati, 1436-1439 AH
  *******************************************************************************/
 
-package unity.modules.engines.basex;
+package unity.modules.engines.nashorn;
 
+import static jdk.nashorn.internal.runtime.Source.sourceFor;
+
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
+import java.io.Writer;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.function.Function;
 
 import javax.script.Bindings;
 import javax.script.ScriptContext;
+import javax.script.ScriptEngine;
 import javax.script.ScriptEngineFactory;
+import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import javax.script.SimpleBindings;
 
 import org.apache.commons.io.IOUtils;
-import org.basex.query.QueryException;
 import org.basex.query.QueryProcessor;
 
+import de.undercouch.vertx.lang.typescript.TypeScriptClassLoader;
+import de.undercouch.vertx.lang.typescript.cache.InMemoryCache;
+import de.undercouch.vertx.lang.typescript.compiler.NodeCompiler;
+import jdk.nashorn.internal.ir.LexicalContext;
+import jdk.nashorn.internal.ir.Node;
+import jdk.nashorn.internal.ir.visitor.NodeVisitor;
+import jdk.nashorn.internal.parser.Parser;
+import jdk.nashorn.internal.runtime.Context;
+import jdk.nashorn.internal.runtime.ErrorManager;
+import jdk.nashorn.internal.runtime.Source;
+import jdk.nashorn.internal.runtime.options.Options;
 import unity.api.DXException;
 import unity.api.DXPackageReference;
 import unity.api.DXScriptEngine;
 import unity.api.DXSession;
-import unity.modules.languages.jsoniq.compiler.translator.JSONiqTranslator;
+import unity.modules.symbolics.symengine.Basic;
+import unity.modules.symbolics.symengine.Expr;
 
 /**
  * @author Mohamad Omar Nachawati
  *
  */
-public class BaseXDXScriptEngine implements DXScriptEngine
+public class NashornDXScriptEngine implements DXScriptEngine
 {
     /**
      *
      */
-    private BaseXDXScriptContext             context;
+    private final NodeCompiler                 compiler = new NodeCompiler();
 
     /**
      *
      */
-    private final BaseXDXScriptContext       defaultContext;
+    private NashornDXScriptContext             context;
 
     /**
      *
      */
-    private final BaseXDXScriptEngineFactory factory;
+    private final NashornDXScriptContext       defaultContext;
 
     /**
      *
      */
-    private final DXSession                  session;
+    private final ScriptEngine                 engine;
 
     /**
      *
      */
-    private final JSONiqTranslator           translator;
+    private final NashornDXScriptEngineFactory factory;
+
+    /**
+     *
+     */
+    private final DXTypeScriptClassLoader      loader   = new DXTypeScriptClassLoader();
+
+    /**
+     *
+     */
+    private final Options                      options  = new Options("nashorn");
+
+    /**
+     *
+     */
+    private final DXSession                    session;
+    {
+        options.set("anon.functions", true);
+        options.set("parse.only", true);
+        options.set("scripting", true);
+    }
 
     /**
      * @param factory
      */
-    public BaseXDXScriptEngine(BaseXDXScriptEngineFactory factory)
+    public NashornDXScriptEngine(NashornDXScriptEngineFactory factory)
     {
         this.factory = factory;
         session = null;
-        defaultContext = new BaseXDXScriptContext(this);
-        translator = new JSONiqTranslator(JSONiqTranslator.Target.XQUERY31);
+        defaultContext = new NashornDXScriptContext(this);
+        engine = new ScriptEngineManager().getEngineByName("nashorn");
+        engine.put("variable", new Variable());
+        engine.getBindings(ScriptContext.ENGINE_SCOPE).put("__", new SymbolicOperators());
+        engine.getBindings(ScriptContext.ENGINE_SCOPE).put("variable", new Variable());
+        // engine.getBindings(ScriptContext.ENGINE_SCOPE).put("variable", new
+        // Variable());
     }
 
     /**
      * @param factory
      * @param session
      */
-    public BaseXDXScriptEngine(BaseXDXScriptEngineFactory factory, DXSession session)
+    public NashornDXScriptEngine(NashornDXScriptEngineFactory factory, DXSession session)
     {
         this.factory = factory;
         this.session = session;
-        defaultContext = new BaseXDXScriptContext(this, session);
-        translator = new JSONiqTranslator(JSONiqTranslator.Target.XQUERY31);
+        defaultContext = new NashornDXScriptContext(this, session);
+        engine = new ScriptEngineManager().getEngineByName("nashorn");
+        engine.getBindings(ScriptContext.ENGINE_SCOPE).put("__", new SymbolicOperators());
+        engine.getBindings(ScriptContext.ENGINE_SCOPE).put("variable", new Variable());
+        engine.put("variable", new Variable());
     }
 
     /*
@@ -122,7 +169,7 @@ public class BaseXDXScriptEngine implements DXScriptEngine
      * @see unity.api.DXScriptEngine#compile(java.io.Reader)
      */
     @Override
-    public BaseXDXCompiledScript compile(Reader script) throws ScriptException
+    public NashornDXCompiledScript compile(Reader script) throws ScriptException
     {
         try {
             return compile(IOUtils.toString(script));
@@ -137,11 +184,11 @@ public class BaseXDXScriptEngine implements DXScriptEngine
      * @see unity.api.DXScriptEngine#compile(java.lang.String)
      */
     @Override
-    public BaseXDXCompiledScript compile(String script) throws ScriptException
+    public NashornDXCompiledScript compile(String script) throws ScriptException
     {
         final QueryProcessor processor = new QueryProcessor(translate(script), getContext().context);
         processor.uriResolver(getContext());
-        return new BaseXDXCompiledScript(this, processor);
+        return new NashornDXCompiledScript(this, processor);
     }
 
     /*
@@ -224,16 +271,14 @@ public class BaseXDXScriptEngine implements DXScriptEngine
     @Override
     public Object eval(String script, ScriptContext context) throws ScriptException
     {
-        System.out.println(translate(script));
-        try (QueryProcessor processor = new QueryProcessor(translate(script),
-                ((BaseXDXScriptContext) context).context)) {
-            processor.uriResolver((BaseXDXScriptContext) context);
-            return processor.value().toJava();
-        } catch (final QueryException e) {
-            throw new ScriptException(e.getMessage());
-        } catch (final Exception e) {
-            throw new ScriptException(e);
-        }
+        final ErrorManager errors = new ErrorManager();
+        final Context context1 = new Context(options, errors, Thread.currentThread().getContextClassLoader());
+        final Source source = sourceFor("abc", translate(script));
+        final Parser parser = new Parser(context1.getEnv(), source, errors);
+        final NashornDXNodeVisitor visitor = new NashornDXNodeVisitor(source);
+        parser.parse().accept(visitor);
+
+        return engine.eval(visitor.toString());
     }
 
     /*
@@ -264,7 +309,7 @@ public class BaseXDXScriptEngine implements DXScriptEngine
      * @see javax.script.ScriptEngine#getContext()
      */
     @Override
-    public BaseXDXScriptContext getContext()
+    public NashornDXScriptContext getContext()
     {
         if (context != null)
             return context;
@@ -334,7 +379,7 @@ public class BaseXDXScriptEngine implements DXScriptEngine
     @Override
     public void setContext(ScriptContext context)
     {
-        this.context = (BaseXDXScriptContext) context;
+        this.context = (NashornDXScriptContext) context;
     }
 
     /**
@@ -344,10 +389,82 @@ public class BaseXDXScriptEngine implements DXScriptEngine
     protected String translate(String script)
     {
         try {
-            return translator.translate(script);
-        } catch (final DXException e) {
+            final File file = File.createTempFile("SCRIPT", ".ts");
+            try (Writer w = Files.newBufferedWriter(file.toPath())) {
+                w.write(script);
+            }
+            final String contents = compiler.compile(file.getAbsolutePath(), loader);
+
+            file.delete();
+            return contents;
+        } catch (final Exception e) {
             e.printStackTrace();
             return script;
         }
     }
+
+    /**
+    *
+    */
+    private class DXTypeScriptClassLoader extends TypeScriptClassLoader
+    {
+        public DXTypeScriptClassLoader()
+        {
+            super(NashornDXScriptEngine.class.getClassLoader(), compiler, new InMemoryCache());
+        }
+
+        /*
+         * @Override public Source getSource(String filename, String baseFilename)
+         * throws IOException { try (InputStream stream = getResourceAsStream(filename))
+         * { return new Source(URI.create(filename), IOUtils.toString(stream,
+         * StandardCharsets.UTF_8)); } }
+         */
+
+    }
+
+    /**
+    *
+    */
+    public static class SymbolicOperators
+    {
+        public Expr _add(Expr a, Expr b)
+        {
+            return a.add(b);
+        }
+
+        public Expr _add(Expr a, Number b)
+        {
+            return a.add(Basic.of(b));
+        }
+
+        public Expr _add(Number a, Expr b)
+        {
+            return Basic.of(a).add(b);
+        }
+
+        public Expr _lt(Expr a, Expr b)
+        {
+            return a.lt(b);
+        }
+
+        public Expr _lt(Expr a, Number b)
+        {
+            return a.lt(Basic.of(b));
+        }
+
+        public Expr _lt(Number a, Expr b)
+        {
+            return Basic.of(a).lt(b);
+        }
+    }
+
+    private static class Variable implements Function<String, Basic>
+    {
+        @Override
+        public Basic apply(String name)
+        {
+            return new Basic(name);
+        }
+    }
+
 }

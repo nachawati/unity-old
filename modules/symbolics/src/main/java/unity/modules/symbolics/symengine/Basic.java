@@ -53,6 +53,8 @@ public class Basic extends Expr
         final Basic b = new Basic();
         if (value instanceof Double)
             sym.real_double_set_d(b.s, (double) value);
+        else if (value instanceof Integer)
+            sym.integer_set_si(b.s, (int) value);
         else
             sym.integer_set_si(b.s, (long) value);
         return b;

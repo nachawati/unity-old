@@ -9,16 +9,16 @@ import javax.script.ScriptException;
 
 import org.junit.Test;
 
-import unity.modules.engines.basex.BaseXDXScriptEngine;
-import unity.modules.engines.basex.BaseXDXScriptEngineFactory;
+import unity.modules.engines.nashorn.NashornDXScriptEngine;
+import unity.modules.engines.nashorn.NashornDXScriptEngineFactory;
 
 public class SelectionTest
 {
     @Test
     public void test() throws FileNotFoundException, IOException, ScriptException
     {
-        try (final BaseXDXScriptEngine engine = new BaseXDXScriptEngineFactory().getScriptEngine()) {
-            try (Reader reader = new FileReader("test.jq")) {
+        try (final NashornDXScriptEngine engine = new NashornDXScriptEngineFactory().getScriptEngine()) {
+            try (Reader reader = new FileReader("test.ts")) {
                 System.out.println(engine.eval(reader));
             }
         }
