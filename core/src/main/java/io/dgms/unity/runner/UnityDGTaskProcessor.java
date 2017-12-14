@@ -10,6 +10,7 @@ package io.dgms.unity.runner;
 
 import io.dgms.unity.UnityDGSession;
 import io.dgms.unity.api.DGScriptEngine;
+import io.dgms.unity.modules.engines.zorba.ZorbaDGScriptEngineFactory;
 import io.dgms.unity.system.UnityDGTask;
 import io.dgms.unity.system.UnityDGTaskExecution;
 
@@ -49,16 +50,20 @@ public class UnityDGTaskProcessor implements Runnable
                     try {
                         final UnityDGTask task = execution.getTask();
                         final UnityDGSession session = new UnityDGSession(task.getPrivateToken());
-                        try (DGScriptEngine engine = session.getSystem().getEngineByName("zorba")) {
+
+                        try (DGScriptEngine engine = new ZorbaDGScriptEngineFactory().getScriptEngine(session)) {
+                            // try (DGScriptEngine engine = session.getSystem().getEngineByName("zorba")) {
                             if (task.getPackageReference() != null)
                                 engine.addPackage(task.getPackageReference());
                             final String result = engine.eval(task.getScript()).toString();
                             runner.finished(execution.getId(), result, null, null);
                         }
                     } catch (final Exception e) {
+                        e.printStackTrace();
                         runner.failed(execution.getId(), null, null, e.getMessage());
                     }
             } catch (final Exception e) {
+                e.printStackTrace();
             } finally {
             }
     }

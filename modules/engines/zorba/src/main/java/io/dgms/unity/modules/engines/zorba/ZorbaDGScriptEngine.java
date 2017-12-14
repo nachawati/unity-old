@@ -363,6 +363,7 @@ public class ZorbaDGScriptEngine implements DGScriptEngine
         try {
             final String path = ZorbaDGScriptEngine.class.getProtectionDomain().getCodeSource().getLocation().toURI()
                     .getPath();
+            System.out.println(path);
             if (path.endsWith("classes/")) {
                 final File location = new File(path).getParentFile().getParentFile().getParentFile().getParentFile();
                 if (SystemUtils.IS_OS_WINDOWS)
@@ -456,6 +457,7 @@ public class ZorbaDGScriptEngine implements DGScriptEngine
                     System.load(library);
             }
         } catch (final Exception e) {
+            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }

@@ -301,6 +301,22 @@ public class ClientDGSystem extends ClientDGSessionObject implements DGSystem
         }
     }
 
+    @Override
+    public Stream<ClientDGTaskExecution> getTaskExecutions(String path)
+    {
+        try {
+            final WebTarget target = getTarget("/api/v1/system/executions");
+            return target.request(MediaType.APPLICATION_JSON).get(new GenericType<List<ClientDGTaskExecution>>()
+            {
+            }).stream().map(t -> {
+                t.session = getSession();
+                return t;
+            });
+        } catch (final IOException e) {
+            return Stream.empty();
+        }
+    }
+
     /*
      * (non-Javadoc)
      *

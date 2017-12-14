@@ -110,6 +110,12 @@ public interface DGSystem extends DGSessionObject
     Stream<? extends DGTaskExecution> getTaskExecutions();
 
     /**
+     * @return Stream<? extends DGTaskExecution>
+     * @throws DGException
+     */
+    Stream<? extends DGTaskExecution> getTaskExecutions(String path);
+
+    /**
      * @param taskExecutionId
      * @return String
      * @throws DGException

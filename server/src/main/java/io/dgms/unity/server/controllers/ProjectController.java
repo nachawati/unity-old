@@ -72,7 +72,8 @@ public class ProjectController extends Controller
     public String doConsole() throws DGException, IOException
     {
         final String script = IOUtils.toString(getRequest().getInputStream(), StandardCharsets.UTF_8);
-        final DGTaskExecution execution = getSystem().submitTask("console", script);
+        final DGPackageReference packageReference = commit.getAsPackageReference();
+        final DGTaskExecution execution = getSystem().submitTask("console", script, packageReference);
 
         for (int i = 0; i < 100; i++) {
             final DGTaskExecutionStatus status = getSystem().getTaskExecutionStatus(execution.getId());
@@ -144,10 +145,9 @@ public class ProjectController extends Controller
     @SuppressWarnings("deprecation")
     @POST
     @Path("run")
-    public String doPostRun() throws DGException, IOException
+    public String doPostRun(@QueryParam("path") String path) throws DGException, IOException
     {
         final String input = IOUtils.toString(getRequest().getInputStream());
-        System.out.println(input);
         final StringBuilder sb = new StringBuilder();
         sb.append("jsoniq version \"1.0\";");
         sb.append("import module namespace dgal = \"http://dgms.io/unity/modules/analytics/core\";");
@@ -163,9 +163,7 @@ public class ProjectController extends Controller
 
         final String expression = sb.toString();
         final DGPackageReference packageReference = commit.getAsPackageReference();
-        final DGTaskExecution execution = getSystem().submitTask(
-                expression.substring(0, expression.length() > 16 ? 16 : expression.length()), expression,
-                packageReference);
+        final DGTaskExecution execution = getSystem().submitTask(path, expression, packageReference);
         DGTaskExecutionStatus status = null;
         while (true) {
             status = getSystem().getTaskExecutionStatus(execution.getId());
@@ -208,7 +206,7 @@ public class ProjectController extends Controller
          * getSystem().getProject(workspacePath); return
          * IOUtils.toString(project.getRepository().getCommit(reference).
          * getResourceAsStream(path), StandardCharsets.UTF_8);
-         * 
+         *
          */
         System.out.println(path + "--" + content);
         /*
@@ -389,6 +387,11 @@ public class ProjectController extends Controller
             } catch (final Exception e) {
             }
         } catch (final Exception e) {
+            try {
+                final String id = path.substring(path.lastIndexOf("/"));
+                getRequest().setAttribute("content", getSystem().getTaskExecutionResult(Long.parseLong(id)));
+            } catch (final Exception ee) {
+            }
         }
 
         sb1.append("]");
@@ -402,6 +405,7 @@ public class ProjectController extends Controller
     public List<Map<String, Object>> getRepositoryTree(@Context UriInfo info, @QueryParam("path") String path)
             throws DGException
     {
+        final String fullPath = path;
         final List<Map<String, Object>> artifacts = new LinkedList<>();
         if ("#".equals(path)) {
             Map<String, Object> artifact = new HashMap<>();
@@ -420,17 +424,27 @@ public class ProjectController extends Controller
                 artifacts.add(artifact);
             }
 
-        } else if (path.startsWith(project.getPathWithNamespace()))
+        } else if (path.startsWith(project.getPathWithNamespace())) {
             for (final DGFile file : commit.getFiles(path.substring(project.getPathWithNamespace().length()), false)
                     .collect(Collectors.toList())) {
                 final Map<String, Object> artifact = new HashMap<>();
                 artifact.put("id", project.getPathWithNamespace() + "/" + file.getPath());
                 artifact.put("text", file.getName());
-                artifact.put("children", file.isDirectory());
+                artifact.put("children", true);
                 artifact.put("icon", file.isDirectory() ? "fa fa-folder" : "fa fa-file-o");
                 artifacts.add(artifact);
             }
-        else {
+            if (artifacts.size() == 0)
+                for (final DGTaskExecution taskExecution : getSystem().getTaskExecutions(fullPath)
+                        .collect(Collectors.toList())) {
+                    final Map<String, Object> artifact = new HashMap<>();
+                    artifact.put("id", fullPath + "/" + taskExecution.getId());
+                    artifact.put("text", taskExecution.getDateInitiated().toString());
+                    artifact.put("children", false);
+                    artifact.put("icon", "fa fa-cog");
+                    artifacts.add(artifact);
+                }
+        } else {
             while (path.startsWith("@"))
                 path = path.substring(1);
             final String projectPath = path.substring(0, path.indexOf("@"));
@@ -446,10 +460,20 @@ public class ProjectController extends Controller
                 final Map<String, Object> artifact = new HashMap<>();
                 artifact.put("id", "@" + projectPath + "@" + reference + "@" + file.getPath());
                 artifact.put("text", file.getName());
-                artifact.put("children", file.isDirectory());
+                artifact.put("children", true);
                 artifact.put("icon", file.isDirectory() ? "fa fa-folder" : "fa fa-file-o");
                 artifacts.add(artifact);
             }
+            if (artifacts.size() == 0)
+                for (final DGTaskExecution taskExecution : getSystem().getTaskExecutions(fullPath)
+                        .collect(Collectors.toList())) {
+                    final Map<String, Object> artifact = new HashMap<>();
+                    artifact.put("id", fullPath + "/" + taskExecution.getId());
+                    artifact.put("text", taskExecution.getDateInitiated().toString());
+                    artifact.put("children", false);
+                    artifact.put("icon", "fa fa-cog");
+                    artifacts.add(artifact);
+                }
         }
         return artifacts;
     }
