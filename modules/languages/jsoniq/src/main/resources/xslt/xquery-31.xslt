@@ -9,11 +9,11 @@
 <xsl:stylesheet version="1.0"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:java="http://xml.apache.org/xslt/java"
 	exclude-result-prefixes="t"
-	xmlns:t="io.dgms.unity.modules.languages.jsoniq.compiler.util.StringEscape">
+	xmlns:t="unity.modules.languages.jsoniq.compiler.util.StringEscape">
 	<xsl:output method="text" />
 
 	<xsl:key name="uri"
-		match="/XQuery/Module/*/Prolog/ModuleImport|/XQuery/Module/*/Prolog/NamespaceDecl"
+		match="/XQuery/Module/*/Prolog/ModuleImport|/XQuery/Module/*/Prolog/NamespaceDecl|/Module/*/Prolog/ModuleImport|/Module/*/Prolog/NamespaceDecl"
 		use="./NCName/terminal[@name='NCName']/text()" />
 
 	<xsl:template match="QuantifiedExpr">
@@ -25,10 +25,10 @@
 				<xsl:variable name="op" select="terminal[1]" />
 				<xsl:choose>
 					<xsl:when test="$op='some'">
-						<xsl:text>_op:symbolic-some(for </xsl:text>
+						<xsl:text>_op:symbolic_some(for </xsl:text>
 					</xsl:when>
 					<xsl:otherwise>
-						<xsl:text>_op:symbolic-every(for </xsl:text>
+						<xsl:text>_op:symbolic_every(for </xsl:text>
 					</xsl:otherwise>
 				</xsl:choose>
 				<xsl:for-each select="QuantifiedVarDecl">
@@ -72,10 +72,10 @@
 					<xsl:if test="position() mod 2 = 0">
 						<xsl:choose>
 							<xsl:when test=".='+'">
-								<xsl:text>_op:symbolic-add(</xsl:text>
+								<xsl:text>_op:symbolic_add(</xsl:text>
 							</xsl:when>
 							<xsl:when test=".='-'">
-								<xsl:text>_op:symbolic-subtract(</xsl:text>
+								<xsl:text>_op:symbolic_subtract(</xsl:text>
 							</xsl:when>
 							<xsl:otherwise>
 								<xsl:text>ERROR</xsl:text>
@@ -127,16 +127,16 @@
 					<xsl:if test="position() mod 2 = 0">
 						<xsl:choose>
 							<xsl:when test="text()='*'">
-								<xsl:text>_op:symbolic-multiply(</xsl:text>
+								<xsl:text>_op:symbolic_multiply(</xsl:text>
 							</xsl:when>
 							<xsl:when test="text()='div'">
-								<xsl:text>_op:symbolic-divide(</xsl:text>
+								<xsl:text>_op:symbolic_divide(</xsl:text>
 							</xsl:when>
 							<xsl:when test="text()='idiv'">
-								<xsl:text>_op:symbolic-integer-divide(</xsl:text>
+								<xsl:text>_op:symbolic_integer_divide(</xsl:text>
 							</xsl:when>
 							<xsl:when test="text()='mod'">
-								<xsl:text>_op:symbolic-mod(</xsl:text>
+								<xsl:text>_op:symbolic_mod(</xsl:text>
 							</xsl:when>
 							<xsl:otherwise>
 								<xsl:text>ERROR</xsl:text>
@@ -185,40 +185,40 @@
 				<xsl:variable name="op" select="$nodes[2]" />
 				<xsl:choose>
 					<xsl:when test="$op='eq'">
-						<xsl:text>_op:symbolic-value-equal(</xsl:text>
+						<xsl:text>_op:symbolic_value_equal(</xsl:text>
 					</xsl:when>
 					<xsl:when test="$op='='">
-						<xsl:text>_op:symbolic-general-equal(</xsl:text>
+						<xsl:text>_op:symbolic_general_equal(</xsl:text>
 					</xsl:when>
 					<xsl:when test="$op='ne'">
-						<xsl:text>_op:symbolic-value-not-equal(</xsl:text>
+						<xsl:text>_op:symbolic_value_not_equal(</xsl:text>
 					</xsl:when>
 					<xsl:when test="$op='!='">
-						<xsl:text>_op:symbolic-general-not-equal(</xsl:text>
+						<xsl:text>_op:symbolic_general_not_equal(</xsl:text>
 					</xsl:when>
 					<xsl:when test="$op='lt'">
-						<xsl:text>_op:symbolic-value-less-than(</xsl:text>
+						<xsl:text>_op:symbolic_value_less_than(</xsl:text>
 					</xsl:when>
 					<xsl:when test="$op='&lt;'">
-						<xsl:text>_op:symbolic-general-less-than(</xsl:text>
+						<xsl:text>_op:symbolic_general_less_than(</xsl:text>
 					</xsl:when>
 					<xsl:when test="$op='gt'">
-						<xsl:text>_op:symbolic-value-greater-than(</xsl:text>
+						<xsl:text>_op:symbolic_value_greater_than(</xsl:text>
 					</xsl:when>
 					<xsl:when test="$op='&gt;'">
-						<xsl:text>_op:symbolic-general-greater-than(</xsl:text>
+						<xsl:text>_op:symbolic_general_greater_than(</xsl:text>
 					</xsl:when>
 					<xsl:when test="$op='le'">
-						<xsl:text>_op:symbolic-value-less-than-or-equal(</xsl:text>
+						<xsl:text>_op:symbolic_value_less_than_or_equal(</xsl:text>
 					</xsl:when>
 					<xsl:when test="$op='&lt;='">
-						<xsl:text>_op:symbolic-general-less-than-or-equal(</xsl:text>
+						<xsl:text>_op:symbolic_general_less_than_or_equal(</xsl:text>
 					</xsl:when>
 					<xsl:when test="$op='ge'">
-						<xsl:text>_op:symbolic-value-greater-than-or-equal(</xsl:text>
+						<xsl:text>_op:symbolic_value_greater_than_or_equal(</xsl:text>
 					</xsl:when>
 					<xsl:when test="$op='&gt;='">
-						<xsl:text>_op:symbolic-general-greater-than-or-equal(</xsl:text>
+						<xsl:text>_op:symbolic_general_greater_than_or_equal(</xsl:text>
 					</xsl:when>
 					<xsl:otherwise>
 						<xsl:text>ERROR</xsl:text>
@@ -257,7 +257,7 @@
 				<xsl:for-each select="$nodes">
 					<xsl:sort select="position()" data-type="number" order="descending" />
 					<xsl:if test="position() mod 2 = 0">
-						<xsl:text>_op:symbolic-and(</xsl:text>
+						<xsl:text>_op:symbolic_and(</xsl:text>
 					</xsl:if>
 				</xsl:for-each>
 				<xsl:for-each select="$nodes">
@@ -299,7 +299,7 @@
 			<xsl:when test="$symbolic-context">
 				<xsl:variable name="nodes" select="*[not(@type='whitespace')]" />
 				<xsl:variable name="count" select="count($nodes)" />
-				<xsl:text>_op:symbolic-instance-of(</xsl:text>
+				<xsl:text>_op:symbolic_instance_of(</xsl:text>
 				<xsl:apply-templates select="$nodes[1]">
 					<xsl:with-param name="symbolic-module" select="$symbolic-module" />
 					<xsl:with-param name="symbolic-context" select="$symbolic-context" />
@@ -330,7 +330,7 @@
 				<xsl:for-each select="$nodes">
 					<xsl:sort select="position()" data-type="number" order="descending" />
 					<xsl:if test="position() mod 2 = 0">
-						<xsl:text>_op:symbolic-or(</xsl:text>
+						<xsl:text>_op:symbolic_or(</xsl:text>
 					</xsl:if>
 				</xsl:for-each>
 				<xsl:for-each select="$nodes">
@@ -372,7 +372,7 @@
 		<xsl:choose>
 			<xsl:when test="$symbolic-context">
 				<xsl:variable name="nodes" select="*[not(@type='whitespace')]" />
-				<xsl:text>_op:symbolic-if(</xsl:text>
+				<xsl:text>_op:symbolic_if(</xsl:text>
 				<xsl:apply-templates select="$nodes[3]">
 					<xsl:with-param name="symbolic-module" select="$symbolic-module" />
 					<xsl:with-param name="symbolic-context" select="$symbolic-context" />
@@ -407,7 +407,7 @@
 		<xsl:choose>
 			<xsl:when test="$symbolic-context">
 				<xsl:variable name="nodes" select="*[not(@type='whitespace')]" />
-				<xsl:text>_op:symbolic-not(</xsl:text>
+				<xsl:text>_op:symbolic_not(</xsl:text>
 				<xsl:apply-templates select="$nodes[2]">
 					<xsl:with-param name="symbolic-module" select="$symbolic-module" />
 					<xsl:with-param name="symbolic-context" select="$symbolic-context" />
@@ -435,10 +435,10 @@
 				<xsl:variable name="op" select="$nodes[1]/text()" />
 				<xsl:choose>
 					<xsl:when test="$op='+'">
-						<xsl:text>_op:symbolic-unary-plus(</xsl:text>
+						<xsl:text>_op:symbolic_unary_plus(</xsl:text>
 					</xsl:when>
 					<xsl:when test="$op='-'">
-						<xsl:text>_op:symbolic-unary-minus(</xsl:text>
+						<xsl:text>_op:symbolic_unary_minus(</xsl:text>
 					</xsl:when>
 					<xsl:otherwise>
 						<xsl:text>ERROR</xsl:text>
@@ -558,25 +558,25 @@
 					<xsl:when test="not(contains(., ':'))">
 						<xsl:choose>
 							<xsl:when test=". = 'abs'">
-								<xsl:text>_op:symbolic-abs</xsl:text>
+								<xsl:text>_op:symbolic_abs</xsl:text>
 							</xsl:when>
 							<xsl:when test=". = 'ceiling'">
-								<xsl:text>_op:symbolic-ceiling</xsl:text>
+								<xsl:text>_op:symbolic_ceiling</xsl:text>
 							</xsl:when>
 							<xsl:when test=". = 'floor'">
-								<xsl:text>_op:symbolic-floor</xsl:text>
+								<xsl:text>_op:symbolic_floor</xsl:text>
 							</xsl:when>
 							<xsl:when test=". = 'max'">
-								<xsl:text>_op:symbolic-max</xsl:text>
+								<xsl:text>_op:symbolic_max</xsl:text>
 							</xsl:when>
 							<xsl:when test=". = 'min'">
-								<xsl:text>_op:symbolic-min</xsl:text>
+								<xsl:text>_op:symbolic_min</xsl:text>
 							</xsl:when>
 							<xsl:when test=". = 'round'">
-								<xsl:text>_op:symbolic-round</xsl:text>
+								<xsl:text>_op:symbolic_round</xsl:text>
 							</xsl:when>
 							<xsl:when test=". = 'sum'">
-								<xsl:text>_op:symbolic-sum</xsl:text>
+								<xsl:text>_op:symbolic_sum</xsl:text>
 							</xsl:when>
 							<xsl:otherwise>
 								<xsl:value-of select="." />
@@ -589,25 +589,25 @@
 					<xsl:when test="starts-with(., 'fn:')">
 						<xsl:choose>
 							<xsl:when test=". = 'fn:abs'">
-								<xsl:text>_op:symbolic-abs</xsl:text>
+								<xsl:text>_op:symbolic_abs</xsl:text>
 							</xsl:when>
 							<xsl:when test=". = 'fn:ceiling'">
-								<xsl:text>_op:symbolic-ceiling</xsl:text>
+								<xsl:text>_op:symbolic_ceiling</xsl:text>
 							</xsl:when>
 							<xsl:when test=". = 'fn:floor'">
-								<xsl:text>_op:symbolic-floor</xsl:text>
+								<xsl:text>_op:symbolic_floor</xsl:text>
 							</xsl:when>
 							<xsl:when test=". = 'fn:max'">
-								<xsl:text>_op:symbolic-max</xsl:text>
+								<xsl:text>_op:symbolic_max</xsl:text>
 							</xsl:when>
 							<xsl:when test=". = 'fn:min'">
-								<xsl:text>_op:symbolic-min</xsl:text>
+								<xsl:text>_op:symbolic_min</xsl:text>
 							</xsl:when>
 							<xsl:when test=". = 'fn:round'">
-								<xsl:text>_op:symbolic-round</xsl:text>
+								<xsl:text>_op:symbolic_round</xsl:text>
 							</xsl:when>
 							<xsl:when test=". = 'fn:sum'">
-								<xsl:text>_op:symbolic-sum</xsl:text>
+								<xsl:text>_op:symbolic_sum</xsl:text>
 							</xsl:when>
 							<xsl:otherwise>
 								<xsl:value-of select="." />
@@ -634,25 +634,25 @@
 							<xsl:when test="$namespace = 'http://www.w3.org/2005/xpath-functions'">
 								<xsl:choose>
 									<xsl:when test="$name = 'abs'">
-										<xsl:text>_op:symbolic-abs</xsl:text>
+										<xsl:text>_op:symbolic_abs</xsl:text>
 									</xsl:when>
 									<xsl:when test="$name = 'ceiling'">
-										<xsl:text>_op:symbolic-ceiling</xsl:text>
+										<xsl:text>_op:symbolic_ceiling</xsl:text>
 									</xsl:when>
 									<xsl:when test="$name = 'floor'">
-										<xsl:text>_op:symbolic-floor</xsl:text>
+										<xsl:text>_op:symbolic_floor</xsl:text>
 									</xsl:when>
 									<xsl:when test="$name = 'max'">
-										<xsl:text>_op:symbolic-max</xsl:text>
+										<xsl:text>_op:symbolic_max</xsl:text>
 									</xsl:when>
 									<xsl:when test="$name = 'min'">
-										<xsl:text>_op:symbolic-min</xsl:text>
+										<xsl:text>_op:symbolic_min</xsl:text>
 									</xsl:when>
 									<xsl:when test="$name = 'round'">
-										<xsl:text>_op:symbolic-round</xsl:text>
+										<xsl:text>_op:symbolic_round</xsl:text>
 									</xsl:when>
 									<xsl:when test="$name = 'sum'">
-										<xsl:text>_op:symbolic-sum</xsl:text>
+										<xsl:text>_op:symbolic_sum</xsl:text>
 									</xsl:when>
 									<xsl:otherwise>
 										<xsl:value-of select="." />
@@ -663,43 +663,43 @@
 								test="$namespace = 'http://www.w3.org/2005/xpath-functions/math'">
 								<xsl:choose>
 									<xsl:when test="$name = 'acos'">
-										<xsl:text>_op:symbolic-acos</xsl:text>
+										<xsl:text>_op:symbolic_acos</xsl:text>
 									</xsl:when>
 									<xsl:when test="$name = 'asin'">
-										<xsl:text>_op:symbolic-asin</xsl:text>
+										<xsl:text>_op:symbolic_asin</xsl:text>
 									</xsl:when>
 									<xsl:when test="$name = 'atan'">
-										<xsl:text>_op:symbolic-atan</xsl:text>
+										<xsl:text>_op:symbolic_atan</xsl:text>
 									</xsl:when>
 									<xsl:when test="$name = 'atan2'">
-										<xsl:text>_op:symbolic-atan2</xsl:text>
+										<xsl:text>_op:symbolic_atan2</xsl:text>
 									</xsl:when>
 									<xsl:when test="$name = 'cos'">
-										<xsl:text>_op:symbolic-cos</xsl:text>
+										<xsl:text>_op:symbolic_cos</xsl:text>
 									</xsl:when>
 									<xsl:when test="$name = 'exp'">
-										<xsl:text>_op:symbolic-exp</xsl:text>
+										<xsl:text>_op:symbolic_exp</xsl:text>
 									</xsl:when>
 									<xsl:when test="$name = 'exp10'">
-										<xsl:text>_op:symbolic-exp10</xsl:text>
+										<xsl:text>_op:symbolic_exp10</xsl:text>
 									</xsl:when>
 									<xsl:when test="$name = 'log'">
-										<xsl:text>_op:symbolic-log</xsl:text>
+										<xsl:text>_op:symbolic_log</xsl:text>
 									</xsl:when>
 									<xsl:when test="$name = 'log10'">
-										<xsl:text>_op:symbolic-log10</xsl:text>
+										<xsl:text>_op:symbolic_log10</xsl:text>
 									</xsl:when>
 									<xsl:when test="$name = 'pow'">
-										<xsl:text>_op:symbolic-pow</xsl:text>
+										<xsl:text>_op:symbolic_pow</xsl:text>
 									</xsl:when>
 									<xsl:when test="$name = 'sin'">
-										<xsl:text>_op:symbolic-sin</xsl:text>
+										<xsl:text>_op:symbolic_sin</xsl:text>
 									</xsl:when>
 									<xsl:when test="$name = 'sqrt'">
-										<xsl:text>_op:symbolic-sqrt</xsl:text>
+										<xsl:text>_op:symbolic_sqrt</xsl:text>
 									</xsl:when>
 									<xsl:when test="$name = 'tan'">
-										<xsl:text>_op:symbolic-tan</xsl:text>
+										<xsl:text>_op:symbolic_tan</xsl:text>
 									</xsl:when>
 									<xsl:otherwise>
 										<xsl:value-of select="." />

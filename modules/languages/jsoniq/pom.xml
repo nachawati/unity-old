@@ -13,7 +13,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>io.dgms.unity</groupId>
+		<groupId>unity</groupId>
 		<artifactId>unity-modules-languages</artifactId>
 		<version>0.1.0-SNAPSHOT</version>
 	</parent>
@@ -71,14 +71,19 @@
 		</dependency>
 
 		<dependency>
-			<groupId>io.dgms.unity</groupId>
+			<groupId>unity</groupId>
 			<artifactId>unity-api</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>xerces</groupId>
+			<artifactId>xercesImpl</artifactId>
 		</dependency>
 
 	</dependencies>

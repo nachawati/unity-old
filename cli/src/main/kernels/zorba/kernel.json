@@ -1,5 +1,5 @@
 {
-	"argv": [ ${dgms.command}, "kernel", "-e", "zorba", "{connection_file}" ],
+	"argv": [ ${unity.command}, "kernel", "-e", "zorba", "{connection_file}" ],
 	"display_name": "JSONiq (Zorba)",
 	"language": "jsoniq"
 }

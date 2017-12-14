@@ -1,7 +1,7 @@
 {
 	"name": "learning",
 	"version": "${project.version}",
-	"description": "Deep learning for Unity",
+	"description": "Machine learning for Unity",
 	"homepage": "https://github.com/nachawati/unity#readme",
 	"bugs": {
 		"url": "https://github.com/nachawati/unity/issues"

@@ -1,0 +1,15 @@
+{
+	"name": "engine-ampl",
+	"version": "${project.version}",
+	"description": "AMPL engine for Unity",
+	"homepage": "https://github.com/nachawati/unity#readme",
+	"bugs": {
+		"url": "https://github.com/nachawati/unity/issues"
+	},
+	"license": "SEE LICENSE IN NOTICE",
+	"author": "Mohamad Omar Nachawati",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/nachawati/unity.git"
+	}
+}

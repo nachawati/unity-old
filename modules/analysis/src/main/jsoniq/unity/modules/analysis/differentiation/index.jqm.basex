@@ -1,0 +1,21 @@
+jsoniq version "1.0";
+
+(:
+    بسم الله الرحمن الرحيم
+   
+    In the name of Allah, the Most Compassionate, the Most Merciful
+   
+    This software is authored by Mohamad Omar Nachawati, 1436-1439 AH
+:)
+
+module namespace differentiation = "http://dgms.io/unity/modules/differentiation";
+
+import module namespace java = "java:unity.modules.analysis.differentiation.IndexModule";
+
+declare namespace u = "http://dgms.io/unity";
+declare option u:symbolic-computation "disabled";
+
+declare function differentiation:differentiate($arg1, $arg2)
+{
+	java:differentiate($arg1, $arg2)
+};

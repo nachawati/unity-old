@@ -1,8 +1,10 @@
 jsoniq version "1.0";
 
-import module namespace sym = "http://dgms.io/unity/modules/symbolics";
-import module namespace diff = "http://dgms.io/unity/modules/analysis/differentiation";
+import module namespace math = "http://www.w3.org/2005/xpath-functions/math";
 
-let $x := sym:variable('x')
-let $e := $x * $x
-return diff:differentiate($e, $x)
+declare function local:f($x, $y)
+{
+	$x + $y
+};
+
+local:f(0, 0)

@@ -8,7 +8,7 @@ jsoniq version "1.0";
 :)
 module namespace symbolics = "http://dgms.io/unity/modules/symbolics";
 
-import module namespace java = "java:io.dgms.unity.modules.symbolics.basex.IndexModule";
+import module namespace java = "java:unity.modules.symbolics.basex.IndexModule";
 
 declare function symbolics:variable()
 {

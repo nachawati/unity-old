@@ -4,7 +4,7 @@ project(unity-module-engine-zorba)
 
 find_package(JNI)
 
-add_library(unity-module-engine-zorba SHARED ZorbaDGScriptContext.cpp)
+add_library(unity-module-engine-zorba SHARED ZorbaDXScriptContext.cpp)
 
 if (windows-msvc-x86_64)
 	include_directories(

@@ -9,7 +9,7 @@ ADD . /opt/unity
 
 RUN npm install -g /opt/unity
 
-VOLUME "/root/.dgms"
+VOLUME "/root/.unity"
 VOLUME "/workspace"
 WORKDIR "/workspace"
-ENTRYPOINT [ "dgms" ]
+ENTRYPOINT [ "unity" ]
