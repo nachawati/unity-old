@@ -112,6 +112,12 @@ public interface DXSystem extends DXSessionObject
     Stream<? extends DXTaskExecution> getTaskExecutions(String path);
 
     /**
+     * @return Stream<? extends DGTaskExecution>
+     * @throws DGException
+     */
+    Stream<? extends DGTaskExecution> getTaskExecutions(String path);
+
+    /**
      * @param taskExecutionId
      * @return String
      * @throws DXException

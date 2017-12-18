@@ -362,6 +362,7 @@ public class ZorbaDXScriptEngine implements DXScriptEngine
         try {
             final String path = ZorbaDXScriptEngine.class.getProtectionDomain().getCodeSource().getLocation().toURI()
                     .getPath();
+            System.out.println(path);
             if (path.endsWith("classes/")) {
                 final File location = new File(path).getParentFile().getParentFile().getParentFile().getParentFile();
                 if (SystemUtils.IS_OS_WINDOWS)
@@ -455,6 +456,7 @@ public class ZorbaDXScriptEngine implements DXScriptEngine
                     System.load(library);
             }
         } catch (final Exception e) {
+            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }

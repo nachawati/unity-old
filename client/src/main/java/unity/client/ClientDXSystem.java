@@ -302,10 +302,26 @@ public class ClientDXSystem extends ClientDXSessionObject implements DXSystem
     }
 
     @Override
+<<<<<<< HEAD:client/src/main/java/io/dgms/unity/client/ClientDGSystem.java
+    public Stream<ClientDGTaskExecution> getTaskExecutions(String path)
+    {
+        try {
+            final WebTarget target = getTarget("/api/v1/system/executions");
+            return target.request(MediaType.APPLICATION_JSON).get(new GenericType<List<ClientDGTaskExecution>>()
+            {
+            }).stream().map(t -> {
+                t.session = getSession();
+                return t;
+            });
+        } catch (final IOException e) {
+            return Stream.empty();
+        }
+=======
     public Stream<? extends DXTaskExecution> getTaskExecutions(String path)
     {
         // TODO Auto-generated method stub
         return null;
+>>>>>>> 5f276a37a85e21b845cc9ede283e805ba8685565:client/src/main/java/unity/client/ClientDXSystem.java
     }
 
     /*

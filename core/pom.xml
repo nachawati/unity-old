@@ -136,6 +136,12 @@
 			<version>0.11</version>
 		</dependency>
 
+		<dependency>
+			<groupId>io.dgms.unity</groupId>
+			<artifactId>module-engine-zorba</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
 	</dependencies>
 
 </project>

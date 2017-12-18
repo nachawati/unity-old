@@ -72,7 +72,12 @@ public class ProjectController extends Controller
     public String doConsole() throws DXException, IOException
     {
         final String script = IOUtils.toString(getRequest().getInputStream(), StandardCharsets.UTF_8);
+<<<<<<< HEAD:server/src/main/java/io/dgms/unity/server/controllers/ProjectController.java
+        final DGPackageReference packageReference = commit.getAsPackageReference();
+        final DGTaskExecution execution = getSystem().submitTask("console", script, packageReference);
+=======
         final DXTaskExecution execution = getSystem().submitTask("console", script);
+>>>>>>> 5f276a37a85e21b845cc9ede283e805ba8685565:server/src/main/java/unity/server/controllers/ProjectController.java
 
         for (int i = 0; i < 100; i++) {
             final DXTaskExecutionStatus status = getSystem().getTaskExecutionStatus(execution.getId());
@@ -158,7 +163,11 @@ public class ProjectController extends Controller
     @SuppressWarnings("deprecation")
     @POST
     @Path("run")
+<<<<<<< HEAD:server/src/main/java/io/dgms/unity/server/controllers/ProjectController.java
+    public String doPostRun(@QueryParam("path") String path) throws DGException, IOException
+=======
     public String doPostRun(@QueryParam("path") String path) throws DXException, IOException
+>>>>>>> 5f276a37a85e21b845cc9ede283e805ba8685565:server/src/main/java/unity/server/controllers/ProjectController.java
     {
         final String input = IOUtils.toString(getRequest().getInputStream());
         final StringBuilder sb = new StringBuilder();
@@ -175,11 +184,17 @@ public class ProjectController extends Controller
                 + ")");
 
         final String expression = sb.toString();
+<<<<<<< HEAD:server/src/main/java/io/dgms/unity/server/controllers/ProjectController.java
+        final DGPackageReference packageReference = commit.getAsPackageReference();
+        final DGTaskExecution execution = getSystem().submitTask(path, expression, packageReference);
+        DGTaskExecutionStatus status = null;
+=======
         System.out.println(expression);
         final DXPackageReference packageReference = commit.getAsPackageReference();
         final DXTaskExecution execution = getSystem().submitTask(path, expression, packageReference);
 
         DXTaskExecutionStatus status = null;
+>>>>>>> 5f276a37a85e21b845cc9ede283e805ba8685565:server/src/main/java/unity/server/controllers/ProjectController.java
         while (true) {
             status = getSystem().getTaskExecutionStatus(execution.getId());
             if (!(status == DXTaskExecutionStatus.ACTIVE || status == DXTaskExecutionStatus.QUEUED))
@@ -407,7 +422,15 @@ public class ProjectController extends Controller
             } catch (final Exception e) {
             }
         } catch (final Exception e) {
+<<<<<<< HEAD:server/src/main/java/io/dgms/unity/server/controllers/ProjectController.java
+            try {
+                final String id = path.substring(path.lastIndexOf("/"));
+                getRequest().setAttribute("content", getSystem().getTaskExecutionResult(Long.parseLong(id)));
+            } catch (final Exception ee) {
+            }
+=======
             e.printStackTrace();
+>>>>>>> 5f276a37a85e21b845cc9ede283e805ba8685565:server/src/main/java/unity/server/controllers/ProjectController.java
         }
 
         sb1.append("]");
@@ -460,7 +483,11 @@ public class ProjectController extends Controller
             }
 
         } else if (path.startsWith(project.getPathWithNamespace())) {
+<<<<<<< HEAD:server/src/main/java/io/dgms/unity/server/controllers/ProjectController.java
+            for (final DGFile file : commit.getFiles(path.substring(project.getPathWithNamespace().length()), false)
+=======
             for (final DXFile file : commit.getFiles(path.substring(project.getPathWithNamespace().length()), false)
+>>>>>>> 5f276a37a85e21b845cc9ede283e805ba8685565:server/src/main/java/unity/server/controllers/ProjectController.java
                     .collect(Collectors.toList())) {
                 // if (!file.isDirectory())
                 // continue;
@@ -471,11 +498,17 @@ public class ProjectController extends Controller
                 artifact.put("icon", file.isDirectory() ? "fa fa-folder" : "fa fa-file-o");
                 artifacts.add(artifact);
             }
+<<<<<<< HEAD:server/src/main/java/io/dgms/unity/server/controllers/ProjectController.java
+            if (artifacts.size() == 0)
+                for (final DGTaskExecution taskExecution : getSystem().getTaskExecutions(fullPath)
+                        .collect(Collectors.toList())) {
+=======
 
             if (artifacts.size() == 0)
                 for (final DXTaskExecution taskExecution : getSystem().getTaskExecutions(fullPath)
                         .collect(Collectors.toList())) {
 
+>>>>>>> 5f276a37a85e21b845cc9ede283e805ba8685565:server/src/main/java/unity/server/controllers/ProjectController.java
                     final Map<String, Object> artifact = new HashMap<>();
                     artifact.put("id", fullPath + "/" + taskExecution.getId());
                     artifact.put("text", taskExecution.getDateInitiated().toString());
@@ -501,12 +534,16 @@ public class ProjectController extends Controller
                 final Map<String, Object> artifact = new HashMap<>();
                 artifact.put("id", "@" + projectPath + "@" + reference + "@" + file.getPath());
                 artifact.put("text", file.getName());
-                artifact.put("children", file.isDirectory());
+                artifact.put("children", true);
                 artifact.put("icon", file.isDirectory() ? "fa fa-folder" : "fa fa-file-o");
                 artifacts.add(artifact);
             }
             if (artifacts.size() == 0)
+<<<<<<< HEAD:server/src/main/java/io/dgms/unity/server/controllers/ProjectController.java
+                for (final DGTaskExecution taskExecution : getSystem().getTaskExecutions(fullPath)
+=======
                 for (final DXTaskExecution taskExecution : getSystem().getTaskExecutions(fullPath)
+>>>>>>> 5f276a37a85e21b845cc9ede283e805ba8685565:server/src/main/java/unity/server/controllers/ProjectController.java
                         .collect(Collectors.toList())) {
                     final Map<String, Object> artifact = new HashMap<>();
                     artifact.put("id", fullPath + "/" + taskExecution.getId());

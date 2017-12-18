@@ -28,7 +28,17 @@
 			$.get("${pageContext.request.contextPath}/${it.project.pathWithNamespace}/file?path=" + $('#import-tree').jstree("get_selected"), function(data){
 				try {
 					var f = form.getEditor("${it.request.getParameter("path")}");
-				f.setValue(JSON.parse(data));
+					var o = JSON.parse(data);
+					var old = f.getValue();//JSON.parse(f.getValue());
+					
+					if (o.input != null && o.input.kb != null) {
+						f.setValue(Object.assign(old, o.input.kb));
+					} else if (o.input != null) {
+						f.setValue(Object.assign(old, o.input));
+					} else {
+						f.setValue(Object.assign(old, o));
+					}
+				
 				} catch (e) {}
 				 $('#modal').modal('toggle');
 			});
