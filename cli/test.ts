@@ -16,7 +16,7 @@ class MfgProcess1 implements MfgProcess
 
 class MfgProcess2 extends MfgProcess1
 {
- cost: number = variable("cost")+4;  
+ cost: number = variable("cost")+4;
 }
 
 var p = new MfgProcess2();
@@ -24,3 +24,4 @@ var q = variable("cost");
 for (var i = 0; i < 100000; i = i + 1)
   q = q + 1; 
 q;
+

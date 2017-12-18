@@ -334,8 +334,6 @@ public class ProjectController extends Controller
     public Viewable getRepositoryResource(@QueryParam("action") final String action,
             @PathParam("path") List<PathSegment> paths)
     {
-        if (action != null)
-            return new Viewable("actions/" + action, this);
         String path;
         if (paths == null || paths.isEmpty())
             path = getProject().getPathWithNamespace();
@@ -422,6 +420,9 @@ public class ProjectController extends Controller
         }
 
         getRequest().setAttribute("navComponents", sb1.toString());
+
+        if (action != null)
+            return new Viewable("actions/" + action, this);
         return new Viewable("tree", this);
     }
 
