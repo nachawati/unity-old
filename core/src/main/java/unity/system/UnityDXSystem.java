@@ -314,29 +314,7 @@ public class UnityDXSystem extends UnityDXSessionObject implements DXSystem
     /*
      * (non-Javadoc)
      *
-<<<<<<< HEAD:core/src/main/java/io/dgms/unity/system/UnityDGSystem.java
-     * @see io.dgms.unity.api.DGSystem#getTaskExecutions()
-     */
-    @Override
-    @SuppressWarnings("unchecked")
-    public Stream<UnityDGTaskExecution> getTaskExecutions(String path)
-    {
-        try (UnityDGEntityManager em = newEntityManager()) {
-            final Query query = em.createQuery("SELECT e FROM UnityDGTaskExecution e WHERE e.task.taskName = :path");
-            query.setParameter("path", path);
-            return query.getResultStream();
-        } catch (final Exception e) {
-            return Stream.empty();
-        }
-    }
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see io.dgms.unity.api.DGSystem#getTaskExecutionScript(java.lang.Long)
-=======
      * @see unity.api.DXSystem#getTaskExecutionScript(java.lang.Long)
->>>>>>> 5f276a37a85e21b845cc9ede283e805ba8685565:core/src/main/java/unity/system/UnityDXSystem.java
      */
     @Override
     public String getTaskExecutionScript(Long taskExecutionId)
