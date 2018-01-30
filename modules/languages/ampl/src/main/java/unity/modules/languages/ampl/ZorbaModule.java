@@ -68,6 +68,7 @@ public class ZorbaModule
             for (final Variable v : ampl.getVariables())
                 solution.add(new StringPair(v.get().name(), Double.toString(v.get().value())));
             solution.add(new StringPair("objective", Double.toString(ampl.getObjective("obj").value())));
+            solution.add(new StringPair("result", ampl.getObjective("obj").result()));
             return new ItemSequence(zorba.getItemFactory().createJSONObject(solution));
         } catch (final Throwable t) {
             solution.add(new StringPair("error", t.getMessage()));

@@ -190,7 +190,13 @@ declare %an:nondeterministic function acore:optimize($mode, $model, $input, $obj
     	{ ampl: ampl:reduce({mode: $mode, objective: $expression, constraints: $constraints, variables: $variables, options: $options}), "check-expression": acore:check($expression), "check-constraints": acore:check($constraints), "expression": $expression, "constraints": $constraints, "solver": acore:choose-solver($expression, $constraints) }
     else
     	let $solution := ampl:solve(ampl:reduce({mode: $mode, objective: $expression, constraints: $constraints, variables: $variables, options: $options}), $solver)
-    	return acore:instantiate-variables($reinput, $variables, $solution)
+    	return
+    		if (exists($solution.error)) then
+    			fn:error(fn:QName("http://dgms.io/unity/errors", "err"), $solution.error)
+    		else if ($solution.result != "solved") then
+    			fn:error(fn:QName("http://dgms.io/unity/errors", $solution.result), $solution.result, acore:instantiate-variables($reinput, $variables, $solution))
+    		else
+    			acore:instantiate-variables($reinput, $variables, $solution)
 };
 
 declare %public function acore:resolve-model($model) as function(*)

@@ -2,9 +2,15 @@ jsoniq version "1.0";
 
 import module namespace math = "http://www.w3.org/2005/xpath-functions/math";
 
-declare function local:f($x, $y)
+import module namespace a = "http://dgms.io/unity/modules/analytics/core";
+
+declare function local:f($input)
 {
-	$x + $y
+	{
+		objective: $input.x * 3 + $input.y * 5,
+		constraints: $input.x >= 5 and $input.y >= 10
+	}
 };
 
-local:f(0, 0)
+
+a:argmin(local:f#1, {x: {"integer?": null}, y: {"integer?": null} }, "objective", { solver: "cplex" })

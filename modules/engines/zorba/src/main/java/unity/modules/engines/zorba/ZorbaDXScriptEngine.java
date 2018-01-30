@@ -362,9 +362,8 @@ public class ZorbaDXScriptEngine implements DXScriptEngine
         try {
             final String path = ZorbaDXScriptEngine.class.getProtectionDomain().getCodeSource().getLocation().toURI()
                     .getPath();
-            System.out.println(path);
             if (path.endsWith("classes/")) {
-                final File location = new File(path).getParentFile().getParentFile().getParentFile().getParentFile();
+                final File location = new File(path).getParentFile().getParentFile().getParentFile().getParentFile().getParentFile();
                 if (SystemUtils.IS_OS_WINDOWS)
                     switch (SystemUtils.OS_ARCH) {
                     case "amd64":

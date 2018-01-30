@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-	بسم الله الرحمن الرحيم
-	
-	In the name of Allah, the Most Compassionate, the Most Merciful
-	
-	This software is authored by Mohamad Omar Nachawati, 1436-1439 AH
--->
+<!-- بسم الله الرحمن الرحيم In the name of Allah, the Most Compassionate, 
+	the Most Merciful This software is authored by Mohamad Omar Nachawati, 1436-1439 
+	AH -->
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -593,6 +589,16 @@
 				<groupId>org.apache.jena</groupId>
 				<artifactId>jena-core</artifactId>
 				<version>3.4.0</version>
+				<exclusions>
+					<exclusion>
+						<groupId>xml-apis</groupId>
+						<artifactId>xml-apis</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>xerces</groupId>
+						<artifactId>xercesImpl</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 
 			<dependency>
