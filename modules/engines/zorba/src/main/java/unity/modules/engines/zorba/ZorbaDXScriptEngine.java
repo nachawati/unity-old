@@ -378,8 +378,10 @@ public class ZorbaDXScriptEngine implements DXScriptEngine
                         loadNativeLibraries(new File(location, "target/linux-gcc-x86_64"));
                         break;
                     }
+            } else if (path.contains("WEB-INF") && path.contains("jetty")) {
+                loadNativeLibraries(new File("/opt/unity"));
             } else if (path.contains("WEB-INF")) {
-                final File location = new File("C:\\Users\\Omar\\Documents\\GitHub\\unity");
+                final File location = new File("/home/omar/git/unity");
                 if (SystemUtils.IS_OS_WINDOWS)
                     switch (SystemUtils.OS_ARCH) {
                     case "amd64":

@@ -249,7 +249,7 @@
 						</configuration>
 					</execution>
 				</executions>
-			</plugin>
+			</plugin>			
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -322,7 +322,7 @@
 						<executions>
 
 							<execution>
-								<phase>validate</phase>
+								<phase>initialize</phase>
 								<goals>
 									<goal>copy-resources</goal>
 								</goals>
@@ -405,6 +405,8 @@
 						</executions>
 					</plugin>
 
+					
+
 				</plugins>
 
 			</build>
@@ -437,7 +439,7 @@
 						<inherited>false</inherited>
 						<executions>
 							<execution>
-								<phase>validate</phase>
+								<phase>initialize</phase>
 								<goals>
 									<goal>copy-resources</goal>
 								</goals>
@@ -498,6 +500,38 @@
 
 									</resources>
 								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<version>1.8</version>
+						<executions>
+							<execution>
+								<id>change-permissions</id>
+								<phase>process-test-classes</phase>
+								<configuration>
+									<target>
+										<chmod file="${project.build.directory}/linux-gcc-x86_64/bin/ampl" perm="755" />
+										<chmod file="${project.build.directory}/linux-gcc-x86_64/bin/baron" perm="755" />
+										<chmod file="${project.build.directory}/linux-gcc-x86_64/bin/conopt" perm="755" />
+										<chmod file="${project.build.directory}/linux-gcc-x86_64/bin/cplex" perm="755" />
+										<chmod file="${project.build.directory}/linux-gcc-x86_64/bin/ilogcp" perm="755" />
+										<chmod file="${project.build.directory}/linux-gcc-x86_64/bin/knitro" perm="755" />
+										<chmod file="${project.build.directory}/linux-gcc-x86_64/bin/lgo" perm="755" />
+										<chmod file="${project.build.directory}/linux-gcc-x86_64/bin/locsol" perm="755" />
+										<chmod file="${project.build.directory}/linux-gcc-x86_64/bin/loqo" perm="755" />
+										<chmod file="${project.build.directory}/linux-gcc-x86_64/bin/minos" perm="755" />
+										<chmod file="${project.build.directory}/linux-gcc-x86_64/bin/snopt" perm="755" />
+										<chmod file="${project.build.directory}/linux-gcc-x86_64/bin/xpress" perm="755" />
+										<chmod file="${project.build.directory}/linux-gcc-x86_64/bin/zorba" perm="755" />
+									</target>
+								</configuration>
+								<goals>
+									<goal>run</goal>
+								</goals>
 							</execution>
 						</executions>
 					</plugin>
@@ -765,6 +799,8 @@
 				<artifactId>xercesImpl</artifactId>
 				<version>2.11.0</version>
 			</dependency>
+
+
 
 		</dependencies>
 

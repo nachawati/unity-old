@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    بسم الله الرحمن الرحيم
+   
+    In the name of Allah, the Most Compassionate, the Most Merciful
+   
+    This software is authored by Mohamad Omar Nachawati, 1436-1439 AH
+ -->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>unity</groupId>
+		<artifactId>unity-distro</artifactId>
+		<version>0.1.0-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>distro-server</artifactId>
+	<packaging>pom</packaging>
+
+	<name>Unity / Distro / Server</name>
+
+	<profiles>
+
+		<profile>
+
+			<id>linux-gcc-x86_64</id>
+
+			<activation>
+
+				<os>
+					<arch>amd64</arch>
+					<family>linux</family>
+				</os>
+
+			</activation>
+
+			<build>
+
+				<plugins>
+
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-resources-plugin</artifactId>
+						<version>3.0.2</version>
+						<executions>
+
+							<execution>
+								<id>copy-Dockerfile</id>
+								<phase>process-resources</phase>
+								<goals>
+									<goal>copy-resources</goal>
+								</goals>
+								<configuration>
+									<outputDirectory>${project.basedir}/../../target/${target}</outputDirectory>
+									<overwrite>true</overwrite>
+									<resources>
+										<resource>
+											<directory>${project.basedir}/src/docker</directory>
+											<includes>
+												<include>Dockerfile</include>
+											</includes>
+											<filtering>true</filtering>
+										</resource>
+									</resources>
+								</configuration>
+							</execution>
+
+						</executions>
+					</plugin>
+
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>1.5.0</version>
+						<executions>
+
+							<execution>
+								<id>docker-build</id>
+								<phase>install</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+								<configuration>
+									<executable>docker</executable>
+									<arguments>
+										<argument>build</argument>
+										<argument>-t</argument>
+										<argument>registry.gitlab.com/nachawati/unity/server:${project.version}</argument>
+										<argument>.</argument>
+									</arguments>
+									<workingDirectory>${project.basedir}/../../target/${target}</workingDirectory>
+								</configuration>
+							</execution>
+
+						</executions>
+					</plugin>
+
+				</plugins>
+
+			</build>
+
+		</profile>
+
+	</profiles>
+
+	<dependencies>
+
+		<dependency>
+			<groupId>unity</groupId>
+			<artifactId>distro-nodejs</artifactId>
+			<version>${project.version}</version>
+			<type>pom</type>
+		</dependency>
+		
+		<dependency>
+			<groupId>unity</groupId>
+			<artifactId>unity-server</artifactId>
+			<version>${project.version}</version>
+			<type>war</type>
+		</dependency>
+
+	</dependencies>
+
+</project>

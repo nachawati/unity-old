@@ -202,7 +202,7 @@ public interface DXSystem extends DXSessionObject
     DXTaskExecution submitTask(String name, Reader reader, DXPackageReference packageReference)
             throws DXException, IOException;
 
-    /**
+    /**opt
      * @param name
      * @param script
      * @return DXTaskExecution
@@ -241,8 +241,11 @@ public interface DXSystem extends DXSessionObject
                         return new File(location, "target/linux-gcc-x86_64").toPath();
                     }
             }
+            if (path.contains("WEB-INF") && path.contains("jetty")) {
+                return new File("/opt/unity").toPath();
+            }
             if (path.contains("WEB-INF")) {
-                final File location = new File("C:\\Users\\Omar\\Documents\\GitHub\\unity");
+                final File location = new File("/home/omar/git/unity");
                 if (SystemUtils.IS_OS_WINDOWS)
                     switch (SystemUtils.OS_ARCH) {
                     case "amd64":

@@ -123,7 +123,10 @@ public class ZorbaDXScriptContext extends SimpleScriptContext implements DXScrip
         try {
             paths.addAll(Files.list(DXSystem.getInstallPath().resolve("modules")).collect(Collectors.toList()));
         } catch (final IOException e) {
+        	e.printStackTrace();
         }
+        
+        System.out.println(paths);
     }
 
     /*

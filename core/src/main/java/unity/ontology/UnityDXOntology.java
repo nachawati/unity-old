@@ -203,6 +203,7 @@ public class UnityDXOntology extends UnityDXSessionObject implements DXOntology
             dataset.begin(ReadWrite.READ);
             final URI ontologyUri = getSession().getGitLabHost().resolve(getProject().getPathWithNamespace());
             final Individual individual = ontModel.getIndividual(ontologyUri + "/" + identifier);
+            System.out.println(ontologyUri + "/" + identifier);
             return individual.getOntClass().toString();
         } catch (final Exception e) {
             e.printStackTrace();

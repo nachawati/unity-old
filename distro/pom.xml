@@ -26,6 +26,7 @@
 	<modules>
 		<module>docker</module>
 		<module>nodejs</module>
+		<module>server</module>
 	</modules>
 
 </project>

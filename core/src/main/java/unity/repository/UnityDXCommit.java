@@ -296,6 +296,7 @@ public class UnityDXCommit extends UnityDXSessionObject implements DXCommit
     @Override
     public InputStream getResourceAsStream(String path) throws DXException
     {
+    	System.out.println("getResourceAsStream>>"+path);
         try {
             final RepositoryFile file = api().getRepositoryFileApi().getFile(path, repository.getProject().getId(),
                     getId());

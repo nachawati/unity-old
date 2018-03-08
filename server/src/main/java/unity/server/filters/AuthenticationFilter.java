@@ -1,6 +1,7 @@
 package unity.server.filters;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.regex.Pattern;
 
 import javax.servlet.Filter;
@@ -16,6 +17,7 @@ import javax.ws.rs.WebApplicationException;
 import unity.UnityDXSession;
 import unity.api.DXException;
 import unity.api.DXSession;
+import unity.modules.engines.zorba.ZorbaDXScriptEngine;
 
 public class AuthenticationFilter implements Filter
 {
@@ -26,7 +28,7 @@ public class AuthenticationFilter implements Filter
     }
 
     public void doFilter(final HttpServletRequest request, final HttpServletResponse response,
-            final FilterChain filterChain) throws IOException, ServletException, DXException
+            final FilterChain filterChain) throws IOException, ServletException, DXException, URISyntaxException
     {
         DXSession session = null;
         if (request.getSession(false) != null)
@@ -36,7 +38,12 @@ public class AuthenticationFilter implements Filter
             if (token != null)
                 session = new UnityDXSession(token);
         }
-        request.setAttribute("session", session = new UnityDXSession("ketNfDswkVTH9xySngFz"));
+        
+        if (ZorbaDXScriptEngine.class.getProtectionDomain().getCodeSource().getLocation().toURI()
+        .getPath().contains("jetty"))
+        	request.setAttribute("session", session/* = new UnityDXSession("ketNfDswkVTH9xySngFz")*/);
+        else
+        	request.setAttribute("session", session = new UnityDXSession("ketNfDswkVTH9xySngFz"));
         if (session != null)
             request.setAttribute("user", session.getUser());
         if (staticContentRegex.matcher(request.getRequestURI()).matches())
@@ -63,7 +70,7 @@ public class AuthenticationFilter implements Filter
     {
         try {
             doFilter((HttpServletRequest) request, (HttpServletResponse) response, filterChain);
-        } catch (final DXException e) {
+        } catch (final DXException | URISyntaxException e) {
             throw new IOException(e);
         }
     }

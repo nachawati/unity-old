@@ -47,6 +47,7 @@
 									<directory>${project.basedir}/target/unity-server</directory>
 									<filtering>false</filtering>
 								</resource>
+					
 
 							</resources>
 						</configuration>
