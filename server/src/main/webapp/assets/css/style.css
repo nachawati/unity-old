@@ -1,3 +1,20 @@
+.content {
+}
+.main-header {
+	border-bottom: solid 1px #4a4785;
+	 box-shadow: 0px 10px 50px 0px rgba(0,0,0,0.5);
+}
+
+
+.features h4
+{
+	font-weight: bold;
+}
+p.info {
+	font-size: 1.2em;
+	color: #ccc; 
+}
+
 .box.box-purple {
   border-top-color: #605ca8;
 }

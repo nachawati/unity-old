@@ -2,6 +2,7 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@attribute name="head" fragment="true" required="false"%>
+<%@attribute name="hero" fragment="true" required="false"%>
 <%@attribute name="path" fragment="true" required="false"%>
 <%@attribute name="sidebar" fragment="true" required="false"%>
 <%@attribute name="menu" fragment="true" required="false"%>
@@ -53,7 +54,7 @@
 <jsp:invoke fragment="head" />
 </head>
 <body
-	class="hold-transition skin-purple ${empty sidebarText ? 'layout-top-nav' : 'sidebar-mini'}">
+	class="hold-transition fixed sidebar-collapse skin-purple ${empty sidebarText ? 'layout-top-nav' : 'sidebar-mini'}">
 	<div class="wrapper">
 		<header class="main-header">
 
@@ -78,7 +79,7 @@
 						<i class="fa fa-bars"></i>
 					</button>
 				</div>
-				
+
 				<div class="navbar-custom-menu pull-right">
 					<ul class="nav navbar-nav">
 						<li class="dropdown user user-menu"><a href="#"
@@ -101,13 +102,15 @@
 				</div>
 				<div class="navbar-custom-menu pull-right">
 					<ul class="nav navbar-nav">
-						<li><a><b>Unity</b> Server (v0.1.0-SNAPSHOT)</a></li>
+						<li><a>v0.1.0-SNAPSHOT</a></li>
 					</ul>
 				</div>
 				<div class="collapse navbar-collapse pull-right"
 					id="navbar-collapse">
 					<form class="navbar-form pull-left-not-xs hidden-md hidden-sm"
-						role="search" action="${pageContext.request.contextPath}${search_action}" method="get">
+						role="search"
+						action="${pageContext.request.contextPath}${search_action}"
+						method="get">
 						<div class="form-group input-group">
 							<c:if test="${not empty search_label}">
 								<span class="input-group-addon"
@@ -135,7 +138,7 @@
 					</ul>
 					 -->
 				</div>
-				
+
 			</nav>
 			<jsp:invoke fragment="menu" var="menuText"></jsp:invoke>
 			<c:if test="${not empty menuText}">
@@ -162,6 +165,11 @@
 		</c:if>
 		<div class="content-wrapper">
 			<div id="canvas"></div>
+			<jsp:invoke fragment="hero" var="heroText"></jsp:invoke>
+
+			<c:if test="${not empty heroText}">
+					${heroText}
+				</c:if>
 			<section class="content">
 				<jsp:invoke fragment="breadcrumbs" var="breadcrumbsText"></jsp:invoke>
 				<c:if test="${not empty breadcrumbsText}">
@@ -170,7 +178,7 @@
 						</ol>
 					</div>
 				</c:if>
-				<div class="container-fluid" >
+				<div class="container-fluid">
 					<div class="row">
 						<jsp:invoke fragment="sidenav" var="sidenavText"></jsp:invoke>
 						<c:choose>
